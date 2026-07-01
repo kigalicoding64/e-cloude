@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as STokenRouteImport } from './routes/s.$token'
 import { Route as AuthenticatedTrashRouteImport } from './routes/_authenticated/trash'
 import { Route as AuthenticatedSharedRouteImport } from './routes/_authenticated/shared'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
@@ -21,6 +22,10 @@ import { Route as AuthenticatedDeveloperRouteImport } from './routes/_authentica
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedApiKeysRouteImport } from './routes/_authenticated/api-keys'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as ApiPublicV1FilesIndexRouteImport } from './routes/api/public/v1/files/index'
+import { Route as ApiPublicV1SharesTokenRouteImport } from './routes/api/public/v1/shares/$token'
+import { Route as ApiPublicV1FilesUploadRouteImport } from './routes/api/public/v1/files/upload'
+import { Route as ApiPublicV1FilesIdRouteImport } from './routes/api/public/v1/files/$id'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
@@ -34,6 +39,11 @@ const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const STokenRoute = STokenRouteImport.update({
+  id: '/s/$token',
+  path: '/s/$token',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedTrashRoute = AuthenticatedTrashRouteImport.update({
@@ -81,6 +91,26 @@ const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const ApiPublicV1FilesIndexRoute = ApiPublicV1FilesIndexRouteImport.update({
+  id: '/api/public/v1/files/',
+  path: '/api/public/v1/files/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicV1SharesTokenRoute = ApiPublicV1SharesTokenRouteImport.update({
+  id: '/api/public/v1/shares/$token',
+  path: '/api/public/v1/shares/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicV1FilesUploadRoute = ApiPublicV1FilesUploadRouteImport.update({
+  id: '/api/public/v1/files/upload',
+  path: '/api/public/v1/files/upload',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicV1FilesIdRoute = ApiPublicV1FilesIdRouteImport.update({
+  id: '/api/public/v1/files/$id',
+  path: '/api/public/v1/files/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -94,6 +124,11 @@ export interface FileRoutesByFullPath {
   '/settings': typeof AuthenticatedSettingsRoute
   '/shared': typeof AuthenticatedSharedRoute
   '/trash': typeof AuthenticatedTrashRoute
+  '/s/$token': typeof STokenRoute
+  '/api/public/v1/files/$id': typeof ApiPublicV1FilesIdRoute
+  '/api/public/v1/files/upload': typeof ApiPublicV1FilesUploadRoute
+  '/api/public/v1/shares/$token': typeof ApiPublicV1SharesTokenRoute
+  '/api/public/v1/files/': typeof ApiPublicV1FilesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -107,6 +142,11 @@ export interface FileRoutesByTo {
   '/settings': typeof AuthenticatedSettingsRoute
   '/shared': typeof AuthenticatedSharedRoute
   '/trash': typeof AuthenticatedTrashRoute
+  '/s/$token': typeof STokenRoute
+  '/api/public/v1/files/$id': typeof ApiPublicV1FilesIdRoute
+  '/api/public/v1/files/upload': typeof ApiPublicV1FilesUploadRoute
+  '/api/public/v1/shares/$token': typeof ApiPublicV1SharesTokenRoute
+  '/api/public/v1/files': typeof ApiPublicV1FilesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -122,6 +162,11 @@ export interface FileRoutesById {
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/shared': typeof AuthenticatedSharedRoute
   '/_authenticated/trash': typeof AuthenticatedTrashRoute
+  '/s/$token': typeof STokenRoute
+  '/api/public/v1/files/$id': typeof ApiPublicV1FilesIdRoute
+  '/api/public/v1/files/upload': typeof ApiPublicV1FilesUploadRoute
+  '/api/public/v1/shares/$token': typeof ApiPublicV1SharesTokenRoute
+  '/api/public/v1/files/': typeof ApiPublicV1FilesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -137,6 +182,11 @@ export interface FileRouteTypes {
     | '/settings'
     | '/shared'
     | '/trash'
+    | '/s/$token'
+    | '/api/public/v1/files/$id'
+    | '/api/public/v1/files/upload'
+    | '/api/public/v1/shares/$token'
+    | '/api/public/v1/files/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -150,6 +200,11 @@ export interface FileRouteTypes {
     | '/settings'
     | '/shared'
     | '/trash'
+    | '/s/$token'
+    | '/api/public/v1/files/$id'
+    | '/api/public/v1/files/upload'
+    | '/api/public/v1/shares/$token'
+    | '/api/public/v1/files'
   id:
     | '__root__'
     | '/'
@@ -164,12 +219,22 @@ export interface FileRouteTypes {
     | '/_authenticated/settings'
     | '/_authenticated/shared'
     | '/_authenticated/trash'
+    | '/s/$token'
+    | '/api/public/v1/files/$id'
+    | '/api/public/v1/files/upload'
+    | '/api/public/v1/shares/$token'
+    | '/api/public/v1/files/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  STokenRoute: typeof STokenRoute
+  ApiPublicV1FilesIdRoute: typeof ApiPublicV1FilesIdRoute
+  ApiPublicV1FilesUploadRoute: typeof ApiPublicV1FilesUploadRoute
+  ApiPublicV1SharesTokenRoute: typeof ApiPublicV1SharesTokenRoute
+  ApiPublicV1FilesIndexRoute: typeof ApiPublicV1FilesIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -193,6 +258,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/s/$token': {
+      id: '/s/$token'
+      path: '/s/$token'
+      fullPath: '/s/$token'
+      preLoaderRoute: typeof STokenRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/trash': {
@@ -258,6 +330,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/api/public/v1/files/': {
+      id: '/api/public/v1/files/'
+      path: '/api/public/v1/files'
+      fullPath: '/api/public/v1/files/'
+      preLoaderRoute: typeof ApiPublicV1FilesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/shares/$token': {
+      id: '/api/public/v1/shares/$token'
+      path: '/api/public/v1/shares/$token'
+      fullPath: '/api/public/v1/shares/$token'
+      preLoaderRoute: typeof ApiPublicV1SharesTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/files/upload': {
+      id: '/api/public/v1/files/upload'
+      path: '/api/public/v1/files/upload'
+      fullPath: '/api/public/v1/files/upload'
+      preLoaderRoute: typeof ApiPublicV1FilesUploadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/files/$id': {
+      id: '/api/public/v1/files/$id'
+      path: '/api/public/v1/files/$id'
+      fullPath: '/api/public/v1/files/$id'
+      preLoaderRoute: typeof ApiPublicV1FilesIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -292,6 +392,11 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
+  STokenRoute: STokenRoute,
+  ApiPublicV1FilesIdRoute: ApiPublicV1FilesIdRoute,
+  ApiPublicV1FilesUploadRoute: ApiPublicV1FilesUploadRoute,
+  ApiPublicV1SharesTokenRoute: ApiPublicV1SharesTokenRoute,
+  ApiPublicV1FilesIndexRoute: ApiPublicV1FilesIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
