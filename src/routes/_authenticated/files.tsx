@@ -126,8 +126,6 @@ function FilesPage() {
         storage_path: storagePath,
       });
       if (dbErr) throw dbErr;
-      // increment storage_used
-      await supabase.rpc("increment_storage" as never, {} as never).then(() => {}).catch(() => {});
       const { data: prof } = await supabase.from("profiles").select("storage_used").eq("id", user!.id).maybeSingle();
       const newUsed = Number(prof?.storage_used ?? 0) + file.size;
       await supabase.from("profiles").update({ storage_used: newUsed }).eq("id", user!.id);
