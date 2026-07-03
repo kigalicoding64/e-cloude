@@ -23,6 +23,11 @@ const devNav = [
   { to: "/developer", label: "Developer", icon: Code2 },
 ] as const;
 
+const aiNav = [
+  { to: "/ai/models", label: "Models", icon: Brain },
+  { to: "/ai/deployments", label: "Deployments", icon: Rocket },
+] as const;
+
 export function AppSidebar() {
   const { user } = useSession();
   const navigate = useNavigate();
