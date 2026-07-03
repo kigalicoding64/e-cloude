@@ -23,6 +23,7 @@ import { Route as AuthenticatedDeveloperRouteImport } from './routes/_authentica
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedApiKeysRouteImport } from './routes/_authenticated/api-keys'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as AuthenticatedAiOrchestratorsRouteImport } from './routes/_authenticated/ai.orchestrators'
 import { Route as AuthenticatedAiModelsRouteImport } from './routes/_authenticated/ai.models'
 import { Route as AuthenticatedAiDeploymentsRouteImport } from './routes/_authenticated/ai.deployments'
 import { Route as AuthenticatedAiModelsSlugRouteImport } from './routes/_authenticated/ai.models.$slug'
@@ -100,6 +101,12 @@ const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedAiOrchestratorsRoute =
+  AuthenticatedAiOrchestratorsRouteImport.update({
+    id: '/ai/orchestrators',
+    path: '/ai/orchestrators',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedAiModelsRoute = AuthenticatedAiModelsRouteImport.update({
   id: '/ai/models',
   path: '/ai/models',
@@ -154,6 +161,7 @@ export interface FileRoutesByFullPath {
   '/s/$token': typeof STokenRoute
   '/ai/deployments': typeof AuthenticatedAiDeploymentsRoute
   '/ai/models': typeof AuthenticatedAiModelsRouteWithChildren
+  '/ai/orchestrators': typeof AuthenticatedAiOrchestratorsRoute
   '/ai/models/$slug': typeof AuthenticatedAiModelsSlugRoute
   '/api/public/v1/files/$id': typeof ApiPublicV1FilesIdRoute
   '/api/public/v1/files/upload': typeof ApiPublicV1FilesUploadRoute
@@ -176,6 +184,7 @@ export interface FileRoutesByTo {
   '/s/$token': typeof STokenRoute
   '/ai/deployments': typeof AuthenticatedAiDeploymentsRoute
   '/ai/models': typeof AuthenticatedAiModelsRouteWithChildren
+  '/ai/orchestrators': typeof AuthenticatedAiOrchestratorsRoute
   '/ai/models/$slug': typeof AuthenticatedAiModelsSlugRoute
   '/api/public/v1/files/$id': typeof ApiPublicV1FilesIdRoute
   '/api/public/v1/files/upload': typeof ApiPublicV1FilesUploadRoute
@@ -200,6 +209,7 @@ export interface FileRoutesById {
   '/s/$token': typeof STokenRoute
   '/_authenticated/ai/deployments': typeof AuthenticatedAiDeploymentsRoute
   '/_authenticated/ai/models': typeof AuthenticatedAiModelsRouteWithChildren
+  '/_authenticated/ai/orchestrators': typeof AuthenticatedAiOrchestratorsRoute
   '/_authenticated/ai/models/$slug': typeof AuthenticatedAiModelsSlugRoute
   '/api/public/v1/files/$id': typeof ApiPublicV1FilesIdRoute
   '/api/public/v1/files/upload': typeof ApiPublicV1FilesUploadRoute
@@ -224,6 +234,7 @@ export interface FileRouteTypes {
     | '/s/$token'
     | '/ai/deployments'
     | '/ai/models'
+    | '/ai/orchestrators'
     | '/ai/models/$slug'
     | '/api/public/v1/files/$id'
     | '/api/public/v1/files/upload'
@@ -246,6 +257,7 @@ export interface FileRouteTypes {
     | '/s/$token'
     | '/ai/deployments'
     | '/ai/models'
+    | '/ai/orchestrators'
     | '/ai/models/$slug'
     | '/api/public/v1/files/$id'
     | '/api/public/v1/files/upload'
@@ -269,6 +281,7 @@ export interface FileRouteTypes {
     | '/s/$token'
     | '/_authenticated/ai/deployments'
     | '/_authenticated/ai/models'
+    | '/_authenticated/ai/orchestrators'
     | '/_authenticated/ai/models/$slug'
     | '/api/public/v1/files/$id'
     | '/api/public/v1/files/upload'
@@ -388,6 +401,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/ai/orchestrators': {
+      id: '/_authenticated/ai/orchestrators'
+      path: '/ai/orchestrators'
+      fullPath: '/ai/orchestrators'
+      preLoaderRoute: typeof AuthenticatedAiOrchestratorsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/ai/models': {
       id: '/_authenticated/ai/models'
       path: '/ai/models'
@@ -465,6 +485,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedTrashRoute: typeof AuthenticatedTrashRoute
   AuthenticatedAiDeploymentsRoute: typeof AuthenticatedAiDeploymentsRoute
   AuthenticatedAiModelsRoute: typeof AuthenticatedAiModelsRouteWithChildren
+  AuthenticatedAiOrchestratorsRoute: typeof AuthenticatedAiOrchestratorsRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -479,6 +500,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedTrashRoute: AuthenticatedTrashRoute,
   AuthenticatedAiDeploymentsRoute: AuthenticatedAiDeploymentsRoute,
   AuthenticatedAiModelsRoute: AuthenticatedAiModelsRouteWithChildren,
+  AuthenticatedAiOrchestratorsRoute: AuthenticatedAiOrchestratorsRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
