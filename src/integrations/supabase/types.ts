@@ -14,6 +14,238 @@ export type Database = {
   }
   public: {
     Tables: {
+      ai_deployment_events: {
+        Row: {
+          created_at: string
+          deployment_id: string
+          id: string
+          level: string
+          message: string
+        }
+        Insert: {
+          created_at?: string
+          deployment_id: string
+          id?: string
+          level?: string
+          message: string
+        }
+        Update: {
+          created_at?: string
+          deployment_id?: string
+          id?: string
+          level?: string
+          message?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_deployment_events_deployment_id_fkey"
+            columns: ["deployment_id"]
+            isOneToOne: false
+            referencedRelation: "ai_deployments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ai_deployments: {
+        Row: {
+          container_id: string | null
+          created_at: string
+          error: string | null
+          gpu_util: number | null
+          host: string | null
+          id: string
+          memory_used_mb: number | null
+          model_id: string
+          orchestrator_id: string | null
+          started_at: string | null
+          status: string
+          stopped_at: string | null
+          updated_at: string
+        }
+        Insert: {
+          container_id?: string | null
+          created_at?: string
+          error?: string | null
+          gpu_util?: number | null
+          host?: string | null
+          id?: string
+          memory_used_mb?: number | null
+          model_id: string
+          orchestrator_id?: string | null
+          started_at?: string | null
+          status?: string
+          stopped_at?: string | null
+          updated_at?: string
+        }
+        Update: {
+          container_id?: string | null
+          created_at?: string
+          error?: string | null
+          gpu_util?: number | null
+          host?: string | null
+          id?: string
+          memory_used_mb?: number | null
+          model_id?: string
+          orchestrator_id?: string | null
+          started_at?: string | null
+          status?: string
+          stopped_at?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_deployments_model_id_fkey"
+            columns: ["model_id"]
+            isOneToOne: false
+            referencedRelation: "ai_models"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ai_deployments_orchestrator_id_fkey"
+            columns: ["orchestrator_id"]
+            isOneToOne: false
+            referencedRelation: "ai_orchestrators"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ai_gateway_keys: {
+        Row: {
+          created_at: string
+          id: string
+          key_hash: string
+          last_used_at: string | null
+          model_id: string | null
+          name: string
+          owner_id: string
+          prefix: string
+          revoked_at: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          key_hash: string
+          last_used_at?: string | null
+          model_id?: string | null
+          name: string
+          owner_id: string
+          prefix: string
+          revoked_at?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          key_hash?: string
+          last_used_at?: string | null
+          model_id?: string | null
+          name?: string
+          owner_id?: string
+          prefix?: string
+          revoked_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_gateway_keys_model_id_fkey"
+            columns: ["model_id"]
+            isOneToOne: false
+            referencedRelation: "ai_models"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ai_models: {
+        Row: {
+          created_at: string
+          description: string | null
+          endpoint_path: string | null
+          framework: string | null
+          gpu_type: string | null
+          id: string
+          memory_mb: number | null
+          name: string
+          owner_id: string
+          slug: string
+          source_ref: string | null
+          source_repo: string | null
+          status: string
+          task: string | null
+          updated_at: string
+          visibility: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          endpoint_path?: string | null
+          framework?: string | null
+          gpu_type?: string | null
+          id?: string
+          memory_mb?: number | null
+          name: string
+          owner_id: string
+          slug: string
+          source_ref?: string | null
+          source_repo?: string | null
+          status?: string
+          task?: string | null
+          updated_at?: string
+          visibility?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          endpoint_path?: string | null
+          framework?: string | null
+          gpu_type?: string | null
+          id?: string
+          memory_mb?: number | null
+          name?: string
+          owner_id?: string
+          slug?: string
+          source_ref?: string | null
+          source_repo?: string | null
+          status?: string
+          task?: string | null
+          updated_at?: string
+          visibility?: string
+        }
+        Relationships: []
+      }
+      ai_orchestrators: {
+        Row: {
+          base_url: string
+          created_at: string
+          gpu_type: string | null
+          id: string
+          last_heartbeat_at: string | null
+          name: string
+          region: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          base_url: string
+          created_at?: string
+          gpu_type?: string | null
+          id?: string
+          last_heartbeat_at?: string | null
+          name: string
+          region?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          base_url?: string
+          created_at?: string
+          gpu_type?: string | null
+          id?: string
+          last_heartbeat_at?: string | null
+          name?: string
+          region?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       api_keys: {
         Row: {
           created_at: string

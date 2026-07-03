@@ -23,6 +23,10 @@ import { Route as AuthenticatedDeveloperRouteImport } from './routes/_authentica
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedApiKeysRouteImport } from './routes/_authenticated/api-keys'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as AuthenticatedAiOrchestratorsRouteImport } from './routes/_authenticated/ai.orchestrators'
+import { Route as AuthenticatedAiModelsRouteImport } from './routes/_authenticated/ai.models'
+import { Route as AuthenticatedAiDeploymentsRouteImport } from './routes/_authenticated/ai.deployments'
+import { Route as AuthenticatedAiModelsSlugRouteImport } from './routes/_authenticated/ai.models.$slug'
 import { Route as ApiPublicV1FilesIndexRouteImport } from './routes/api/public/v1/files/index'
 import { Route as ApiPublicV1SharesTokenRouteImport } from './routes/api/public/v1/shares/$token'
 import { Route as ApiPublicV1FilesUploadRouteImport } from './routes/api/public/v1/files/upload'
@@ -97,6 +101,29 @@ const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedAiOrchestratorsRoute =
+  AuthenticatedAiOrchestratorsRouteImport.update({
+    id: '/ai/orchestrators',
+    path: '/ai/orchestrators',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedAiModelsRoute = AuthenticatedAiModelsRouteImport.update({
+  id: '/ai/models',
+  path: '/ai/models',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedAiDeploymentsRoute =
+  AuthenticatedAiDeploymentsRouteImport.update({
+    id: '/ai/deployments',
+    path: '/ai/deployments',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedAiModelsSlugRoute =
+  AuthenticatedAiModelsSlugRouteImport.update({
+    id: '/$slug',
+    path: '/$slug',
+    getParentRoute: () => AuthenticatedAiModelsRoute,
+  } as any)
 const ApiPublicV1FilesIndexRoute = ApiPublicV1FilesIndexRouteImport.update({
   id: '/api/public/v1/files/',
   path: '/api/public/v1/files/',
@@ -132,6 +159,10 @@ export interface FileRoutesByFullPath {
   '/shared': typeof AuthenticatedSharedRoute
   '/trash': typeof AuthenticatedTrashRoute
   '/s/$token': typeof STokenRoute
+  '/ai/deployments': typeof AuthenticatedAiDeploymentsRoute
+  '/ai/models': typeof AuthenticatedAiModelsRouteWithChildren
+  '/ai/orchestrators': typeof AuthenticatedAiOrchestratorsRoute
+  '/ai/models/$slug': typeof AuthenticatedAiModelsSlugRoute
   '/api/public/v1/files/$id': typeof ApiPublicV1FilesIdRoute
   '/api/public/v1/files/upload': typeof ApiPublicV1FilesUploadRoute
   '/api/public/v1/shares/$token': typeof ApiPublicV1SharesTokenRoute
@@ -151,6 +182,10 @@ export interface FileRoutesByTo {
   '/shared': typeof AuthenticatedSharedRoute
   '/trash': typeof AuthenticatedTrashRoute
   '/s/$token': typeof STokenRoute
+  '/ai/deployments': typeof AuthenticatedAiDeploymentsRoute
+  '/ai/models': typeof AuthenticatedAiModelsRouteWithChildren
+  '/ai/orchestrators': typeof AuthenticatedAiOrchestratorsRoute
+  '/ai/models/$slug': typeof AuthenticatedAiModelsSlugRoute
   '/api/public/v1/files/$id': typeof ApiPublicV1FilesIdRoute
   '/api/public/v1/files/upload': typeof ApiPublicV1FilesUploadRoute
   '/api/public/v1/shares/$token': typeof ApiPublicV1SharesTokenRoute
@@ -172,6 +207,10 @@ export interface FileRoutesById {
   '/_authenticated/shared': typeof AuthenticatedSharedRoute
   '/_authenticated/trash': typeof AuthenticatedTrashRoute
   '/s/$token': typeof STokenRoute
+  '/_authenticated/ai/deployments': typeof AuthenticatedAiDeploymentsRoute
+  '/_authenticated/ai/models': typeof AuthenticatedAiModelsRouteWithChildren
+  '/_authenticated/ai/orchestrators': typeof AuthenticatedAiOrchestratorsRoute
+  '/_authenticated/ai/models/$slug': typeof AuthenticatedAiModelsSlugRoute
   '/api/public/v1/files/$id': typeof ApiPublicV1FilesIdRoute
   '/api/public/v1/files/upload': typeof ApiPublicV1FilesUploadRoute
   '/api/public/v1/shares/$token': typeof ApiPublicV1SharesTokenRoute
@@ -193,6 +232,10 @@ export interface FileRouteTypes {
     | '/shared'
     | '/trash'
     | '/s/$token'
+    | '/ai/deployments'
+    | '/ai/models'
+    | '/ai/orchestrators'
+    | '/ai/models/$slug'
     | '/api/public/v1/files/$id'
     | '/api/public/v1/files/upload'
     | '/api/public/v1/shares/$token'
@@ -212,6 +255,10 @@ export interface FileRouteTypes {
     | '/shared'
     | '/trash'
     | '/s/$token'
+    | '/ai/deployments'
+    | '/ai/models'
+    | '/ai/orchestrators'
+    | '/ai/models/$slug'
     | '/api/public/v1/files/$id'
     | '/api/public/v1/files/upload'
     | '/api/public/v1/shares/$token'
@@ -232,6 +279,10 @@ export interface FileRouteTypes {
     | '/_authenticated/shared'
     | '/_authenticated/trash'
     | '/s/$token'
+    | '/_authenticated/ai/deployments'
+    | '/_authenticated/ai/models'
+    | '/_authenticated/ai/orchestrators'
+    | '/_authenticated/ai/models/$slug'
     | '/api/public/v1/files/$id'
     | '/api/public/v1/files/upload'
     | '/api/public/v1/shares/$token'
@@ -350,6 +401,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/ai/orchestrators': {
+      id: '/_authenticated/ai/orchestrators'
+      path: '/ai/orchestrators'
+      fullPath: '/ai/orchestrators'
+      preLoaderRoute: typeof AuthenticatedAiOrchestratorsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/ai/models': {
+      id: '/_authenticated/ai/models'
+      path: '/ai/models'
+      fullPath: '/ai/models'
+      preLoaderRoute: typeof AuthenticatedAiModelsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/ai/deployments': {
+      id: '/_authenticated/ai/deployments'
+      path: '/ai/deployments'
+      fullPath: '/ai/deployments'
+      preLoaderRoute: typeof AuthenticatedAiDeploymentsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/ai/models/$slug': {
+      id: '/_authenticated/ai/models/$slug'
+      path: '/$slug'
+      fullPath: '/ai/models/$slug'
+      preLoaderRoute: typeof AuthenticatedAiModelsSlugRouteImport
+      parentRoute: typeof AuthenticatedAiModelsRoute
+    }
     '/api/public/v1/files/': {
       id: '/api/public/v1/files/'
       path: '/api/public/v1/files'
@@ -381,6 +460,19 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AuthenticatedAiModelsRouteChildren {
+  AuthenticatedAiModelsSlugRoute: typeof AuthenticatedAiModelsSlugRoute
+}
+
+const AuthenticatedAiModelsRouteChildren: AuthenticatedAiModelsRouteChildren = {
+  AuthenticatedAiModelsSlugRoute: AuthenticatedAiModelsSlugRoute,
+}
+
+const AuthenticatedAiModelsRouteWithChildren =
+  AuthenticatedAiModelsRoute._addFileChildren(
+    AuthenticatedAiModelsRouteChildren,
+  )
+
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
   AuthenticatedApiKeysRoute: typeof AuthenticatedApiKeysRoute
@@ -391,6 +483,9 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedSharedRoute: typeof AuthenticatedSharedRoute
   AuthenticatedTrashRoute: typeof AuthenticatedTrashRoute
+  AuthenticatedAiDeploymentsRoute: typeof AuthenticatedAiDeploymentsRoute
+  AuthenticatedAiModelsRoute: typeof AuthenticatedAiModelsRouteWithChildren
+  AuthenticatedAiOrchestratorsRoute: typeof AuthenticatedAiOrchestratorsRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -403,6 +498,9 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedSharedRoute: AuthenticatedSharedRoute,
   AuthenticatedTrashRoute: AuthenticatedTrashRoute,
+  AuthenticatedAiDeploymentsRoute: AuthenticatedAiDeploymentsRoute,
+  AuthenticatedAiModelsRoute: AuthenticatedAiModelsRouteWithChildren,
+  AuthenticatedAiOrchestratorsRoute: AuthenticatedAiOrchestratorsRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =

@@ -1,5 +1,5 @@
 import { Link, useRouterState, useNavigate } from "@tanstack/react-router";
-import { LayoutDashboard, FolderOpen, Share2, Star, Trash2, KeyRound, Code2, Settings, Shield, LogOut } from "lucide-react";
+import { LayoutDashboard, FolderOpen, Share2, Star, Trash2, KeyRound, Code2, Settings, Shield, LogOut, Brain, Rocket, Server } from "lucide-react";
 import { Logo } from "@/components/Logo";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { supabase } from "@/integrations/supabase/client";
@@ -21,6 +21,11 @@ const nav = [
 const devNav = [
   { to: "/api-keys", label: "API Keys", icon: KeyRound },
   { to: "/developer", label: "Developer", icon: Code2 },
+] as const;
+
+const aiNav = [
+  { to: "/ai/models", label: "Models", icon: Brain },
+  { to: "/ai/deployments", label: "Deployments", icon: Rocket },
 ] as const;
 
 export function AppSidebar() {
@@ -105,6 +110,26 @@ export function AppSidebar() {
           ))}
         </div>
 
+        <div className="mt-6 mb-2 px-3 text-xs font-semibold uppercase tracking-wider text-sidebar-foreground/50">
+          AI Hub
+        </div>
+        <div className="space-y-0.5">
+          {aiNav.map((item) => (
+            <Link
+              key={item.to}
+              to={item.to}
+              className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                isActive(item.to)
+                  ? "bg-sidebar-accent text-sidebar-accent-foreground"
+                  : "text-sidebar-foreground/80 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground"
+              }`}
+            >
+              <item.icon className="h-4 w-4" />
+              {item.label}
+            </Link>
+          ))}
+        </div>
+
         {isAdmin && (
           <>
             <div className="mt-6 mb-2 px-3 text-xs font-semibold uppercase tracking-wider text-sidebar-foreground/50">
@@ -120,6 +145,17 @@ export function AppSidebar() {
             >
               <Shield className="h-4 w-4" />
               Admin Panel
+            </Link>
+            <Link
+              to="/ai/orchestrators"
+              className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                isActive("/ai/orchestrators")
+                  ? "bg-sidebar-accent text-sidebar-accent-foreground"
+                  : "text-sidebar-foreground/80 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground"
+              }`}
+            >
+              <Server className="h-4 w-4" />
+              GPU Runners
             </Link>
           </>
         )}
