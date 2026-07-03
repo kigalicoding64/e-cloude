@@ -21,8 +21,8 @@ import { generateApiKey, sha256Hex } from "@/lib/hash";
 export const Route = createFileRoute("/_authenticated/ai/models/$slug")({
   head: () => ({ meta: [{ title: "Model — E-Cloud" }] }),
   component: ModelDetailPage,
-  errorComponent: ErrorBoundary,
-  notFoundComponent: NotFound,
+  errorComponent: ({ error }) => <div className="p-10 text-destructive">Error: {error.message}</div>,
+  notFoundComponent: () => <div className="p-10 text-muted-foreground">Model not found.</div>,
 });
 
 const STATUS_TONE: Record<string, string> = {
