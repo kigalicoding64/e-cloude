@@ -17,8 +17,6 @@ import {
 import { toast } from "sonner";
 import { formatDate } from "@/lib/format";
 import { generateApiKey, sha256Hex } from "@/lib/hash";
-import { NotFound } from "@/components/NotFound";
-import { ErrorBoundary } from "@/components/ErrorBoundary";
 
 export const Route = createFileRoute("/_authenticated/ai/models/$slug")({
   head: () => ({ meta: [{ title: "Model — E-Cloud" }] }),
