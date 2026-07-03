@@ -1,5 +1,5 @@
 import { Link, useRouterState, useNavigate } from "@tanstack/react-router";
-import { LayoutDashboard, FolderOpen, Share2, Star, Trash2, KeyRound, Code2, Settings, Shield, LogOut } from "lucide-react";
+import { LayoutDashboard, FolderOpen, Share2, Star, Trash2, KeyRound, Code2, Settings, Shield, LogOut, Brain, Rocket, Server } from "lucide-react";
 import { Logo } from "@/components/Logo";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { supabase } from "@/integrations/supabase/client";
