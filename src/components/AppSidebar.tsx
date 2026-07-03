@@ -110,6 +110,26 @@ export function AppSidebar() {
           ))}
         </div>
 
+        <div className="mt-6 mb-2 px-3 text-xs font-semibold uppercase tracking-wider text-sidebar-foreground/50">
+          AI Hub
+        </div>
+        <div className="space-y-0.5">
+          {aiNav.map((item) => (
+            <Link
+              key={item.to}
+              to={item.to}
+              className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                isActive(item.to)
+                  ? "bg-sidebar-accent text-sidebar-accent-foreground"
+                  : "text-sidebar-foreground/80 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground"
+              }`}
+            >
+              <item.icon className="h-4 w-4" />
+              {item.label}
+            </Link>
+          ))}
+        </div>
+
         {isAdmin && (
           <>
             <div className="mt-6 mb-2 px-3 text-xs font-semibold uppercase tracking-wider text-sidebar-foreground/50">
@@ -125,6 +145,17 @@ export function AppSidebar() {
             >
               <Shield className="h-4 w-4" />
               Admin Panel
+            </Link>
+            <Link
+              to="/ai/orchestrators"
+              className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                isActive("/ai/orchestrators")
+                  ? "bg-sidebar-accent text-sidebar-accent-foreground"
+                  : "text-sidebar-foreground/80 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground"
+              }`}
+            >
+              <Server className="h-4 w-4" />
+              GPU Runners
             </Link>
           </>
         )}
