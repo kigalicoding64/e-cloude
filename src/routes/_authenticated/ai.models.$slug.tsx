@@ -8,15 +8,20 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogTrigger, DialogDescription,
 } from "@/components/ui/dialog";
 import {
   ArrowLeft, Play, Square, Trash2, Rocket, KeyRound, Copy, Github, ExternalLink, Activity,
+  GitBranch, RotateCcw, LineChart as LineChartIcon,
 } from "lucide-react";
 import { toast } from "sonner";
 import { formatDate } from "@/lib/format";
 import { generateApiKey, sha256Hex } from "@/lib/hash";
+import {
+  LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid,
+} from "recharts";
 
 export const Route = createFileRoute("/_authenticated/ai/models/$slug")({
   head: () => ({ meta: [{ title: "Model — E-Cloud" }] }),
