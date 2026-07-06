@@ -28,7 +28,13 @@ export const Route = createFileRoute("/api/public/v1/agent/deployments/$id/statu
           return jsonError("deployment not assigned to this orchestrator", 403);
         }
 
-        const patch: Record<string, unknown> = { status: body.status };
+        const patch: {
+          status: string;
+          container_id?: string;
+          host?: string;
+          error?: string;
+          stopped_at?: string;
+        } = { status: body.status };
         if (body.container_id) patch.container_id = body.container_id;
         if (body.host) patch.host = body.host;
         if (body.error) patch.error = body.error;

@@ -120,10 +120,9 @@ export const Route = createFileRoute("/api/v1/chat/$slug")({
             tokens_used_month: tokensUsed + total,
             last_used_at: new Date().toISOString(),
           }).eq("id", gkey.id);
-          await supabaseAdmin.rpc("noop").then(() => {}).catch(() => {});
-          // Bump deployment aggregate
+          const { data: cur } = await supabaseAdmin.from("ai_deployments").select("total_tokens").eq("id", dep.id).single();
           await supabaseAdmin.from("ai_deployments").update({
-            total_tokens: (await getTotal(supabaseAdmin, dep.id)) + total,
+            total_tokens: Number(cur?.total_tokens ?? 0) + total,
           }).eq("id", dep.id);
         } else {
           await supabaseAdmin.from("ai_gateway_keys").update({
@@ -152,8 +151,9 @@ function json(data: unknown, status = 200): Response {
   });
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function logReq(
-  db: Awaited<ReturnType<typeof import("@/integrations/supabase/client.server").then>>["supabaseAdmin"] extends never ? never : any,
+  db: any,
   key_id: string,
   model_id: string,
   deployment_id: string | null,
@@ -168,7 +168,3 @@ async function logReq(
   });
 }
 
-async function getTotal(db: any, deployment_id: string): Promise<number> {
-  const { data } = await db.from("ai_deployments").select("total_tokens").eq("id", deployment_id).single();
-  return Number(data?.total_tokens ?? 0);
-}
