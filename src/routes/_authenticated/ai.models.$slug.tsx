@@ -262,13 +262,13 @@ function ModelDetailPage() {
   const createVersion = useMutation({
     mutationFn: async () => {
       if (!model || !newVersion.git_ref.trim()) throw new Error("Git ref required");
-      let config: Record<string, unknown> = {};
+      let config: unknown = {};
       try { config = JSON.parse(newVersion.config || "{}"); } catch { throw new Error("Config must be valid JSON"); }
       const { error } = await supabase.from("ai_model_versions").insert({
         model_id: model.id,
         git_ref: newVersion.git_ref.trim(),
         source_repo: model.source_repo,
-        deployment_config: config,
+        deployment_config: config as never,
         notes: newVersion.notes || null,
         created_by: user!.id,
       });
