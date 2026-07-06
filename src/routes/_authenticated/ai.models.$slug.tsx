@@ -459,9 +459,21 @@ function ModelDetailPage() {
                     <DialogTitle>Create gateway key</DialogTitle>
                     <DialogDescription>This key can only call {model.name}.</DialogDescription>
                   </DialogHeader>
-                  <div className="space-y-1.5">
-                    <Label>Name</Label>
-                    <Input value={keyName} onChange={(e) => setKeyName(e.target.value)} placeholder="e.g. Mobile app" autoFocus />
+                  <div className="grid gap-3">
+                    <div className="grid gap-1.5">
+                      <Label>Name</Label>
+                      <Input value={keyName} onChange={(e) => setKeyName(e.target.value)} placeholder="e.g. Mobile app" autoFocus />
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="grid gap-1.5">
+                        <Label>Rate limit (req/min)</Label>
+                        <Input type="number" min={1} value={keyRate} onChange={(e) => setKeyRate(Number(e.target.value))} />
+                      </div>
+                      <div className="grid gap-1.5">
+                        <Label>Monthly token quota</Label>
+                        <Input type="number" min={0} value={keyQuota} onChange={(e) => setKeyQuota(Number(e.target.value))} />
+                      </div>
+                    </div>
                   </div>
                   <DialogFooter>
                     <Button variant="ghost" onClick={() => setKeyOpen(false)}>Cancel</Button>
