@@ -46,7 +46,11 @@ function ModelDetailPage() {
   const navigate = Route.useNavigate();
   const [keyOpen, setKeyOpen] = useState(false);
   const [keyName, setKeyName] = useState("");
+  const [keyRate, setKeyRate] = useState(60);
+  const [keyQuota, setKeyQuota] = useState(1_000_000);
   const [createdKey, setCreatedKey] = useState<string | null>(null);
+  const [versionOpen, setVersionOpen] = useState(false);
+  const [newVersion, setNewVersion] = useState({ git_ref: "main", notes: "", config: "{}" });
 
   const { data: model } = useQuery({
     queryKey: ["ai-model", slug],
@@ -109,6 +113,79 @@ function ModelDetailPage() {
         .order("created_at", { ascending: false });
       return data ?? [];
     },
+  });
+
+  const { data: versions = [] } = useQuery({
+    queryKey: ["ai-versions", model?.id],
+    enabled: !!model,
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("ai_model_versions")
+        .select("*")
+        .eq("model_id", model!.id)
+        .order("created_at", { ascending: false });
+      return data ?? [];
+    },
+  });
+
+  const { data: metrics = [] } = useQuery({
+    queryKey: ["ai-metrics", activeDeployment?.id],
+    enabled: !!activeDeployment,
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("ai_metrics")
+        .select("gpu_util, memory_used_mb, vram_used_mb, tokens_per_sec, measured_at")
+        .eq("deployment_id", activeDeployment!.id)
+        .order("measured_at", { ascending: false })
+        .limit(120);
+      return (data ?? []).reverse().map((m) => ({
+        t: new Date(m.measured_at).toLocaleTimeString(),
+        gpu: m.gpu_util != null ? Number(m.gpu_util) : null,
+        mem: m.memory_used_mb ?? null,
+        vram: m.vram_used_mb ?? null,
+        tps: m.tokens_per_sec != null ? Number(m.tokens_per_sec) : null,
+      }));
+    },
+    refetchInterval: 3000,
+  });
+
+  const deploy = useMutation({
+    mutationFn: async (versionId?: string) => {
+      if (!model) return;
+      const runner = orchestrators.find((o) => o.status === "online") ?? orchestrators[0];
+      const version = versionId
+        ? versions.find((v) => v.id === versionId)
+        : versions.find((v) => v.is_active) ?? versions[0];
+      const { data: dep, error } = await supabase
+        .from("ai_deployments")
+        .insert({
+          model_id: model.id,
+          orchestrator_id: runner?.id ?? null,
+          version_id: version?.id ?? null,
+          status: "pending",
+          started_at: new Date().toISOString(),
+        })
+        .select()
+        .single();
+      if (error) throw error;
+      // Mark selected version as active
+      if (version) {
+        await supabase.from("ai_model_versions").update({ is_active: false }).eq("model_id", model.id);
+        await supabase.from("ai_model_versions").update({ is_active: true }).eq("id", version.id);
+      }
+      await supabase.from("ai_models").update({ status: "building" }).eq("id", model.id);
+      await supabase.from("ai_deployment_events").insert([
+        { deployment_id: dep.id, level: "info", message: `Queued deployment for ${model.name}${version ? ` @ ${version.git_ref}` : ""}` },
+        { deployment_id: dep.id, level: "info", message: runner ? `Assigned to runner "${runner.name}"` : "No GPU runner registered — job will remain pending until one is added" },
+      ]);
+    },
+    onSuccess: () => {
+      toast.success("Deployment queued");
+      qc.invalidateQueries({ queryKey: ["ai-deployments"] });
+      qc.invalidateQueries({ queryKey: ["ai-versions"] });
+      qc.invalidateQueries({ queryKey: ["ai-model", slug] });
+    },
+    onError: (e: Error) => toast.error(e.message),
   });
 
   const deploy = useMutation({
