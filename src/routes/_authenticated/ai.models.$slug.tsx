@@ -188,34 +188,7 @@ function ModelDetailPage() {
     onError: (e: Error) => toast.error(e.message),
   });
 
-  const deploy = useMutation({
-    mutationFn: async () => {
-      if (!model) return;
-      const runner = orchestrators.find((o) => o.status === "online") ?? orchestrators[0];
-      const { data: dep, error } = await supabase
-        .from("ai_deployments")
-        .insert({
-          model_id: model.id,
-          orchestrator_id: runner?.id ?? null,
-          status: "pending",
-          started_at: new Date().toISOString(),
-        })
-        .select()
-        .single();
-      if (error) throw error;
-      await supabase.from("ai_models").update({ status: "building" }).eq("id", model.id);
-      await supabase.from("ai_deployment_events").insert([
-        { deployment_id: dep.id, level: "info", message: `Queued deployment for ${model.name}` },
-        { deployment_id: dep.id, level: "info", message: runner ? `Assigned to runner "${runner.name}"` : "No GPU runner registered — job will remain pending until one is added" },
-      ]);
-    },
-    onSuccess: () => {
-      toast.success("Deployment queued");
-      qc.invalidateQueries({ queryKey: ["ai-deployments"] });
-      qc.invalidateQueries({ queryKey: ["ai-model", slug] });
-    },
-    onError: (e: Error) => toast.error(e.message),
-  });
+
 
   const stop = useMutation({
     mutationFn: async (id: string) => {
