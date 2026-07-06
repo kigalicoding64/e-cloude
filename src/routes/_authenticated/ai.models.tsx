@@ -66,7 +66,7 @@ function ModelsPage() {
     mutationFn: async () => {
       if (!form.name.trim()) throw new Error("Name is required");
       const slug = `${slugify(form.name)}-${Math.random().toString(36).slice(2, 6)}`;
-      const { error } = await supabase.from("ai_models").insert({
+      const { data: inserted, error } = await supabase.from("ai_models").insert({
         owner_id: user!.id,
         name: form.name.trim(),
         slug,
@@ -79,8 +79,23 @@ function ModelsPage() {
         memory_mb: form.memory_mb,
         endpoint_path: `/api/v1/chat/${slug}`,
         status: "draft",
-      });
+      }).select("id").single();
       if (error) throw error;
+      // Seed initial version so we can pin & roll back later
+      await supabase.from("ai_model_versions").insert({
+        model_id: inserted.id,
+        git_ref: form.source_ref || "main",
+        source_repo: form.source_repo || null,
+        deployment_config: {
+          framework: form.framework,
+          task: form.task,
+          gpu_type: form.gpu_type,
+          memory_mb: form.memory_mb,
+        },
+        notes: "Initial version",
+        is_active: true,
+        created_by: user!.id,
+      });
     },
     onSuccess: () => {
       toast.success("Model registered");
