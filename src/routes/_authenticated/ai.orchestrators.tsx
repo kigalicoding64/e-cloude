@@ -242,8 +242,5 @@ function AgentTokenRow({ token }: { token: string | null }) {
       </Button>
     </div>
   );
-        </div>
-      )}
-    </div>
-  );
 }
+
