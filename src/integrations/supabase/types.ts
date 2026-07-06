@@ -60,7 +60,10 @@ export type Database = {
           started_at: string | null
           status: string
           stopped_at: string | null
+          tokens_per_sec: number | null
+          total_tokens: number
           updated_at: string
+          version_id: string | null
         }
         Insert: {
           container_id?: string | null
@@ -75,7 +78,10 @@ export type Database = {
           started_at?: string | null
           status?: string
           stopped_at?: string | null
+          tokens_per_sec?: number | null
+          total_tokens?: number
           updated_at?: string
+          version_id?: string | null
         }
         Update: {
           container_id?: string | null
@@ -90,7 +96,10 @@ export type Database = {
           started_at?: string | null
           status?: string
           stopped_at?: string | null
+          tokens_per_sec?: number | null
+          total_tokens?: number
           updated_at?: string
+          version_id?: string | null
         }
         Relationships: [
           {
@@ -107,6 +116,13 @@ export type Database = {
             referencedRelation: "ai_orchestrators"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "ai_deployments_version_id_fkey"
+            columns: ["version_id"]
+            isOneToOne: false
+            referencedRelation: "ai_model_versions"
+            referencedColumns: ["id"]
+          },
         ]
       }
       ai_gateway_keys: {
@@ -119,7 +135,11 @@ export type Database = {
           name: string
           owner_id: string
           prefix: string
+          quota_reset_at: string
+          quota_tokens_month: number
+          rate_limit_per_min: number
           revoked_at: string | null
+          tokens_used_month: number
         }
         Insert: {
           created_at?: string
@@ -130,7 +150,11 @@ export type Database = {
           name: string
           owner_id: string
           prefix: string
+          quota_reset_at?: string
+          quota_tokens_month?: number
+          rate_limit_per_min?: number
           revoked_at?: string | null
+          tokens_used_month?: number
         }
         Update: {
           created_at?: string
@@ -141,11 +165,161 @@ export type Database = {
           name?: string
           owner_id?: string
           prefix?: string
+          quota_reset_at?: string
+          quota_tokens_month?: number
+          rate_limit_per_min?: number
           revoked_at?: string | null
+          tokens_used_month?: number
         }
         Relationships: [
           {
             foreignKeyName: "ai_gateway_keys_model_id_fkey"
+            columns: ["model_id"]
+            isOneToOne: false
+            referencedRelation: "ai_models"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ai_gateway_requests: {
+        Row: {
+          created_at: string
+          deployment_id: string | null
+          error: string | null
+          id: number
+          key_id: string | null
+          latency_ms: number | null
+          model_id: string | null
+          status: number
+          tokens_in: number
+          tokens_out: number
+        }
+        Insert: {
+          created_at?: string
+          deployment_id?: string | null
+          error?: string | null
+          id?: number
+          key_id?: string | null
+          latency_ms?: number | null
+          model_id?: string | null
+          status?: number
+          tokens_in?: number
+          tokens_out?: number
+        }
+        Update: {
+          created_at?: string
+          deployment_id?: string | null
+          error?: string | null
+          id?: number
+          key_id?: string | null
+          latency_ms?: number | null
+          model_id?: string | null
+          status?: number
+          tokens_in?: number
+          tokens_out?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_gateway_requests_deployment_id_fkey"
+            columns: ["deployment_id"]
+            isOneToOne: false
+            referencedRelation: "ai_deployments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ai_gateway_requests_key_id_fkey"
+            columns: ["key_id"]
+            isOneToOne: false
+            referencedRelation: "ai_gateway_keys"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ai_gateway_requests_model_id_fkey"
+            columns: ["model_id"]
+            isOneToOne: false
+            referencedRelation: "ai_models"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ai_metrics: {
+        Row: {
+          deployment_id: string
+          gpu_util: number | null
+          id: number
+          measured_at: string
+          memory_used_mb: number | null
+          tokens_per_sec: number | null
+          vram_used_mb: number | null
+        }
+        Insert: {
+          deployment_id: string
+          gpu_util?: number | null
+          id?: number
+          measured_at?: string
+          memory_used_mb?: number | null
+          tokens_per_sec?: number | null
+          vram_used_mb?: number | null
+        }
+        Update: {
+          deployment_id?: string
+          gpu_util?: number | null
+          id?: number
+          measured_at?: string
+          memory_used_mb?: number | null
+          tokens_per_sec?: number | null
+          vram_used_mb?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_metrics_deployment_id_fkey"
+            columns: ["deployment_id"]
+            isOneToOne: false
+            referencedRelation: "ai_deployments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ai_model_versions: {
+        Row: {
+          commit_sha: string | null
+          created_at: string
+          created_by: string | null
+          deployment_config: Json
+          git_ref: string
+          id: string
+          is_active: boolean
+          model_id: string
+          notes: string | null
+          source_repo: string | null
+        }
+        Insert: {
+          commit_sha?: string | null
+          created_at?: string
+          created_by?: string | null
+          deployment_config?: Json
+          git_ref: string
+          id?: string
+          is_active?: boolean
+          model_id: string
+          notes?: string | null
+          source_repo?: string | null
+        }
+        Update: {
+          commit_sha?: string | null
+          created_at?: string
+          created_by?: string | null
+          deployment_config?: Json
+          git_ref?: string
+          id?: string
+          is_active?: boolean
+          model_id?: string
+          notes?: string | null
+          source_repo?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_model_versions_model_id_fkey"
             columns: ["model_id"]
             isOneToOne: false
             referencedRelation: "ai_models"
@@ -212,6 +386,7 @@ export type Database = {
       }
       ai_orchestrators: {
         Row: {
+          agent_token: string | null
           base_url: string
           created_at: string
           gpu_type: string | null
@@ -223,6 +398,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          agent_token?: string | null
           base_url: string
           created_at?: string
           gpu_type?: string | null
@@ -234,6 +410,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          agent_token?: string | null
           base_url?: string
           created_at?: string
           gpu_type?: string | null
