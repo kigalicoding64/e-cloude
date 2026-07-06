@@ -386,6 +386,30 @@ function ModelDetailPage() {
           <Card className="overflow-hidden">
             <div className="flex items-center justify-between border-b border-border px-5 py-4">
               <div className="flex items-center gap-2">
+                <LineChartIcon className="h-4 w-4 text-primary" />
+                <h2 className="font-display text-lg font-semibold">GPU metrics</h2>
+              </div>
+              <span className="text-xs text-muted-foreground">{metrics.length} samples</span>
+            </div>
+            {metrics.length === 0 ? (
+              <div className="p-10 text-center text-sm text-muted-foreground">
+                Waiting for the runner to stream metrics.
+              </div>
+            ) : (
+              <div className="grid gap-4 p-4 md:grid-cols-2">
+                <MetricChart data={metrics} dataKey="gpu" label="GPU util (%)" unit="%" stroke="hsl(var(--primary))" />
+                <MetricChart data={metrics} dataKey="tps" label="Tokens / sec" stroke="#10b981" />
+                <MetricChart data={metrics} dataKey="mem" label="Memory (MB)" unit=" MB" stroke="#f59e0b" />
+                <MetricChart data={metrics} dataKey="vram" label="VRAM (MB)" unit=" MB" stroke="#8b5cf6" />
+              </div>
+            )}
+          </Card>
+
+
+
+          <Card className="overflow-hidden">
+            <div className="flex items-center justify-between border-b border-border px-5 py-4">
+              <div className="flex items-center gap-2">
                 <Activity className="h-4 w-4 text-primary" />
                 <h2 className="font-display text-lg font-semibold">Live logs</h2>
               </div>
