@@ -293,7 +293,7 @@ function ModelDetailPage() {
         </div>
         <div className="flex gap-2">
           {canDeploy ? (
-            <Button className="gap-2" onClick={() => deploy.mutate()} disabled={deploy.isPending}>
+            <Button className="gap-2" onClick={() => deploy.mutate(undefined)} disabled={deploy.isPending}>
               <Play className="h-4 w-4" /> Deploy
             </Button>
           ) : activeDeployment ? (
