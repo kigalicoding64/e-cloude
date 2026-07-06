@@ -500,8 +500,76 @@ function ModelDetailPage() {
               </div>
             )}
           </Card>
+
+          <Card className="overflow-hidden">
+            <div className="flex items-center justify-between border-b border-border px-5 py-4">
+              <div className="flex items-center gap-2">
+                <GitBranch className="h-4 w-4 text-primary" />
+                <h2 className="font-display text-lg font-semibold">Versions</h2>
+              </div>
+              <Dialog open={versionOpen} onOpenChange={setVersionOpen}>
+                <DialogTrigger asChild>
+                  <Button size="sm" variant="outline">+ Version</Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>New version</DialogTitle>
+                    <DialogDescription>Pin a specific branch, tag, or commit — then deploy or roll back.</DialogDescription>
+                  </DialogHeader>
+                  <div className="grid gap-3">
+                    <div className="grid gap-1.5">
+                      <Label>Git ref (branch / tag / SHA)</Label>
+                      <Input value={newVersion.git_ref} onChange={(e) => setNewVersion({ ...newVersion, git_ref: e.target.value })} placeholder="v1.2.0 or abc123" />
+                    </div>
+                    <div className="grid gap-1.5">
+                      <Label>Notes</Label>
+                      <Input value={newVersion.notes} onChange={(e) => setNewVersion({ ...newVersion, notes: e.target.value })} placeholder="What changed" />
+                    </div>
+                    <div className="grid gap-1.5">
+                      <Label>Deployment config (JSON)</Label>
+                      <Textarea rows={4} className="font-mono text-xs" value={newVersion.config} onChange={(e) => setNewVersion({ ...newVersion, config: e.target.value })} />
+                    </div>
+                  </div>
+                  <DialogFooter>
+                    <Button variant="ghost" onClick={() => setVersionOpen(false)}>Cancel</Button>
+                    <Button onClick={() => createVersion.mutate()} disabled={createVersion.isPending}>Create</Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+            </div>
+            {versions.length === 0 ? (
+              <div className="p-6 text-center text-xs text-muted-foreground">No versions yet.</div>
+            ) : (
+              <div className="divide-y divide-border">
+                {versions.map((v) => (
+                  <div key={v.id} className="flex items-center justify-between gap-2 px-4 py-3">
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-2">
+                        <code className="truncate font-mono text-xs">{v.git_ref}</code>
+                        {v.is_active && <Badge className="bg-emerald-500/15 text-emerald-600 dark:text-emerald-400">active</Badge>}
+                      </div>
+                      {v.notes && <div className="mt-0.5 line-clamp-1 text-[11px] text-muted-foreground">{v.notes}</div>}
+                      <div className="mt-0.5 text-[10px] text-muted-foreground">{formatDate(v.created_at)}</div>
+                    </div>
+                    <Button
+                      size="sm"
+                      variant={v.is_active ? "ghost" : "outline"}
+                      className="gap-1.5"
+                      disabled={deploy.isPending || !!activeDeployment}
+                      onClick={() => deploy.mutate(v.id)}
+                      title={v.is_active ? "Redeploy" : "Rollback"}
+                    >
+                      {v.is_active ? <Play className="h-3 w-3" /> : <RotateCcw className="h-3 w-3" />}
+                      {v.is_active ? "Deploy" : "Rollback"}
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </Card>
         </div>
       </div>
+
 
       <Dialog open={!!createdKey} onOpenChange={(o) => !o && setCreatedKey(null)}>
         <DialogContent>
@@ -525,3 +593,40 @@ function ModelDetailPage() {
     </div>
   );
 }
+
+type MetricPoint = { t: string; gpu: number | null; mem: number | null; vram: number | null; tps: number | null };
+
+function MetricChart({ data, dataKey, label, unit = "", stroke }: {
+  data: MetricPoint[];
+  dataKey: "gpu" | "mem" | "vram" | "tps";
+  label: string;
+  unit?: string;
+  stroke: string;
+}) {
+  const latest = [...data].reverse().find((d) => d[dataKey] != null)?.[dataKey];
+  return (
+    <div className="rounded-lg border border-border bg-surface-2 p-3">
+      <div className="mb-1 flex items-center justify-between">
+        <span className="text-xs text-muted-foreground">{label}</span>
+        <span className="font-mono text-xs font-semibold">
+          {latest != null ? `${Number(latest).toFixed(dataKey === "gpu" || dataKey === "tps" ? 1 : 0)}${unit}` : "—"}
+        </span>
+      </div>
+      <div className="h-32">
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart data={data} margin={{ top: 4, right: 8, bottom: 4, left: -20 }}>
+            <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+            <XAxis dataKey="t" tick={{ fontSize: 9 }} interval="preserveStartEnd" />
+            <YAxis tick={{ fontSize: 9 }} width={40} />
+            <Tooltip
+              contentStyle={{ background: "hsl(var(--popover))", border: "1px solid hsl(var(--border))", fontSize: 11 }}
+              formatter={(v: number) => [`${v}${unit}`, label]}
+            />
+            <Line type="monotone" dataKey={dataKey} stroke={stroke} strokeWidth={2} dot={false} isAnimationActive={false} connectNulls />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
+    </div>
+  );
+}
+
