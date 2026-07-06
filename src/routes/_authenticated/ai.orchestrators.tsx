@@ -11,7 +11,7 @@ import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogTrigger, DialogDescription,
 } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Server, Plus, Trash2, Radio } from "lucide-react";
+import { Server, Plus, Trash2, Radio, Copy, Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
 import { formatDate } from "@/lib/format";
 
@@ -188,7 +188,8 @@ function OrchestratorsPage() {
               <div className="mb-3 truncate rounded-md bg-surface-2 px-2 py-1.5 font-mono text-[11px] text-muted-foreground">
                 {r.base_url}
               </div>
-              <div className="flex items-center justify-between text-xs text-muted-foreground">
+              <AgentTokenRow token={r.agent_token} />
+              <div className="mt-3 flex items-center justify-between text-xs text-muted-foreground">
                 <span>{r.gpu_type ?? "—"}</span>
                 <span>Added {formatDate(r.created_at)}</span>
               </div>
@@ -201,6 +202,45 @@ function OrchestratorsPage() {
           ))}
         </div>
       )}
+
+      <Card className="mt-8 p-5">
+        <h2 className="font-display text-base font-semibold">Agent HTTP API</h2>
+        <p className="mt-1 text-xs text-muted-foreground">
+          Your GPU agent authenticates with <code className="rounded bg-muted px-1">Authorization: Bearer &lt;agent_token&gt;</code> and polls the endpoints below.
+        </p>
+        <ul className="mt-3 space-y-1 font-mono text-[11px] text-muted-foreground">
+          <li>POST /api/public/v1/agent/heartbeat</li>
+          <li>GET&nbsp;&nbsp;/api/public/v1/agent/jobs/next</li>
+          <li>POST /api/public/v1/agent/deployments/&#123;id&#125;/status &nbsp;<span className="text-muted-foreground/70">{"{ status, container_id?, host?, error? }"}</span></li>
+          <li>POST /api/public/v1/agent/deployments/&#123;id&#125;/logs &nbsp;<span className="text-muted-foreground/70">{"{ level, message } | { events: [...] }"}</span></li>
+          <li>POST /api/public/v1/agent/deployments/&#123;id&#125;/metrics &nbsp;<span className="text-muted-foreground/70">{"{ gpu_util, memory_used_mb, vram_used_mb, tokens_per_sec }"}</span></li>
+        </ul>
+      </Card>
     </div>
   );
 }
+
+function AgentTokenRow({ token }: { token: string | null }) {
+  const [show, setShow] = useState(false);
+  if (!token) return null;
+  return (
+    <div className="flex items-center gap-1.5 rounded-md border border-dashed border-border px-2 py-1.5">
+      <code className="min-w-0 flex-1 truncate font-mono text-[10px] text-muted-foreground">
+        {show ? token : "•".repeat(24)}
+      </code>
+      <Button size="icon" variant="ghost" className="h-6 w-6" onClick={() => setShow((s) => !s)} aria-label="Toggle token">
+        {show ? <EyeOff className="h-3 w-3" /> : <Eye className="h-3 w-3" />}
+      </Button>
+      <Button
+        size="icon"
+        variant="ghost"
+        className="h-6 w-6"
+        onClick={() => { navigator.clipboard.writeText(token); toast.success("Token copied"); }}
+        aria-label="Copy token"
+      >
+        <Copy className="h-3 w-3" />
+      </Button>
+    </div>
+  );
+}
+

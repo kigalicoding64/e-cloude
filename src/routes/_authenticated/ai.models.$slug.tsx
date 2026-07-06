@@ -8,15 +8,20 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogTrigger, DialogDescription,
 } from "@/components/ui/dialog";
 import {
   ArrowLeft, Play, Square, Trash2, Rocket, KeyRound, Copy, Github, ExternalLink, Activity,
+  GitBranch, RotateCcw, LineChart as LineChartIcon,
 } from "lucide-react";
 import { toast } from "sonner";
 import { formatDate } from "@/lib/format";
 import { generateApiKey, sha256Hex } from "@/lib/hash";
+import {
+  LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid,
+} from "recharts";
 
 export const Route = createFileRoute("/_authenticated/ai/models/$slug")({
   head: () => ({ meta: [{ title: "Model — E-Cloud" }] }),
@@ -41,7 +46,11 @@ function ModelDetailPage() {
   const navigate = Route.useNavigate();
   const [keyOpen, setKeyOpen] = useState(false);
   const [keyName, setKeyName] = useState("");
+  const [keyRate, setKeyRate] = useState(60);
+  const [keyQuota, setKeyQuota] = useState(1_000_000);
   const [createdKey, setCreatedKey] = useState<string | null>(null);
+  const [versionOpen, setVersionOpen] = useState(false);
+  const [newVersion, setNewVersion] = useState({ git_ref: "main", notes: "", config: "{}" });
 
   const { data: model } = useQuery({
     queryKey: ["ai-model", slug],
@@ -106,34 +115,80 @@ function ModelDetailPage() {
     },
   });
 
+  const { data: versions = [] } = useQuery({
+    queryKey: ["ai-versions", model?.id],
+    enabled: !!model,
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("ai_model_versions")
+        .select("*")
+        .eq("model_id", model!.id)
+        .order("created_at", { ascending: false });
+      return data ?? [];
+    },
+  });
+
+  const { data: metrics = [] } = useQuery({
+    queryKey: ["ai-metrics", activeDeployment?.id],
+    enabled: !!activeDeployment,
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("ai_metrics")
+        .select("gpu_util, memory_used_mb, vram_used_mb, tokens_per_sec, measured_at")
+        .eq("deployment_id", activeDeployment!.id)
+        .order("measured_at", { ascending: false })
+        .limit(120);
+      return (data ?? []).reverse().map((m) => ({
+        t: new Date(m.measured_at).toLocaleTimeString(),
+        gpu: m.gpu_util != null ? Number(m.gpu_util) : null,
+        mem: m.memory_used_mb ?? null,
+        vram: m.vram_used_mb ?? null,
+        tps: m.tokens_per_sec != null ? Number(m.tokens_per_sec) : null,
+      }));
+    },
+    refetchInterval: 3000,
+  });
+
   const deploy = useMutation({
-    mutationFn: async () => {
+    mutationFn: async (versionId?: string) => {
       if (!model) return;
       const runner = orchestrators.find((o) => o.status === "online") ?? orchestrators[0];
+      const version = versionId
+        ? versions.find((v) => v.id === versionId)
+        : versions.find((v) => v.is_active) ?? versions[0];
       const { data: dep, error } = await supabase
         .from("ai_deployments")
         .insert({
           model_id: model.id,
           orchestrator_id: runner?.id ?? null,
+          version_id: version?.id ?? null,
           status: "pending",
           started_at: new Date().toISOString(),
         })
         .select()
         .single();
       if (error) throw error;
+      // Mark selected version as active
+      if (version) {
+        await supabase.from("ai_model_versions").update({ is_active: false }).eq("model_id", model.id);
+        await supabase.from("ai_model_versions").update({ is_active: true }).eq("id", version.id);
+      }
       await supabase.from("ai_models").update({ status: "building" }).eq("id", model.id);
       await supabase.from("ai_deployment_events").insert([
-        { deployment_id: dep.id, level: "info", message: `Queued deployment for ${model.name}` },
+        { deployment_id: dep.id, level: "info", message: `Queued deployment for ${model.name}${version ? ` @ ${version.git_ref}` : ""}` },
         { deployment_id: dep.id, level: "info", message: runner ? `Assigned to runner "${runner.name}"` : "No GPU runner registered — job will remain pending until one is added" },
       ]);
     },
     onSuccess: () => {
       toast.success("Deployment queued");
       qc.invalidateQueries({ queryKey: ["ai-deployments"] });
+      qc.invalidateQueries({ queryKey: ["ai-versions"] });
       qc.invalidateQueries({ queryKey: ["ai-model", slug] });
     },
     onError: (e: Error) => toast.error(e.message),
   });
+
+
 
   const stop = useMutation({
     mutationFn: async (id: string) => {
@@ -178,6 +233,8 @@ function ModelDetailPage() {
         name: keyName.trim(),
         prefix: key.slice(0, 16),
         key_hash,
+        rate_limit_per_min: Math.max(1, Number(keyRate) || 60),
+        quota_tokens_month: Math.max(0, Number(keyQuota) || 1_000_000),
       });
       if (error) throw error;
       return key;
@@ -200,6 +257,30 @@ function ModelDetailPage() {
       toast.success("Key revoked");
       qc.invalidateQueries({ queryKey: ["ai-keys"] });
     },
+  });
+
+  const createVersion = useMutation({
+    mutationFn: async () => {
+      if (!model || !newVersion.git_ref.trim()) throw new Error("Git ref required");
+      let config: unknown = {};
+      try { config = JSON.parse(newVersion.config || "{}"); } catch { throw new Error("Config must be valid JSON"); }
+      const { error } = await supabase.from("ai_model_versions").insert({
+        model_id: model.id,
+        git_ref: newVersion.git_ref.trim(),
+        source_repo: model.source_repo,
+        deployment_config: config as never,
+        notes: newVersion.notes || null,
+        created_by: user!.id,
+      });
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      toast.success("Version created");
+      setVersionOpen(false);
+      setNewVersion({ git_ref: "main", notes: "", config: "{}" });
+      qc.invalidateQueries({ queryKey: ["ai-versions"] });
+    },
+    onError: (e: Error) => toast.error(e.message),
   });
 
   if (!model) return <div className="p-10 text-muted-foreground">Loading…</div>;
@@ -238,7 +319,7 @@ function ModelDetailPage() {
         </div>
         <div className="flex gap-2">
           {canDeploy ? (
-            <Button className="gap-2" onClick={() => deploy.mutate()} disabled={deploy.isPending}>
+            <Button className="gap-2" onClick={() => deploy.mutate(undefined)} disabled={deploy.isPending}>
               <Play className="h-4 w-4" /> Deploy
             </Button>
           ) : activeDeployment ? (
@@ -305,6 +386,30 @@ function ModelDetailPage() {
           <Card className="overflow-hidden">
             <div className="flex items-center justify-between border-b border-border px-5 py-4">
               <div className="flex items-center gap-2">
+                <LineChartIcon className="h-4 w-4 text-primary" />
+                <h2 className="font-display text-lg font-semibold">GPU metrics</h2>
+              </div>
+              <span className="text-xs text-muted-foreground">{metrics.length} samples</span>
+            </div>
+            {metrics.length === 0 ? (
+              <div className="p-10 text-center text-sm text-muted-foreground">
+                Waiting for the runner to stream metrics.
+              </div>
+            ) : (
+              <div className="grid gap-4 p-4 md:grid-cols-2">
+                <MetricChart data={metrics} dataKey="gpu" label="GPU util (%)" unit="%" stroke="hsl(var(--primary))" />
+                <MetricChart data={metrics} dataKey="tps" label="Tokens / sec" stroke="#10b981" />
+                <MetricChart data={metrics} dataKey="mem" label="Memory (MB)" unit=" MB" stroke="#f59e0b" />
+                <MetricChart data={metrics} dataKey="vram" label="VRAM (MB)" unit=" MB" stroke="#8b5cf6" />
+              </div>
+            )}
+          </Card>
+
+
+
+          <Card className="overflow-hidden">
+            <div className="flex items-center justify-between border-b border-border px-5 py-4">
+              <div className="flex items-center gap-2">
                 <Activity className="h-4 w-4 text-primary" />
                 <h2 className="font-display text-lg font-semibold">Live logs</h2>
               </div>
@@ -354,9 +459,21 @@ function ModelDetailPage() {
                     <DialogTitle>Create gateway key</DialogTitle>
                     <DialogDescription>This key can only call {model.name}.</DialogDescription>
                   </DialogHeader>
-                  <div className="space-y-1.5">
-                    <Label>Name</Label>
-                    <Input value={keyName} onChange={(e) => setKeyName(e.target.value)} placeholder="e.g. Mobile app" autoFocus />
+                  <div className="grid gap-3">
+                    <div className="grid gap-1.5">
+                      <Label>Name</Label>
+                      <Input value={keyName} onChange={(e) => setKeyName(e.target.value)} placeholder="e.g. Mobile app" autoFocus />
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="grid gap-1.5">
+                        <Label>Rate limit (req/min)</Label>
+                        <Input type="number" min={1} value={keyRate} onChange={(e) => setKeyRate(Number(e.target.value))} />
+                      </div>
+                      <div className="grid gap-1.5">
+                        <Label>Monthly token quota</Label>
+                        <Input type="number" min={0} value={keyQuota} onChange={(e) => setKeyQuota(Number(e.target.value))} />
+                      </div>
+                    </div>
                   </div>
                   <DialogFooter>
                     <Button variant="ghost" onClick={() => setKeyOpen(false)}>Cancel</Button>
@@ -383,8 +500,76 @@ function ModelDetailPage() {
               </div>
             )}
           </Card>
+
+          <Card className="overflow-hidden">
+            <div className="flex items-center justify-between border-b border-border px-5 py-4">
+              <div className="flex items-center gap-2">
+                <GitBranch className="h-4 w-4 text-primary" />
+                <h2 className="font-display text-lg font-semibold">Versions</h2>
+              </div>
+              <Dialog open={versionOpen} onOpenChange={setVersionOpen}>
+                <DialogTrigger asChild>
+                  <Button size="sm" variant="outline">+ Version</Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>New version</DialogTitle>
+                    <DialogDescription>Pin a specific branch, tag, or commit — then deploy or roll back.</DialogDescription>
+                  </DialogHeader>
+                  <div className="grid gap-3">
+                    <div className="grid gap-1.5">
+                      <Label>Git ref (branch / tag / SHA)</Label>
+                      <Input value={newVersion.git_ref} onChange={(e) => setNewVersion({ ...newVersion, git_ref: e.target.value })} placeholder="v1.2.0 or abc123" />
+                    </div>
+                    <div className="grid gap-1.5">
+                      <Label>Notes</Label>
+                      <Input value={newVersion.notes} onChange={(e) => setNewVersion({ ...newVersion, notes: e.target.value })} placeholder="What changed" />
+                    </div>
+                    <div className="grid gap-1.5">
+                      <Label>Deployment config (JSON)</Label>
+                      <Textarea rows={4} className="font-mono text-xs" value={newVersion.config} onChange={(e) => setNewVersion({ ...newVersion, config: e.target.value })} />
+                    </div>
+                  </div>
+                  <DialogFooter>
+                    <Button variant="ghost" onClick={() => setVersionOpen(false)}>Cancel</Button>
+                    <Button onClick={() => createVersion.mutate()} disabled={createVersion.isPending}>Create</Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+            </div>
+            {versions.length === 0 ? (
+              <div className="p-6 text-center text-xs text-muted-foreground">No versions yet.</div>
+            ) : (
+              <div className="divide-y divide-border">
+                {versions.map((v) => (
+                  <div key={v.id} className="flex items-center justify-between gap-2 px-4 py-3">
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-2">
+                        <code className="truncate font-mono text-xs">{v.git_ref}</code>
+                        {v.is_active && <Badge className="bg-emerald-500/15 text-emerald-600 dark:text-emerald-400">active</Badge>}
+                      </div>
+                      {v.notes && <div className="mt-0.5 line-clamp-1 text-[11px] text-muted-foreground">{v.notes}</div>}
+                      <div className="mt-0.5 text-[10px] text-muted-foreground">{formatDate(v.created_at)}</div>
+                    </div>
+                    <Button
+                      size="sm"
+                      variant={v.is_active ? "ghost" : "outline"}
+                      className="gap-1.5"
+                      disabled={deploy.isPending || !!activeDeployment}
+                      onClick={() => deploy.mutate(v.id)}
+                      title={v.is_active ? "Redeploy" : "Rollback"}
+                    >
+                      {v.is_active ? <Play className="h-3 w-3" /> : <RotateCcw className="h-3 w-3" />}
+                      {v.is_active ? "Deploy" : "Rollback"}
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </Card>
         </div>
       </div>
+
 
       <Dialog open={!!createdKey} onOpenChange={(o) => !o && setCreatedKey(null)}>
         <DialogContent>
@@ -408,3 +593,40 @@ function ModelDetailPage() {
     </div>
   );
 }
+
+type MetricPoint = { t: string; gpu: number | null; mem: number | null; vram: number | null; tps: number | null };
+
+function MetricChart({ data, dataKey, label, unit = "", stroke }: {
+  data: MetricPoint[];
+  dataKey: "gpu" | "mem" | "vram" | "tps";
+  label: string;
+  unit?: string;
+  stroke: string;
+}) {
+  const latest = [...data].reverse().find((d) => d[dataKey] != null)?.[dataKey];
+  return (
+    <div className="rounded-lg border border-border bg-surface-2 p-3">
+      <div className="mb-1 flex items-center justify-between">
+        <span className="text-xs text-muted-foreground">{label}</span>
+        <span className="font-mono text-xs font-semibold">
+          {latest != null ? `${Number(latest).toFixed(dataKey === "gpu" || dataKey === "tps" ? 1 : 0)}${unit}` : "—"}
+        </span>
+      </div>
+      <div className="h-32">
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart data={data} margin={{ top: 4, right: 8, bottom: 4, left: -20 }}>
+            <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+            <XAxis dataKey="t" tick={{ fontSize: 9 }} interval="preserveStartEnd" />
+            <YAxis tick={{ fontSize: 9 }} width={40} />
+            <Tooltip
+              contentStyle={{ background: "hsl(var(--popover))", border: "1px solid hsl(var(--border))", fontSize: 11 }}
+              formatter={(v: number) => [`${v}${unit}`, label]}
+            />
+            <Line type="monotone" dataKey={dataKey} stroke={stroke} strokeWidth={2} dot={false} isAnimationActive={false} connectNulls />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
+    </div>
+  );
+}
+
