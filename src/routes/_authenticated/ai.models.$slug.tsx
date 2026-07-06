@@ -233,6 +233,8 @@ function ModelDetailPage() {
         name: keyName.trim(),
         prefix: key.slice(0, 16),
         key_hash,
+        rate_limit_per_min: Math.max(1, Number(keyRate) || 60),
+        quota_tokens_month: Math.max(0, Number(keyQuota) || 1_000_000),
       });
       if (error) throw error;
       return key;
@@ -255,6 +257,30 @@ function ModelDetailPage() {
       toast.success("Key revoked");
       qc.invalidateQueries({ queryKey: ["ai-keys"] });
     },
+  });
+
+  const createVersion = useMutation({
+    mutationFn: async () => {
+      if (!model || !newVersion.git_ref.trim()) throw new Error("Git ref required");
+      let config: Record<string, unknown> = {};
+      try { config = JSON.parse(newVersion.config || "{}"); } catch { throw new Error("Config must be valid JSON"); }
+      const { error } = await supabase.from("ai_model_versions").insert({
+        model_id: model.id,
+        git_ref: newVersion.git_ref.trim(),
+        source_repo: model.source_repo,
+        deployment_config: config,
+        notes: newVersion.notes || null,
+        created_by: user!.id,
+      });
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      toast.success("Version created");
+      setVersionOpen(false);
+      setNewVersion({ git_ref: "main", notes: "", config: "{}" });
+      qc.invalidateQueries({ queryKey: ["ai-versions"] });
+    },
+    onError: (e: Error) => toast.error(e.message),
   });
 
   if (!model) return <div className="p-10 text-muted-foreground">Loading…</div>;
