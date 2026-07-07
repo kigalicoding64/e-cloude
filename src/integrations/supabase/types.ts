@@ -14,6 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      activity_log: {
+        Row: {
+          created_at: string
+          id: string
+          metadata: Json
+          org_id: string | null
+          target_id: string | null
+          target_name: string | null
+          type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          metadata?: Json
+          org_id?: string | null
+          target_id?: string | null
+          target_name?: string | null
+          type: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          metadata?: Json
+          org_id?: string | null
+          target_id?: string | null
+          target_name?: string | null
+          type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       ai_deployment_events: {
         Row: {
           created_at: string
@@ -456,6 +489,45 @@ export type Database = {
         }
         Relationships: []
       }
+      backup_schedules: {
+        Row: {
+          created_at: string
+          enabled: boolean
+          frequency: string
+          id: string
+          last_run_at: string | null
+          name: string
+          next_run_at: string | null
+          sources: string[]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          enabled?: boolean
+          frequency?: string
+          id?: string
+          last_run_at?: string | null
+          name: string
+          next_run_at?: string | null
+          sources?: string[]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          enabled?: boolean
+          frequency?: string
+          id?: string
+          last_run_at?: string | null
+          name?: string
+          next_run_at?: string | null
+          sources?: string[]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       files: {
         Row: {
           created_at: string
@@ -465,6 +537,7 @@ export type Database = {
           is_trashed: boolean
           mime_type: string | null
           name: string
+          org_id: string | null
           size: number
           storage_path: string
           trashed_at: string | null
@@ -479,6 +552,7 @@ export type Database = {
           is_trashed?: boolean
           mime_type?: string | null
           name: string
+          org_id?: string | null
           size?: number
           storage_path: string
           trashed_at?: string | null
@@ -493,6 +567,7 @@ export type Database = {
           is_trashed?: boolean
           mime_type?: string | null
           name?: string
+          org_id?: string | null
           size?: number
           storage_path?: string
           trashed_at?: string | null
@@ -514,6 +589,7 @@ export type Database = {
           created_at: string
           id: string
           name: string
+          org_id: string | null
           parent_id: string | null
           updated_at: string
           user_id: string
@@ -522,6 +598,7 @@ export type Database = {
           created_at?: string
           id?: string
           name: string
+          org_id?: string | null
           parent_id?: string | null
           updated_at?: string
           user_id: string
@@ -530,6 +607,7 @@ export type Database = {
           created_at?: string
           id?: string
           name?: string
+          org_id?: string | null
           parent_id?: string | null
           updated_at?: string
           user_id?: string
@@ -543,6 +621,101 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      notifications: {
+        Row: {
+          body: string | null
+          created_at: string
+          id: string
+          link: string | null
+          read_at: string | null
+          title: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          body?: string | null
+          created_at?: string
+          id?: string
+          link?: string | null
+          read_at?: string | null
+          title: string
+          type?: string
+          user_id: string
+        }
+        Update: {
+          body?: string | null
+          created_at?: string
+          id?: string
+          link?: string | null
+          read_at?: string | null
+          title?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      organization_members: {
+        Row: {
+          created_at: string
+          id: string
+          org_id: string
+          role: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          org_id: string
+          role?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          org_id?: string
+          role?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "organization_members_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      organizations: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          owner_id: string
+          slug: string
+          storage_quota_gb: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          owner_id: string
+          slug: string
+          storage_quota_gb?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          owner_id?: string
+          slug?: string
+          storage_quota_gb?: number
+          updated_at?: string
+        }
+        Relationships: []
       }
       profiles: {
         Row: {
@@ -649,6 +822,14 @@ export type Database = {
           _role: Database["public"]["Enums"]["app_role"]
           _user_id: string
         }
+        Returns: boolean
+      }
+      is_org_admin: {
+        Args: { _org_id: string; _user_id: string }
+        Returns: boolean
+      }
+      is_org_member: {
+        Args: { _org_id: string; _user_id: string }
         Returns: boolean
       }
     }
