@@ -15,14 +15,20 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as STokenRouteImport } from './routes/s.$token'
 import { Route as AuthenticatedTrashRouteImport } from './routes/_authenticated/trash'
+import { Route as AuthenticatedStorageAnalyticsRouteImport } from './routes/_authenticated/storage-analytics'
 import { Route as AuthenticatedSharedRouteImport } from './routes/_authenticated/shared'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
+import { Route as AuthenticatedOrganizationsRouteImport } from './routes/_authenticated/organizations'
+import { Route as AuthenticatedNotificationsRouteImport } from './routes/_authenticated/notifications'
 import { Route as AuthenticatedFilesRouteImport } from './routes/_authenticated/files'
 import { Route as AuthenticatedFavoritesRouteImport } from './routes/_authenticated/favorites'
 import { Route as AuthenticatedDeveloperRouteImport } from './routes/_authenticated/developer'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedBackupRouteImport } from './routes/_authenticated/backup'
 import { Route as AuthenticatedApiKeysRouteImport } from './routes/_authenticated/api-keys'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as AuthenticatedActivityRouteImport } from './routes/_authenticated/activity'
+import { Route as AuthenticatedOrganizationsIdRouteImport } from './routes/_authenticated/organizations.$id'
 import { Route as AuthenticatedAiOrchestratorsRouteImport } from './routes/_authenticated/ai.orchestrators'
 import { Route as AuthenticatedAiModelsRouteImport } from './routes/_authenticated/ai.models'
 import { Route as AuthenticatedAiDeploymentsRouteImport } from './routes/_authenticated/ai.deployments'
@@ -67,6 +73,12 @@ const AuthenticatedTrashRoute = AuthenticatedTrashRouteImport.update({
   path: '/trash',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedStorageAnalyticsRoute =
+  AuthenticatedStorageAnalyticsRouteImport.update({
+    id: '/storage-analytics',
+    path: '/storage-analytics',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedSharedRoute = AuthenticatedSharedRouteImport.update({
   id: '/shared',
   path: '/shared',
@@ -77,6 +89,18 @@ const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedOrganizationsRoute =
+  AuthenticatedOrganizationsRouteImport.update({
+    id: '/organizations',
+    path: '/organizations',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedNotificationsRoute =
+  AuthenticatedNotificationsRouteImport.update({
+    id: '/notifications',
+    path: '/notifications',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedFilesRoute = AuthenticatedFilesRouteImport.update({
   id: '/files',
   path: '/files',
@@ -97,6 +121,11 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedBackupRoute = AuthenticatedBackupRouteImport.update({
+  id: '/backup',
+  path: '/backup',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedApiKeysRoute = AuthenticatedApiKeysRouteImport.update({
   id: '/api-keys',
   path: '/api-keys',
@@ -107,6 +136,17 @@ const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedActivityRoute = AuthenticatedActivityRouteImport.update({
+  id: '/activity',
+  path: '/activity',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedOrganizationsIdRoute =
+  AuthenticatedOrganizationsIdRouteImport.update({
+    id: '/$id',
+    path: '/$id',
+    getParentRoute: () => AuthenticatedOrganizationsRoute,
+  } as any)
 const AuthenticatedAiOrchestratorsRoute =
   AuthenticatedAiOrchestratorsRouteImport.update({
     id: '/ai/orchestrators',
@@ -190,19 +230,25 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/activity': typeof AuthenticatedActivityRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/api-keys': typeof AuthenticatedApiKeysRoute
+  '/backup': typeof AuthenticatedBackupRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/developer': typeof AuthenticatedDeveloperRoute
   '/favorites': typeof AuthenticatedFavoritesRoute
   '/files': typeof AuthenticatedFilesRoute
+  '/notifications': typeof AuthenticatedNotificationsRoute
+  '/organizations': typeof AuthenticatedOrganizationsRouteWithChildren
   '/settings': typeof AuthenticatedSettingsRoute
   '/shared': typeof AuthenticatedSharedRoute
+  '/storage-analytics': typeof AuthenticatedStorageAnalyticsRoute
   '/trash': typeof AuthenticatedTrashRoute
   '/s/$token': typeof STokenRoute
   '/ai/deployments': typeof AuthenticatedAiDeploymentsRoute
   '/ai/models': typeof AuthenticatedAiModelsRouteWithChildren
   '/ai/orchestrators': typeof AuthenticatedAiOrchestratorsRoute
+  '/organizations/$id': typeof AuthenticatedOrganizationsIdRoute
   '/ai/models/$slug': typeof AuthenticatedAiModelsSlugRoute
   '/api/v1/chat/$slug': typeof ApiV1ChatSlugRoute
   '/api/public/v1/agent/heartbeat': typeof ApiPublicV1AgentHeartbeatRoute
@@ -219,19 +265,25 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/activity': typeof AuthenticatedActivityRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/api-keys': typeof AuthenticatedApiKeysRoute
+  '/backup': typeof AuthenticatedBackupRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/developer': typeof AuthenticatedDeveloperRoute
   '/favorites': typeof AuthenticatedFavoritesRoute
   '/files': typeof AuthenticatedFilesRoute
+  '/notifications': typeof AuthenticatedNotificationsRoute
+  '/organizations': typeof AuthenticatedOrganizationsRouteWithChildren
   '/settings': typeof AuthenticatedSettingsRoute
   '/shared': typeof AuthenticatedSharedRoute
+  '/storage-analytics': typeof AuthenticatedStorageAnalyticsRoute
   '/trash': typeof AuthenticatedTrashRoute
   '/s/$token': typeof STokenRoute
   '/ai/deployments': typeof AuthenticatedAiDeploymentsRoute
   '/ai/models': typeof AuthenticatedAiModelsRouteWithChildren
   '/ai/orchestrators': typeof AuthenticatedAiOrchestratorsRoute
+  '/organizations/$id': typeof AuthenticatedOrganizationsIdRoute
   '/ai/models/$slug': typeof AuthenticatedAiModelsSlugRoute
   '/api/v1/chat/$slug': typeof ApiV1ChatSlugRoute
   '/api/public/v1/agent/heartbeat': typeof ApiPublicV1AgentHeartbeatRoute
@@ -250,19 +302,25 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/_authenticated/activity': typeof AuthenticatedActivityRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/api-keys': typeof AuthenticatedApiKeysRoute
+  '/_authenticated/backup': typeof AuthenticatedBackupRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/developer': typeof AuthenticatedDeveloperRoute
   '/_authenticated/favorites': typeof AuthenticatedFavoritesRoute
   '/_authenticated/files': typeof AuthenticatedFilesRoute
+  '/_authenticated/notifications': typeof AuthenticatedNotificationsRoute
+  '/_authenticated/organizations': typeof AuthenticatedOrganizationsRouteWithChildren
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/shared': typeof AuthenticatedSharedRoute
+  '/_authenticated/storage-analytics': typeof AuthenticatedStorageAnalyticsRoute
   '/_authenticated/trash': typeof AuthenticatedTrashRoute
   '/s/$token': typeof STokenRoute
   '/_authenticated/ai/deployments': typeof AuthenticatedAiDeploymentsRoute
   '/_authenticated/ai/models': typeof AuthenticatedAiModelsRouteWithChildren
   '/_authenticated/ai/orchestrators': typeof AuthenticatedAiOrchestratorsRoute
+  '/_authenticated/organizations/$id': typeof AuthenticatedOrganizationsIdRoute
   '/_authenticated/ai/models/$slug': typeof AuthenticatedAiModelsSlugRoute
   '/api/v1/chat/$slug': typeof ApiV1ChatSlugRoute
   '/api/public/v1/agent/heartbeat': typeof ApiPublicV1AgentHeartbeatRoute
@@ -281,19 +339,25 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/sitemap.xml'
+    | '/activity'
     | '/admin'
     | '/api-keys'
+    | '/backup'
     | '/dashboard'
     | '/developer'
     | '/favorites'
     | '/files'
+    | '/notifications'
+    | '/organizations'
     | '/settings'
     | '/shared'
+    | '/storage-analytics'
     | '/trash'
     | '/s/$token'
     | '/ai/deployments'
     | '/ai/models'
     | '/ai/orchestrators'
+    | '/organizations/$id'
     | '/ai/models/$slug'
     | '/api/v1/chat/$slug'
     | '/api/public/v1/agent/heartbeat'
@@ -310,19 +374,25 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/sitemap.xml'
+    | '/activity'
     | '/admin'
     | '/api-keys'
+    | '/backup'
     | '/dashboard'
     | '/developer'
     | '/favorites'
     | '/files'
+    | '/notifications'
+    | '/organizations'
     | '/settings'
     | '/shared'
+    | '/storage-analytics'
     | '/trash'
     | '/s/$token'
     | '/ai/deployments'
     | '/ai/models'
     | '/ai/orchestrators'
+    | '/organizations/$id'
     | '/ai/models/$slug'
     | '/api/v1/chat/$slug'
     | '/api/public/v1/agent/heartbeat'
@@ -340,19 +410,25 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/auth'
     | '/sitemap.xml'
+    | '/_authenticated/activity'
     | '/_authenticated/admin'
     | '/_authenticated/api-keys'
+    | '/_authenticated/backup'
     | '/_authenticated/dashboard'
     | '/_authenticated/developer'
     | '/_authenticated/favorites'
     | '/_authenticated/files'
+    | '/_authenticated/notifications'
+    | '/_authenticated/organizations'
     | '/_authenticated/settings'
     | '/_authenticated/shared'
+    | '/_authenticated/storage-analytics'
     | '/_authenticated/trash'
     | '/s/$token'
     | '/_authenticated/ai/deployments'
     | '/_authenticated/ai/models'
     | '/_authenticated/ai/orchestrators'
+    | '/_authenticated/organizations/$id'
     | '/_authenticated/ai/models/$slug'
     | '/api/v1/chat/$slug'
     | '/api/public/v1/agent/heartbeat'
@@ -428,6 +504,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedTrashRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/storage-analytics': {
+      id: '/_authenticated/storage-analytics'
+      path: '/storage-analytics'
+      fullPath: '/storage-analytics'
+      preLoaderRoute: typeof AuthenticatedStorageAnalyticsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/shared': {
       id: '/_authenticated/shared'
       path: '/shared'
@@ -440,6 +523,20 @@ declare module '@tanstack/react-router' {
       path: '/settings'
       fullPath: '/settings'
       preLoaderRoute: typeof AuthenticatedSettingsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/organizations': {
+      id: '/_authenticated/organizations'
+      path: '/organizations'
+      fullPath: '/organizations'
+      preLoaderRoute: typeof AuthenticatedOrganizationsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/notifications': {
+      id: '/_authenticated/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof AuthenticatedNotificationsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/files': {
@@ -470,6 +567,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/backup': {
+      id: '/_authenticated/backup'
+      path: '/backup'
+      fullPath: '/backup'
+      preLoaderRoute: typeof AuthenticatedBackupRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/api-keys': {
       id: '/_authenticated/api-keys'
       path: '/api-keys'
@@ -483,6 +587,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin'
       preLoaderRoute: typeof AuthenticatedAdminRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/activity': {
+      id: '/_authenticated/activity'
+      path: '/activity'
+      fullPath: '/activity'
+      preLoaderRoute: typeof AuthenticatedActivityRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/organizations/$id': {
+      id: '/_authenticated/organizations/$id'
+      path: '/$id'
+      fullPath: '/organizations/$id'
+      preLoaderRoute: typeof AuthenticatedOrganizationsIdRouteImport
+      parentRoute: typeof AuthenticatedOrganizationsRoute
     }
     '/_authenticated/ai/orchestrators': {
       id: '/_authenticated/ai/orchestrators'
@@ -585,6 +703,20 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AuthenticatedOrganizationsRouteChildren {
+  AuthenticatedOrganizationsIdRoute: typeof AuthenticatedOrganizationsIdRoute
+}
+
+const AuthenticatedOrganizationsRouteChildren: AuthenticatedOrganizationsRouteChildren =
+  {
+    AuthenticatedOrganizationsIdRoute: AuthenticatedOrganizationsIdRoute,
+  }
+
+const AuthenticatedOrganizationsRouteWithChildren =
+  AuthenticatedOrganizationsRoute._addFileChildren(
+    AuthenticatedOrganizationsRouteChildren,
+  )
+
 interface AuthenticatedAiModelsRouteChildren {
   AuthenticatedAiModelsSlugRoute: typeof AuthenticatedAiModelsSlugRoute
 }
@@ -599,14 +731,19 @@ const AuthenticatedAiModelsRouteWithChildren =
   )
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedActivityRoute: typeof AuthenticatedActivityRoute
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
   AuthenticatedApiKeysRoute: typeof AuthenticatedApiKeysRoute
+  AuthenticatedBackupRoute: typeof AuthenticatedBackupRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedDeveloperRoute: typeof AuthenticatedDeveloperRoute
   AuthenticatedFavoritesRoute: typeof AuthenticatedFavoritesRoute
   AuthenticatedFilesRoute: typeof AuthenticatedFilesRoute
+  AuthenticatedNotificationsRoute: typeof AuthenticatedNotificationsRoute
+  AuthenticatedOrganizationsRoute: typeof AuthenticatedOrganizationsRouteWithChildren
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedSharedRoute: typeof AuthenticatedSharedRoute
+  AuthenticatedStorageAnalyticsRoute: typeof AuthenticatedStorageAnalyticsRoute
   AuthenticatedTrashRoute: typeof AuthenticatedTrashRoute
   AuthenticatedAiDeploymentsRoute: typeof AuthenticatedAiDeploymentsRoute
   AuthenticatedAiModelsRoute: typeof AuthenticatedAiModelsRouteWithChildren
@@ -614,14 +751,19 @@ interface AuthenticatedRouteRouteChildren {
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedActivityRoute: AuthenticatedActivityRoute,
   AuthenticatedAdminRoute: AuthenticatedAdminRoute,
   AuthenticatedApiKeysRoute: AuthenticatedApiKeysRoute,
+  AuthenticatedBackupRoute: AuthenticatedBackupRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedDeveloperRoute: AuthenticatedDeveloperRoute,
   AuthenticatedFavoritesRoute: AuthenticatedFavoritesRoute,
   AuthenticatedFilesRoute: AuthenticatedFilesRoute,
+  AuthenticatedNotificationsRoute: AuthenticatedNotificationsRoute,
+  AuthenticatedOrganizationsRoute: AuthenticatedOrganizationsRouteWithChildren,
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedSharedRoute: AuthenticatedSharedRoute,
+  AuthenticatedStorageAnalyticsRoute: AuthenticatedStorageAnalyticsRoute,
   AuthenticatedTrashRoute: AuthenticatedTrashRoute,
   AuthenticatedAiDeploymentsRoute: AuthenticatedAiDeploymentsRoute,
   AuthenticatedAiModelsRoute: AuthenticatedAiModelsRouteWithChildren,
@@ -654,13 +796,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
