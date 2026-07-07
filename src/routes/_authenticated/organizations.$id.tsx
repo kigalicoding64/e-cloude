@@ -37,13 +37,19 @@ function OrgDetail() {
     queryFn: async () => {
       const { data } = await supabase
         .from("organization_members")
-        .select("id, user_id, role, created_at, profiles:user_id(display_name, avatar_url)")
+        .select("id, user_id, role, created_at")
         .eq("org_id", id)
         .order("created_at", { ascending: true });
-      return (data ?? []) as Array<{
-        id: string; user_id: string; role: string; created_at: string;
-        profiles: { display_name: string | null; avatar_url: string | null } | null;
-      }>;
+      const rows = data ?? [];
+      const ids = [...new Set(rows.map((r) => r.user_id))];
+      const { data: profs } = ids.length
+        ? await supabase.from("profiles").select("id, display_name, avatar_url").in("id", ids)
+        : { data: [] as Array<{ id: string; display_name: string | null; avatar_url: string | null }> };
+      const map = new Map((profs ?? []).map((p) => [p.id, p]));
+      return rows.map((r) => ({
+        ...r,
+        profiles: map.get(r.user_id) ?? null,
+      }));
     },
   });
 
