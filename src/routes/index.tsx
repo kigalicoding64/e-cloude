@@ -93,7 +93,7 @@ function Landing() {
               <span className="ml-3 font-mono text-xs text-muted-foreground">POST /api/public/v1/files/upload</span>
             </div>
             <pre className="overflow-x-auto p-6 text-sm leading-relaxed">
-              <code className="font-mono text-foreground">{`curl -X POST https://your-app.lovable.app/api/public/v1/files/upload \\
+              <code className="font-mono text-foreground">{`curl -X POST https://cloud.egreedtech.org/api/public/v1/files/upload \\
   -H "X-API-Key: eck_live_••••••••••••••" \\
   -F "file=@invoice.pdf" \\
   -F "folder=receipts"
@@ -102,7 +102,7 @@ function Landing() {
   "id": "b4c1...",
   "name": "invoice.pdf",
   "size": 84213,
-  "url": "https://your-app.lovable.app/s/xk92..."
+  "url": "https://cloud.egreedtech.org/s/xk92..."
 }`}</code>
             </pre>
           </motion.div>
