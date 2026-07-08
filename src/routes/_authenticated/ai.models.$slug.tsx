@@ -108,7 +108,7 @@ function ModelDetailPage() {
     queryFn: async () => {
       const { data } = await supabase
         .from("ai_gateway_keys")
-        .select("*")
+        .select("id, name, prefix, model_id, owner_id, rate_limit_per_min, quota_tokens_month, tokens_used_month, quota_reset_at, created_at, revoked_at, last_used_at")
         .eq("model_id", model!.id)
         .order("created_at", { ascending: false });
       return data ?? [];
