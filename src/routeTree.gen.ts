@@ -18,6 +18,7 @@ import { Route as AuthenticatedTrashRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedStorageAnalyticsRouteImport } from './routes/_authenticated/storage-analytics'
 import { Route as AuthenticatedSharedRouteImport } from './routes/_authenticated/shared'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
+import { Route as AuthenticatedSecurityRouteImport } from './routes/_authenticated/security'
 import { Route as AuthenticatedOrganizationsRouteImport } from './routes/_authenticated/organizations'
 import { Route as AuthenticatedNotificationsRouteImport } from './routes/_authenticated/notifications'
 import { Route as AuthenticatedFilesRouteImport } from './routes/_authenticated/files'
@@ -91,6 +92,11 @@ const AuthenticatedSharedRoute = AuthenticatedSharedRouteImport.update({
 const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedSecurityRoute = AuthenticatedSecurityRouteImport.update({
+  id: '/security',
+  path: '/security',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedOrganizationsRoute =
@@ -265,6 +271,7 @@ export interface FileRoutesByFullPath {
   '/files': typeof AuthenticatedFilesRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
   '/organizations': typeof AuthenticatedOrganizationsRouteWithChildren
+  '/security': typeof AuthenticatedSecurityRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/shared': typeof AuthenticatedSharedRoute
   '/storage-analytics': typeof AuthenticatedStorageAnalyticsRoute
@@ -304,6 +311,7 @@ export interface FileRoutesByTo {
   '/files': typeof AuthenticatedFilesRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
   '/organizations': typeof AuthenticatedOrganizationsRouteWithChildren
+  '/security': typeof AuthenticatedSecurityRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/shared': typeof AuthenticatedSharedRoute
   '/storage-analytics': typeof AuthenticatedStorageAnalyticsRoute
@@ -345,6 +353,7 @@ export interface FileRoutesById {
   '/_authenticated/files': typeof AuthenticatedFilesRoute
   '/_authenticated/notifications': typeof AuthenticatedNotificationsRoute
   '/_authenticated/organizations': typeof AuthenticatedOrganizationsRouteWithChildren
+  '/_authenticated/security': typeof AuthenticatedSecurityRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/shared': typeof AuthenticatedSharedRoute
   '/_authenticated/storage-analytics': typeof AuthenticatedStorageAnalyticsRoute
@@ -386,6 +395,7 @@ export interface FileRouteTypes {
     | '/files'
     | '/notifications'
     | '/organizations'
+    | '/security'
     | '/settings'
     | '/shared'
     | '/storage-analytics'
@@ -425,6 +435,7 @@ export interface FileRouteTypes {
     | '/files'
     | '/notifications'
     | '/organizations'
+    | '/security'
     | '/settings'
     | '/shared'
     | '/storage-analytics'
@@ -465,6 +476,7 @@ export interface FileRouteTypes {
     | '/_authenticated/files'
     | '/_authenticated/notifications'
     | '/_authenticated/organizations'
+    | '/_authenticated/security'
     | '/_authenticated/settings'
     | '/_authenticated/shared'
     | '/_authenticated/storage-analytics'
@@ -574,6 +586,13 @@ declare module '@tanstack/react-router' {
       path: '/settings'
       fullPath: '/settings'
       preLoaderRoute: typeof AuthenticatedSettingsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/security': {
+      id: '/_authenticated/security'
+      path: '/security'
+      fullPath: '/security'
+      preLoaderRoute: typeof AuthenticatedSecurityRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/organizations': {
@@ -820,6 +839,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedFilesRoute: typeof AuthenticatedFilesRoute
   AuthenticatedNotificationsRoute: typeof AuthenticatedNotificationsRoute
   AuthenticatedOrganizationsRoute: typeof AuthenticatedOrganizationsRouteWithChildren
+  AuthenticatedSecurityRoute: typeof AuthenticatedSecurityRoute
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedSharedRoute: typeof AuthenticatedSharedRoute
   AuthenticatedStorageAnalyticsRoute: typeof AuthenticatedStorageAnalyticsRoute
@@ -840,6 +860,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedFilesRoute: AuthenticatedFilesRoute,
   AuthenticatedNotificationsRoute: AuthenticatedNotificationsRoute,
   AuthenticatedOrganizationsRoute: AuthenticatedOrganizationsRouteWithChildren,
+  AuthenticatedSecurityRoute: AuthenticatedSecurityRoute,
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedSharedRoute: AuthenticatedSharedRoute,
   AuthenticatedStorageAnalyticsRoute: AuthenticatedStorageAnalyticsRoute,
