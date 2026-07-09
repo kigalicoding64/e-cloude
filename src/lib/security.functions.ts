@@ -260,7 +260,7 @@ export const updateSecurityPrefs = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     await ensureRow(context.userId);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const patch: Record<string, unknown> = {};
+    const patch: { require_2fa_for_sensitive?: boolean } = {};
     if (typeof data.require_2fa_for_sensitive === "boolean") {
       patch.require_2fa_for_sensitive = data.require_2fa_for_sensitive;
     }
