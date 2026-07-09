@@ -7,7 +7,7 @@ export const setFileLock = createServerFn({ method: "POST" })
   .inputValidator((d: { file_id: string; password?: string; pin?: string }) => d)
   .handler(async ({ data, context }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const patch: Record<string, unknown> = {};
+    const patch: { password_hash?: string | null; pin_hash?: string | null } = {};
     if (data.password !== undefined) {
       patch.password_hash = data.password ? await sha256Hex(`file-lock:${data.password}`) : null;
     }
