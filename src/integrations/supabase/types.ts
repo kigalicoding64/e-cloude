@@ -538,6 +538,8 @@ export type Database = {
           mime_type: string | null
           name: string
           org_id: string | null
+          password_hash: string | null
+          pin_hash: string | null
           size: number
           storage_path: string
           trashed_at: string | null
@@ -553,6 +555,8 @@ export type Database = {
           mime_type?: string | null
           name: string
           org_id?: string | null
+          password_hash?: string | null
+          pin_hash?: string | null
           size?: number
           storage_path: string
           trashed_at?: string | null
@@ -568,6 +572,8 @@ export type Database = {
           mime_type?: string | null
           name?: string
           org_id?: string | null
+          password_hash?: string | null
+          pin_hash?: string | null
           size?: number
           storage_path?: string
           trashed_at?: string | null
@@ -747,6 +753,30 @@ export type Database = {
         }
         Relationships: []
       }
+      sensitive_action_grants: {
+        Row: {
+          created_at: string
+          expires_at: string
+          id: string
+          scope: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          expires_at?: string
+          id?: string
+          scope: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          expires_at?: string
+          id?: string
+          scope?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       shares: {
         Row: {
           created_at: string
@@ -791,6 +821,130 @@ export type Database = {
           },
         ]
       }
+      upload_sessions: {
+        Row: {
+          api_key_id: string | null
+          chunk_size: number
+          created_at: string
+          expires_at: string
+          file_id: string | null
+          filename: string
+          folder_id: string | null
+          id: string
+          mime_type: string | null
+          password_hash: string | null
+          status: string
+          storage_prefix: string
+          total_chunks: number
+          total_size: number
+          updated_at: string
+          uploaded_chunks: number[]
+          user_id: string
+        }
+        Insert: {
+          api_key_id?: string | null
+          chunk_size: number
+          created_at?: string
+          expires_at?: string
+          file_id?: string | null
+          filename: string
+          folder_id?: string | null
+          id?: string
+          mime_type?: string | null
+          password_hash?: string | null
+          status?: string
+          storage_prefix: string
+          total_chunks: number
+          total_size: number
+          updated_at?: string
+          uploaded_chunks?: number[]
+          user_id: string
+        }
+        Update: {
+          api_key_id?: string | null
+          chunk_size?: number
+          created_at?: string
+          expires_at?: string
+          file_id?: string | null
+          filename?: string
+          folder_id?: string | null
+          id?: string
+          mime_type?: string | null
+          password_hash?: string | null
+          status?: string
+          storage_prefix?: string
+          total_chunks?: number
+          total_size?: number
+          updated_at?: string
+          uploaded_chunks?: number[]
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "upload_sessions_api_key_id_fkey"
+            columns: ["api_key_id"]
+            isOneToOne: false
+            referencedRelation: "api_keys"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "upload_sessions_file_id_fkey"
+            columns: ["file_id"]
+            isOneToOne: false
+            referencedRelation: "files"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "upload_sessions_folder_id_fkey"
+            columns: ["folder_id"]
+            isOneToOne: false
+            referencedRelation: "folders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_passkeys: {
+        Row: {
+          backed_up: boolean
+          counter: number
+          created_at: string
+          credential_id: string
+          device_type: string | null
+          id: string
+          last_used_at: string | null
+          name: string
+          public_key: string
+          transports: string[]
+          user_id: string
+        }
+        Insert: {
+          backed_up?: boolean
+          counter?: number
+          created_at?: string
+          credential_id: string
+          device_type?: string | null
+          id?: string
+          last_used_at?: string | null
+          name: string
+          public_key: string
+          transports?: string[]
+          user_id: string
+        }
+        Update: {
+          backed_up?: boolean
+          counter?: number
+          created_at?: string
+          credential_id?: string
+          device_type?: string | null
+          id?: string
+          last_used_at?: string | null
+          name?: string
+          public_key?: string
+          transports?: string[]
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -812,6 +966,72 @@ export type Database = {
         }
         Relationships: []
       }
+      user_security: {
+        Row: {
+          app_pin_enabled: boolean
+          app_pin_hash: string | null
+          backup_codes_hashed: string[]
+          created_at: string
+          require_2fa_for_sensitive: boolean
+          totp_enabled: boolean
+          totp_pending_secret: string | null
+          totp_secret: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          app_pin_enabled?: boolean
+          app_pin_hash?: string | null
+          backup_codes_hashed?: string[]
+          created_at?: string
+          require_2fa_for_sensitive?: boolean
+          totp_enabled?: boolean
+          totp_pending_secret?: string | null
+          totp_secret?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          app_pin_enabled?: boolean
+          app_pin_hash?: string | null
+          backup_codes_hashed?: string[]
+          created_at?: string
+          require_2fa_for_sensitive?: boolean
+          totp_enabled?: boolean
+          totp_pending_secret?: string | null
+          totp_secret?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      webauthn_challenges: {
+        Row: {
+          challenge: string
+          created_at: string
+          expires_at: string
+          id: string
+          purpose: string
+          user_id: string | null
+        }
+        Insert: {
+          challenge: string
+          created_at?: string
+          expires_at?: string
+          id?: string
+          purpose: string
+          user_id?: string | null
+        }
+        Update: {
+          challenge?: string
+          created_at?: string
+          expires_at?: string
+          id?: string
+          purpose?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -822,6 +1042,10 @@ export type Database = {
           _role: Database["public"]["Enums"]["app_role"]
           _user_id: string
         }
+        Returns: boolean
+      }
+      has_sensitive_grant: {
+        Args: { _scope: string; _user_id: string }
         Returns: boolean
       }
       is_org_admin: {

@@ -53,6 +53,7 @@ const groups: { label: string; items: NavItem[] }[] = [
     items: [
       { to: "/api-keys", label: "API Keys", icon: KeyRound },
       { to: "/developer", label: "Console", icon: Code2 },
+      { to: "/security", label: "Security", icon: Shield },
     ],
   },
 ];

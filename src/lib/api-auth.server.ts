@@ -1,28 +1,27 @@
-// Server-only helper — resolves an API key from the X-API-Key header to a user_id.
-// Uses supabaseAdmin (service role). Import inside handlers only.
+// Resolves an API key (X-API-Key: eck_live_...) to its owner user_id.
 import { sha256Hex } from "@/lib/hash";
 
-export async function authenticateApiKey(request: Request): Promise<{ userId: string; keyId: string } | null> {
-  const key = request.headers.get("x-api-key");
+export type ApiCaller = { userId: string; keyId: string };
+
+export async function authenticateApiKey(request: Request): Promise<ApiCaller | null> {
+  const key =
+    request.headers.get("x-api-key") ??
+    (request.headers.get("authorization") ?? "").replace(/^Bearer\s+/i, "");
   if (!key || !key.startsWith("eck_")) return null;
-  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const key_hash = await sha256Hex(key);
-  const { data, error } = await supabaseAdmin
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data } = await supabaseAdmin
     .from("api_keys")
     .select("id, user_id, is_active")
     .eq("key_hash", key_hash)
     .maybeSingle();
-  if (error || !data || !data.is_active) return null;
-  // fire-and-forget last_used update
-  supabaseAdmin.from("api_keys").update({ last_used_at: new Date().toISOString() }).eq("id", data.id).then(() => {});
+  if (!data || !data.is_active) return null;
+  supabaseAdmin
+    .from("api_keys")
+    .update({ last_used_at: new Date().toISOString() })
+    .eq("id", data.id)
+    .then(() => {});
   return { userId: data.user_id, keyId: data.id };
-}
-
-export function jsonError(message: string, status: number): Response {
-  return new Response(JSON.stringify({ error: message }), {
-    status,
-    headers: { "Content-Type": "application/json" },
-  });
 }
 
 export function json(data: unknown, status = 200): Response {
@@ -30,4 +29,8 @@ export function json(data: unknown, status = 200): Response {
     status,
     headers: { "Content-Type": "application/json" },
   });
+}
+
+export function jsonError(message: string, status: number): Response {
+  return json({ error: message }, status);
 }
