@@ -476,3 +476,68 @@ function ShareDialog({ fileId, onClose }: { fileId: string | null; onClose: () =
     </Dialog>
   );
 }
+
+function LockDialog({
+  target, onClose, onChanged,
+}: {
+  target: { id: string; name: string; hasPassword: boolean; hasPin: boolean } | null;
+  onClose: () => void;
+  onChanged: () => void;
+}) {
+  const set = useServerFn(setFileLock);
+  const [password, setPassword] = useState("");
+  const [pin, setPin] = useState("");
+  const [busy, setBusy] = useState(false);
+
+  const apply = async (patch: { password?: string; pin?: string }) => {
+    if (!target) return;
+    setBusy(true);
+    try {
+      await set({ data: { file_id: target.id, ...patch } });
+      toast.success("Updated");
+      setPassword(""); setPin("");
+      onChanged();
+      onClose();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Failed");
+    } finally { setBusy(false); }
+  };
+
+  return (
+    <Dialog open={!!target} onOpenChange={(o) => !o && onClose()}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Lock file</DialogTitle>
+        </DialogHeader>
+        {target && (
+          <div className="space-y-5">
+            <p className="text-sm text-muted-foreground truncate">{target.name}</p>
+            <div className="space-y-2">
+              <Label>Password {target.hasPassword && <span className="text-xs text-primary">(currently set)</span>}</Label>
+              <Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="New password" />
+              <div className="flex gap-2">
+                <Button size="sm" disabled={busy || !password} onClick={() => apply({ password })}>Set password</Button>
+                {target.hasPassword && (
+                  <Button size="sm" variant="outline" disabled={busy} onClick={() => apply({ password: "" })}>Remove</Button>
+                )}
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Label>PIN (4–8 digits) {target.hasPin && <span className="text-xs text-primary">(currently set)</span>}</Label>
+              <Input inputMode="numeric" maxLength={8} value={pin} onChange={(e) => setPin(e.target.value.replace(/\D/g, ""))} placeholder="New PIN" />
+              <div className="flex gap-2">
+                <Button size="sm" disabled={busy || pin.length < 4} onClick={() => apply({ pin })}>Set PIN</Button>
+                {target.hasPin && (
+                  <Button size="sm" variant="outline" disabled={busy} onClick={() => apply({ pin: "" })}>Remove</Button>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+        <DialogFooter>
+          <Button variant="ghost" onClick={onClose}>Close</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}
