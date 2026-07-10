@@ -13,10 +13,12 @@ import {
 import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
-import { Folder, FolderPlus, Upload, Star, Trash2, Share2, Download, MoreVertical, ChevronRight, Home, LayoutGrid, List as ListIcon, Search } from "lucide-react";
+import { Folder, FolderPlus, Upload, Star, Trash2, Share2, Download, MoreVertical, ChevronRight, Home, LayoutGrid, List as ListIcon, Search, Lock, Unlock } from "lucide-react";
 import { toast } from "sonner";
 import { formatBytes, formatDate, iconForMime } from "@/lib/format";
 import { randomToken } from "@/lib/hash";
+import { useServerFn } from "@tanstack/react-start";
+import { setFileLock, verifyFileLock } from "@/lib/file-lock.functions";
 import { z } from "zod";
 
 export const Route = createFileRoute("/_authenticated/files")({
