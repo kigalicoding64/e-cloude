@@ -1,6 +1,7 @@
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { AppSidebar } from "@/components/AppSidebar";
+import { AppLock } from "@/components/AppLock";
 
 export const Route = createFileRoute("/_authenticated")({
   ssr: false,
@@ -19,6 +20,7 @@ function AuthLayout() {
       <main className="flex-1 overflow-y-auto">
         <Outlet />
       </main>
+      <AppLock />
     </div>
   );
 }

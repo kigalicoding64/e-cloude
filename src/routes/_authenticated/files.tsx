@@ -13,10 +13,12 @@ import {
 import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
-import { Folder, FolderPlus, Upload, Star, Trash2, Share2, Download, MoreVertical, ChevronRight, Home, LayoutGrid, List as ListIcon, Search } from "lucide-react";
+import { Folder, FolderPlus, Upload, Star, Trash2, Share2, Download, MoreVertical, ChevronRight, Home, LayoutGrid, List as ListIcon, Search, Lock, Unlock } from "lucide-react";
 import { toast } from "sonner";
 import { formatBytes, formatDate, iconForMime } from "@/lib/format";
 import { randomToken } from "@/lib/hash";
+import { useServerFn } from "@tanstack/react-start";
+import { setFileLock, verifyFileLock } from "@/lib/file-lock.functions";
 import { z } from "zod";
 
 export const Route = createFileRoute("/_authenticated/files")({
@@ -39,9 +41,28 @@ function FilesPage() {
   const [newFolderOpen, setNewFolderOpen] = useState(false);
   const [newFolderName, setNewFolderName] = useState("");
   const [shareFileId, setShareFileId] = useState<string | null>(null);
+  const [lockTarget, setLockTarget] = useState<{ id: string; name: string; hasPassword: boolean; hasPin: boolean } | null>(null);
   const [renameTarget, setRenameTarget] = useState<{ id: string; name: string; kind: "file" | "folder" } | null>(null);
   const [renameValue, setRenameValue] = useState("");
+  const [verifiedIds, setVerifiedIds] = useState<Set<string>>(new Set());
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const doVerify = useServerFn(verifyFileLock);
+
+  const requireUnlock = async (f: { id: string; name: string; password_hash: string | null; pin_hash: string | null }) => {
+    if (!f.password_hash && !f.pin_hash) return true;
+    if (verifiedIds.has(f.id)) return true;
+    const kind: "password" | "pin" = f.password_hash ? "password" : "pin";
+    const secret = window.prompt(`Enter ${kind} for "${f.name}"`);
+    if (!secret) return false;
+    try {
+      await doVerify({ data: { file_id: f.id, secret, kind } });
+      setVerifiedIds((s) => new Set(s).add(f.id));
+      return true;
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Wrong secret");
+      return false;
+    }
+  };
 
   const { data: currentFolder } = useQuery({
     queryKey: ["folder", folderId],
@@ -197,11 +218,12 @@ function FilesPage() {
     onError: (e: Error) => toast.error(e.message),
   });
 
-  const downloadFile = async (storage_path: string, name: string) => {
-    const { data, error } = await supabase.storage.from("user-files").createSignedUrl(storage_path, 60);
+  const downloadFile = async (f: { id: string; storage_path: string; name: string; password_hash: string | null; pin_hash: string | null }) => {
+    if (!(await requireUnlock(f))) return;
+    const { data, error } = await supabase.storage.from("user-files").createSignedUrl(f.storage_path, 60);
     if (error || !data) return toast.error("Download failed");
     const a = document.createElement("a");
-    a.href = data.signedUrl; a.download = name; a.click();
+    a.href = data.signedUrl; a.download = f.name; a.click();
   };
 
   const filteredFiles = files.filter((f) => f.name.toLowerCase().includes(search.toLowerCase()));
@@ -299,11 +321,15 @@ function FilesPage() {
                   <Button variant="ghost" size="icon" className="absolute right-1 top-1 opacity-0 group-hover:opacity-100"><MoreVertical className="h-4 w-4" /></Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                  <DropdownMenuItem onClick={() => downloadFile(f.storage_path, f.name)}><Download className="mr-2 h-4 w-4" /> Download</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => downloadFile(f)}><Download className="mr-2 h-4 w-4" /> Download</DropdownMenuItem>
                   <DropdownMenuItem onClick={() => setShareFileId(f.id)}><Share2 className="mr-2 h-4 w-4" /> Share</DropdownMenuItem>
                   <DropdownMenuItem onClick={() => toggleFav.mutate({ id: f.id, val: !f.is_favorite })}>
                     <Star className={`mr-2 h-4 w-4 ${f.is_favorite ? "fill-primary text-primary" : ""}`} />
                     {f.is_favorite ? "Unfavorite" : "Favorite"}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setLockTarget({ id: f.id, name: f.name, hasPassword: !!f.password_hash, hasPin: !!f.pin_hash })}>
+                    {(f.password_hash || f.pin_hash) ? <Unlock className="mr-2 h-4 w-4" /> : <Lock className="mr-2 h-4 w-4" />}
+                    {(f.password_hash || f.pin_hash) ? "Manage lock" : "Lock file"}
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => { setRenameTarget({ id: f.id, name: f.name, kind: "file" }); setRenameValue(f.name); }}>Rename</DropdownMenuItem>
                   <DropdownMenuSeparator />
@@ -311,6 +337,9 @@ function FilesPage() {
                 </DropdownMenuContent>
               </DropdownMenu>
               {f.is_favorite && <Star className="absolute left-2 top-2 h-3.5 w-3.5 fill-primary text-primary" />}
+              {(f.password_hash || f.pin_hash) && (
+                <Lock className="absolute left-2 top-2 h-3.5 w-3.5 text-primary" />
+              )}
             </Card>
           ))}
         </div>
@@ -346,13 +375,17 @@ function FilesPage() {
                     <div className="flex items-center gap-3 font-medium">
                       <span className="rounded bg-primary-soft px-1.5 py-0.5 font-mono text-[10px] uppercase text-primary">{iconForMime(f.mime_type).slice(0, 3)}</span>
                       {f.name}
+                      {(f.password_hash || f.pin_hash) && <Lock className="h-3.5 w-3.5 text-primary" />}
                     </div>
                   </td>
                   <td className="px-4 py-3 text-muted-foreground">{formatBytes(Number(f.size))}</td>
                   <td className="px-4 py-3 text-muted-foreground">{formatDate(f.updated_at)}</td>
                   <td className="px-4 py-3 text-right">
-                    <Button variant="ghost" size="sm" onClick={() => downloadFile(f.storage_path, f.name)}>Download</Button>
+                    <Button variant="ghost" size="sm" onClick={() => downloadFile(f)}>Download</Button>
                     <Button variant="ghost" size="sm" onClick={() => setShareFileId(f.id)}>Share</Button>
+                    <Button variant="ghost" size="sm" onClick={() => setLockTarget({ id: f.id, name: f.name, hasPassword: !!f.password_hash, hasPin: !!f.pin_hash })}>
+                      {(f.password_hash || f.pin_hash) ? "Lock…" : "Lock"}
+                    </Button>
                     <Button variant="ghost" size="sm" onClick={() => trashFile.mutate(f.id)}>Trash</Button>
                   </td>
                 </tr>
@@ -363,6 +396,7 @@ function FilesPage() {
       )}
 
       <ShareDialog fileId={shareFileId} onClose={() => setShareFileId(null)} />
+      <LockDialog target={lockTarget} onClose={() => setLockTarget(null)} onChanged={() => { setVerifiedIds(new Set()); qc.invalidateQueries({ queryKey: ["files"] }); }} />
 
       <Dialog open={!!renameTarget} onOpenChange={(o) => !o && setRenameTarget(null)}>
         <DialogContent>
@@ -437,6 +471,71 @@ function ShareDialog({ fileId, onClose }: { fileId: string | null; onClose: () =
         <DialogFooter>
           <Button variant="ghost" onClick={onClose}>Cancel</Button>
           <Button onClick={() => create.mutate()} disabled={create.isPending}>Create & copy link</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function LockDialog({
+  target, onClose, onChanged,
+}: {
+  target: { id: string; name: string; hasPassword: boolean; hasPin: boolean } | null;
+  onClose: () => void;
+  onChanged: () => void;
+}) {
+  const set = useServerFn(setFileLock);
+  const [password, setPassword] = useState("");
+  const [pin, setPin] = useState("");
+  const [busy, setBusy] = useState(false);
+
+  const apply = async (patch: { password?: string; pin?: string }) => {
+    if (!target) return;
+    setBusy(true);
+    try {
+      await set({ data: { file_id: target.id, ...patch } });
+      toast.success("Updated");
+      setPassword(""); setPin("");
+      onChanged();
+      onClose();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Failed");
+    } finally { setBusy(false); }
+  };
+
+  return (
+    <Dialog open={!!target} onOpenChange={(o) => !o && onClose()}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Lock file</DialogTitle>
+        </DialogHeader>
+        {target && (
+          <div className="space-y-5">
+            <p className="text-sm text-muted-foreground truncate">{target.name}</p>
+            <div className="space-y-2">
+              <Label>Password {target.hasPassword && <span className="text-xs text-primary">(currently set)</span>}</Label>
+              <Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="New password" />
+              <div className="flex gap-2">
+                <Button size="sm" disabled={busy || !password} onClick={() => apply({ password })}>Set password</Button>
+                {target.hasPassword && (
+                  <Button size="sm" variant="outline" disabled={busy} onClick={() => apply({ password: "" })}>Remove</Button>
+                )}
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Label>PIN (4–8 digits) {target.hasPin && <span className="text-xs text-primary">(currently set)</span>}</Label>
+              <Input inputMode="numeric" maxLength={8} value={pin} onChange={(e) => setPin(e.target.value.replace(/\D/g, ""))} placeholder="New PIN" />
+              <div className="flex gap-2">
+                <Button size="sm" disabled={busy || pin.length < 4} onClick={() => apply({ pin })}>Set PIN</Button>
+                {target.hasPin && (
+                  <Button size="sm" variant="outline" disabled={busy} onClick={() => apply({ pin: "" })}>Remove</Button>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+        <DialogFooter>
+          <Button variant="ghost" onClick={onClose}>Close</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
