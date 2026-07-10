@@ -321,11 +321,15 @@ function FilesPage() {
                   <Button variant="ghost" size="icon" className="absolute right-1 top-1 opacity-0 group-hover:opacity-100"><MoreVertical className="h-4 w-4" /></Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                  <DropdownMenuItem onClick={() => downloadFile(f.storage_path, f.name)}><Download className="mr-2 h-4 w-4" /> Download</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => downloadFile(f)}><Download className="mr-2 h-4 w-4" /> Download</DropdownMenuItem>
                   <DropdownMenuItem onClick={() => setShareFileId(f.id)}><Share2 className="mr-2 h-4 w-4" /> Share</DropdownMenuItem>
                   <DropdownMenuItem onClick={() => toggleFav.mutate({ id: f.id, val: !f.is_favorite })}>
                     <Star className={`mr-2 h-4 w-4 ${f.is_favorite ? "fill-primary text-primary" : ""}`} />
                     {f.is_favorite ? "Unfavorite" : "Favorite"}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setLockTarget({ id: f.id, name: f.name, hasPassword: !!f.password_hash, hasPin: !!f.pin_hash })}>
+                    {(f.password_hash || f.pin_hash) ? <Unlock className="mr-2 h-4 w-4" /> : <Lock className="mr-2 h-4 w-4" />}
+                    {(f.password_hash || f.pin_hash) ? "Manage lock" : "Lock file"}
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => { setRenameTarget({ id: f.id, name: f.name, kind: "file" }); setRenameValue(f.name); }}>Rename</DropdownMenuItem>
                   <DropdownMenuSeparator />
@@ -333,6 +337,9 @@ function FilesPage() {
                 </DropdownMenuContent>
               </DropdownMenu>
               {f.is_favorite && <Star className="absolute left-2 top-2 h-3.5 w-3.5 fill-primary text-primary" />}
+              {(f.password_hash || f.pin_hash) && (
+                <Lock className="absolute left-2 top-2 h-3.5 w-3.5 text-primary" />
+              )}
             </Card>
           ))}
         </div>
