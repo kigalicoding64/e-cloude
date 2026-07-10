@@ -375,13 +375,17 @@ function FilesPage() {
                     <div className="flex items-center gap-3 font-medium">
                       <span className="rounded bg-primary-soft px-1.5 py-0.5 font-mono text-[10px] uppercase text-primary">{iconForMime(f.mime_type).slice(0, 3)}</span>
                       {f.name}
+                      {(f.password_hash || f.pin_hash) && <Lock className="h-3.5 w-3.5 text-primary" />}
                     </div>
                   </td>
                   <td className="px-4 py-3 text-muted-foreground">{formatBytes(Number(f.size))}</td>
                   <td className="px-4 py-3 text-muted-foreground">{formatDate(f.updated_at)}</td>
                   <td className="px-4 py-3 text-right">
-                    <Button variant="ghost" size="sm" onClick={() => downloadFile(f.storage_path, f.name)}>Download</Button>
+                    <Button variant="ghost" size="sm" onClick={() => downloadFile(f)}>Download</Button>
                     <Button variant="ghost" size="sm" onClick={() => setShareFileId(f.id)}>Share</Button>
+                    <Button variant="ghost" size="sm" onClick={() => setLockTarget({ id: f.id, name: f.name, hasPassword: !!f.password_hash, hasPin: !!f.pin_hash })}>
+                      {(f.password_hash || f.pin_hash) ? "Lock…" : "Lock"}
+                    </Button>
                     <Button variant="ghost" size="sm" onClick={() => trashFile.mutate(f.id)}>Trash</Button>
                   </td>
                 </tr>
