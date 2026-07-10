@@ -396,6 +396,7 @@ function FilesPage() {
       )}
 
       <ShareDialog fileId={shareFileId} onClose={() => setShareFileId(null)} />
+      <LockDialog target={lockTarget} onClose={() => setLockTarget(null)} onChanged={() => { setVerifiedIds(new Set()); qc.invalidateQueries({ queryKey: ["files"] }); }} />
 
       <Dialog open={!!renameTarget} onOpenChange={(o) => !o && setRenameTarget(null)}>
         <DialogContent>
