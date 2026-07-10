@@ -41,9 +41,28 @@ function FilesPage() {
   const [newFolderOpen, setNewFolderOpen] = useState(false);
   const [newFolderName, setNewFolderName] = useState("");
   const [shareFileId, setShareFileId] = useState<string | null>(null);
+  const [lockTarget, setLockTarget] = useState<{ id: string; name: string; hasPassword: boolean; hasPin: boolean } | null>(null);
   const [renameTarget, setRenameTarget] = useState<{ id: string; name: string; kind: "file" | "folder" } | null>(null);
   const [renameValue, setRenameValue] = useState("");
+  const [verifiedIds, setVerifiedIds] = useState<Set<string>>(new Set());
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const doVerify = useServerFn(verifyFileLock);
+
+  const requireUnlock = async (f: { id: string; name: string; password_hash: string | null; pin_hash: string | null }) => {
+    if (!f.password_hash && !f.pin_hash) return true;
+    if (verifiedIds.has(f.id)) return true;
+    const kind: "password" | "pin" = f.password_hash ? "password" : "pin";
+    const secret = window.prompt(`Enter ${kind} for "${f.name}"`);
+    if (!secret) return false;
+    try {
+      await doVerify({ data: { file_id: f.id, secret, kind } });
+      setVerifiedIds((s) => new Set(s).add(f.id));
+      return true;
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Wrong secret");
+      return false;
+    }
+  };
 
   const { data: currentFolder } = useQuery({
     queryKey: ["folder", folderId],
