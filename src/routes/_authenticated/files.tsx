@@ -218,11 +218,12 @@ function FilesPage() {
     onError: (e: Error) => toast.error(e.message),
   });
 
-  const downloadFile = async (storage_path: string, name: string) => {
-    const { data, error } = await supabase.storage.from("user-files").createSignedUrl(storage_path, 60);
+  const downloadFile = async (f: { id: string; storage_path: string; name: string; password_hash: string | null; pin_hash: string | null }) => {
+    if (!(await requireUnlock(f))) return;
+    const { data, error } = await supabase.storage.from("user-files").createSignedUrl(f.storage_path, 60);
     if (error || !data) return toast.error("Download failed");
     const a = document.createElement("a");
-    a.href = data.signedUrl; a.download = name; a.click();
+    a.href = data.signedUrl; a.download = f.name; a.click();
   };
 
   const filteredFiles = files.filter((f) => f.name.toLowerCase().includes(search.toLowerCase()));
