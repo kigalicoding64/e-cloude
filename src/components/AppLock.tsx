@@ -162,17 +162,18 @@ export function AppLock() {
         )}
 
         <div className="mt-4 flex flex-wrap justify-center gap-2 text-xs">
-          {status?.app_pin_enabled && mode !== "pin" && (
+          {factors.pin && mode !== "pin" && (
             <Button variant="ghost" size="sm" onClick={() => { setMode("pin"); setValue(""); }}>
               <Lock className="mr-1 h-3 w-3" /> Use PIN
             </Button>
           )}
-          {status?.totp_enabled && mode !== "totp" && (
+          {factors.totp && mode !== "totp" && (
             <Button variant="ghost" size="sm" onClick={() => { setMode("totp"); setValue(""); }}>
               <KeyRound className="mr-1 h-3 w-3" /> Use 2FA code
             </Button>
           )}
-          {(status?.passkey_count ?? 0) > 0 && (
+          {factors.passkey && (
+
             <Button variant="ghost" size="sm" onClick={submitPasskey} disabled={busy}>
               <Fingerprint className="mr-1 h-3 w-3" /> Use passkey
             </Button>
