@@ -311,7 +311,9 @@ function FilesPage() {
               </DropdownMenu>
             </Card>
           ))}
-          {filteredFiles.map((f) => (
+          {filteredFiles.map((f) => {
+            const lock = fileLockState(f);
+            return (
             <Card key={f.id} className="group relative overflow-hidden p-4 transition-all hover:shadow-elegant">
               <div className="flex flex-col items-center gap-3">
                 <div className="flex h-16 w-16 items-center justify-center rounded-xl bg-primary-soft font-mono text-xs uppercase text-primary">
@@ -319,6 +321,17 @@ function FilesPage() {
                 </div>
                 <div className="w-full truncate text-center text-sm font-medium">{f.name}</div>
                 <div className="text-xs text-muted-foreground">{formatBytes(Number(f.size))}</div>
+                <span
+                  title={lockSummary(f)}
+                  className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] ${
+                    lock.locked
+                      ? "border-primary/30 bg-primary-soft text-primary"
+                      : "border-border text-muted-foreground"
+                  }`}
+                >
+                  {lock.locked ? <Lock className="h-3 w-3" /> : <Unlock className="h-3 w-3" />}
+                  {lock.label}
+                </span>
               </div>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -331,9 +344,8 @@ function FilesPage() {
                     <Star className={`mr-2 h-4 w-4 ${f.is_favorite ? "fill-primary text-primary" : ""}`} />
                     {f.is_favorite ? "Unfavorite" : "Favorite"}
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setLockTarget({ id: f.id, name: f.name, hasPassword: !!f.password_hash, hasPin: !!f.pin_hash })}>
-                    {(f.password_hash || f.pin_hash) ? <Unlock className="mr-2 h-4 w-4" /> : <Lock className="mr-2 h-4 w-4" />}
-                    {(f.password_hash || f.pin_hash) ? "Manage lock" : "Lock file"}
+                  <DropdownMenuItem onClick={() => setLockTarget({ id: f.id, name: f.name, hasPassword: lock.hasPassword, hasPin: lock.hasPin })}>
+                    <Lock className="mr-2 h-4 w-4" /> Manage security
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => { setRenameTarget({ id: f.id, name: f.name, kind: "file" }); setRenameValue(f.name); }}>Rename</DropdownMenuItem>
                   <DropdownMenuSeparator />
@@ -341,11 +353,10 @@ function FilesPage() {
                 </DropdownMenuContent>
               </DropdownMenu>
               {f.is_favorite && <Star className="absolute left-2 top-2 h-3.5 w-3.5 fill-primary text-primary" />}
-              {(f.password_hash || f.pin_hash) && (
-                <Lock className="absolute left-2 top-2 h-3.5 w-3.5 text-primary" />
-              )}
             </Card>
-          ))}
+            );
+          })}
+
         </div>
       ) : (
         <Card className="overflow-hidden">
