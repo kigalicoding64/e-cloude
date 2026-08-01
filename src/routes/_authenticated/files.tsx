@@ -57,6 +57,7 @@ function FilesPage() {
     const kind = state.promptKind!;
     const secret = window.prompt(`Enter ${kind} for "${f.name}"`);
     if (!secret) return false;
+    try {
 
       await doVerify({ data: { file_id: f.id, secret, kind } });
       setVerifiedIds((s) => new Set(s).add(f.id));
