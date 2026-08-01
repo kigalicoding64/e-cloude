@@ -17,6 +17,7 @@ import { Route as STokenRouteImport } from './routes/s.$token'
 import { Route as AuthenticatedTrashRouteImport } from './routes/_authenticated/trash'
 import { Route as AuthenticatedStorageAnalyticsRouteImport } from './routes/_authenticated/storage-analytics'
 import { Route as AuthenticatedSharedRouteImport } from './routes/_authenticated/shared'
+import { Route as AuthenticatedShareDiagnosticsRouteImport } from './routes/_authenticated/share-diagnostics'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedSecurityRouteImport } from './routes/_authenticated/security'
 import { Route as AuthenticatedOrganizationsRouteImport } from './routes/_authenticated/organizations'
@@ -89,6 +90,12 @@ const AuthenticatedSharedRoute = AuthenticatedSharedRouteImport.update({
   path: '/shared',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedShareDiagnosticsRoute =
+  AuthenticatedShareDiagnosticsRouteImport.update({
+    id: '/share-diagnostics',
+    path: '/share-diagnostics',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
@@ -273,6 +280,7 @@ export interface FileRoutesByFullPath {
   '/organizations': typeof AuthenticatedOrganizationsRouteWithChildren
   '/security': typeof AuthenticatedSecurityRoute
   '/settings': typeof AuthenticatedSettingsRoute
+  '/share-diagnostics': typeof AuthenticatedShareDiagnosticsRoute
   '/shared': typeof AuthenticatedSharedRoute
   '/storage-analytics': typeof AuthenticatedStorageAnalyticsRoute
   '/trash': typeof AuthenticatedTrashRoute
@@ -313,6 +321,7 @@ export interface FileRoutesByTo {
   '/organizations': typeof AuthenticatedOrganizationsRouteWithChildren
   '/security': typeof AuthenticatedSecurityRoute
   '/settings': typeof AuthenticatedSettingsRoute
+  '/share-diagnostics': typeof AuthenticatedShareDiagnosticsRoute
   '/shared': typeof AuthenticatedSharedRoute
   '/storage-analytics': typeof AuthenticatedStorageAnalyticsRoute
   '/trash': typeof AuthenticatedTrashRoute
@@ -355,6 +364,7 @@ export interface FileRoutesById {
   '/_authenticated/organizations': typeof AuthenticatedOrganizationsRouteWithChildren
   '/_authenticated/security': typeof AuthenticatedSecurityRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
+  '/_authenticated/share-diagnostics': typeof AuthenticatedShareDiagnosticsRoute
   '/_authenticated/shared': typeof AuthenticatedSharedRoute
   '/_authenticated/storage-analytics': typeof AuthenticatedStorageAnalyticsRoute
   '/_authenticated/trash': typeof AuthenticatedTrashRoute
@@ -397,6 +407,7 @@ export interface FileRouteTypes {
     | '/organizations'
     | '/security'
     | '/settings'
+    | '/share-diagnostics'
     | '/shared'
     | '/storage-analytics'
     | '/trash'
@@ -437,6 +448,7 @@ export interface FileRouteTypes {
     | '/organizations'
     | '/security'
     | '/settings'
+    | '/share-diagnostics'
     | '/shared'
     | '/storage-analytics'
     | '/trash'
@@ -478,6 +490,7 @@ export interface FileRouteTypes {
     | '/_authenticated/organizations'
     | '/_authenticated/security'
     | '/_authenticated/settings'
+    | '/_authenticated/share-diagnostics'
     | '/_authenticated/shared'
     | '/_authenticated/storage-analytics'
     | '/_authenticated/trash'
@@ -579,6 +592,13 @@ declare module '@tanstack/react-router' {
       path: '/shared'
       fullPath: '/shared'
       preLoaderRoute: typeof AuthenticatedSharedRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/share-diagnostics': {
+      id: '/_authenticated/share-diagnostics'
+      path: '/share-diagnostics'
+      fullPath: '/share-diagnostics'
+      preLoaderRoute: typeof AuthenticatedShareDiagnosticsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/settings': {
@@ -841,6 +861,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedOrganizationsRoute: typeof AuthenticatedOrganizationsRouteWithChildren
   AuthenticatedSecurityRoute: typeof AuthenticatedSecurityRoute
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
+  AuthenticatedShareDiagnosticsRoute: typeof AuthenticatedShareDiagnosticsRoute
   AuthenticatedSharedRoute: typeof AuthenticatedSharedRoute
   AuthenticatedStorageAnalyticsRoute: typeof AuthenticatedStorageAnalyticsRoute
   AuthenticatedTrashRoute: typeof AuthenticatedTrashRoute
@@ -862,6 +883,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedOrganizationsRoute: AuthenticatedOrganizationsRouteWithChildren,
   AuthenticatedSecurityRoute: AuthenticatedSecurityRoute,
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
+  AuthenticatedShareDiagnosticsRoute: AuthenticatedShareDiagnosticsRoute,
   AuthenticatedSharedRoute: AuthenticatedSharedRoute,
   AuthenticatedStorageAnalyticsRoute: AuthenticatedStorageAnalyticsRoute,
   AuthenticatedTrashRoute: AuthenticatedTrashRoute,
