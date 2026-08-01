@@ -122,7 +122,7 @@ export function AppLock() {
   };
 
   const signOut = async () => {
-    try { sessionStorage.removeItem(STORAGE_KEY); } catch {}
+    writeLockedFlag(window.sessionStorage, false);
     await supabase.auth.signOut();
     window.location.href = "/auth";
   };
