@@ -51,12 +51,13 @@ function FilesPage() {
   const doVerify = useServerFn(verifyFileLock);
 
   const requireUnlock = async (f: { id: string; name: string; password_hash: string | null; pin_hash: string | null }) => {
-    if (!f.password_hash && !f.pin_hash) return true;
+    const state = fileLockState(f);
+    if (!state.locked) return true;
     if (verifiedIds.has(f.id)) return true;
-    const kind: "password" | "pin" = f.password_hash ? "password" : "pin";
+    const kind = state.promptKind!;
     const secret = window.prompt(`Enter ${kind} for "${f.name}"`);
     if (!secret) return false;
-    try {
+
       await doVerify({ data: { file_id: f.id, secret, kind } });
       setVerifiedIds((s) => new Set(s).add(f.id));
       return true;
