@@ -19,6 +19,8 @@ import { formatBytes, formatDate, iconForMime } from "@/lib/format";
 import { randomToken } from "@/lib/hash";
 import { useServerFn } from "@tanstack/react-start";
 import { setFileLock, verifyFileLock } from "@/lib/file-lock.functions";
+import { fileLockState, lockSummary } from "@/lib/file-lock";
+
 import { z } from "zod";
 
 export const Route = createFileRoute("/_authenticated/files")({
