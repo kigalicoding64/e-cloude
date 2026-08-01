@@ -349,6 +349,7 @@ function FilesPage() {
             <thead className="border-b border-border bg-surface-2 text-left text-xs uppercase tracking-wider text-muted-foreground">
               <tr>
                 <th className="px-4 py-3 font-medium">Name</th>
+                <th className="px-4 py-3 font-medium">Security</th>
                 <th className="px-4 py-3 font-medium">Size</th>
                 <th className="px-4 py-3 font-medium">Modified</th>
                 <th className="px-4 py-3"></th>
@@ -363,34 +364,65 @@ function FilesPage() {
                     </Link>
                   </td>
                   <td className="px-4 py-3 text-muted-foreground">—</td>
+                  <td className="px-4 py-3 text-muted-foreground">—</td>
                   <td className="px-4 py-3 text-muted-foreground">{formatDate(f.updated_at)}</td>
                   <td className="px-4 py-3 text-right">
                     <Button variant="ghost" size="sm" onClick={() => trashFolder.mutate(f.id)}>Delete</Button>
                   </td>
                 </tr>
               ))}
-              {filteredFiles.map((f) => (
+              {filteredFiles.map((f) => {
+                const lock = fileLockState(f);
+                return (
                 <tr key={f.id} className="border-b border-border hover:bg-surface-2">
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-3 font-medium">
                       <span className="rounded bg-primary-soft px-1.5 py-0.5 font-mono text-[10px] uppercase text-primary">{iconForMime(f.mime_type).slice(0, 3)}</span>
                       {f.name}
-                      {(f.password_hash || f.pin_hash) && <Lock className="h-3.5 w-3.5 text-primary" />}
+                      {f.is_favorite && <Star className="h-3.5 w-3.5 fill-primary text-primary" />}
                     </div>
+                  </td>
+                  <td className="px-4 py-3">
+                    <span
+                      title={lockSummary(f)}
+                      className={`inline-flex items-center gap-1.5 rounded-full border px-2 py-0.5 text-xs ${
+                        lock.locked
+                          ? "border-primary/30 bg-primary-soft text-primary"
+                          : "border-border text-muted-foreground"
+                      }`}
+                    >
+                      {lock.locked ? <Lock className="h-3 w-3" /> : <Unlock className="h-3 w-3" />}
+                      {lock.label}
+                    </span>
                   </td>
                   <td className="px-4 py-3 text-muted-foreground">{formatBytes(Number(f.size))}</td>
                   <td className="px-4 py-3 text-muted-foreground">{formatDate(f.updated_at)}</td>
                   <td className="px-4 py-3 text-right">
-                    <Button variant="ghost" size="sm" onClick={() => downloadFile(f)}>Download</Button>
-                    <Button variant="ghost" size="sm" onClick={() => setShareFileId(f.id)}>Share</Button>
-                    <Button variant="ghost" size="sm" onClick={() => setLockTarget({ id: f.id, name: f.name, hasPassword: !!f.password_hash, hasPin: !!f.pin_hash })}>
-                      {(f.password_hash || f.pin_hash) ? "Lock…" : "Lock"}
-                    </Button>
-                    <Button variant="ghost" size="sm" onClick={() => trashFile.mutate(f.id)}>Trash</Button>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon"><MoreVertical className="h-4 w-4" /></Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem onClick={() => downloadFile(f)}><Download className="mr-2 h-4 w-4" /> Download</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => setShareFileId(f.id)}><Share2 className="mr-2 h-4 w-4" /> Share</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => toggleFav.mutate({ id: f.id, val: !f.is_favorite })}>
+                          <Star className={`mr-2 h-4 w-4 ${f.is_favorite ? "fill-primary text-primary" : ""}`} />
+                          {f.is_favorite ? "Unfavorite" : "Favorite"}
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => setLockTarget({ id: f.id, name: f.name, hasPassword: lock.hasPassword, hasPin: lock.hasPin })}>
+                          <Lock className="mr-2 h-4 w-4" /> Manage security
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => { setRenameTarget({ id: f.id, name: f.name, kind: "file" }); setRenameValue(f.name); }}>Rename</DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem className="text-destructive" onClick={() => trashFile.mutate(f.id)}><Trash2 className="mr-2 h-4 w-4" /> Move to trash</DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </td>
                 </tr>
-              ))}
+                );
+              })}
             </tbody>
+
           </table>
         </Card>
       )}
