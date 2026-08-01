@@ -14,9 +14,17 @@ import { Logo } from "@/components/Logo";
 import { Lock, Fingerprint, KeyRound } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-
-const INACTIVITY_MS = 5 * 60 * 1000; // 5 minutes
-const STORAGE_KEY = "ecloud:applock:locked";
+import {
+  ACTIVITY_EVENTS,
+  APP_LOCK_INACTIVITY_MS,
+  availableFactors,
+  canLockAccount,
+  createInactivityLock,
+  initialUnlockMode,
+  readLockedFlag,
+  writeLockedFlag,
+  type InactivityLock,
+} from "@/lib/app-lock";
 
 export function AppLock() {
   const getStatus = useServerFn(getSecurityStatus);
@@ -31,49 +39,50 @@ export function AppLock() {
     staleTime: 60_000,
   });
 
-  const canLock = !!(status?.app_pin_enabled || status?.totp_enabled || (status?.passkey_count ?? 0) > 0);
+  const canLock = canLockAccount(status);
+  const factors = availableFactors(status);
   const [locked, setLocked] = useState(false);
   const [mode, setMode] = useState<"pin" | "totp">("pin");
   const [value, setValue] = useState("");
   const [busy, setBusy] = useState(false);
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const lockRef = useRef<InactivityLock | null>(null);
 
   // Restore locked state across reloads.
   useEffect(() => {
     if (!canLock) return;
-    if (typeof window !== "undefined" && sessionStorage.getItem(STORAGE_KEY) === "1") {
+    if (typeof window !== "undefined" && readLockedFlag(window.sessionStorage)) {
       setLocked(true);
     }
-    setMode(status?.app_pin_enabled ? "pin" : "totp");
-  }, [canLock, status?.app_pin_enabled]);
+    setMode(initialUnlockMode(status));
+  }, [canLock, status]);
 
   // Inactivity watcher.
   useEffect(() => {
     if (!canLock || locked) return;
-    const arm = () => {
-      if (timerRef.current) clearTimeout(timerRef.current);
-      timerRef.current = setTimeout(() => {
-        setLocked(true);
-        try { sessionStorage.setItem(STORAGE_KEY, "1"); } catch {}
-      }, INACTIVITY_MS);
-    };
-    const events = ["mousemove", "keydown", "click", "scroll", "touchstart"];
-    events.forEach((e) => window.addEventListener(e, arm, { passive: true }));
+    const lock = createInactivityLock(() => {
+      setLocked(true);
+      writeLockedFlag(window.sessionStorage, true);
+    }, APP_LOCK_INACTIVITY_MS);
+    lockRef.current = lock;
+    const arm = () => lock.arm();
+    ACTIVITY_EVENTS.forEach((e) => window.addEventListener(e, arm, { passive: true }));
     const onVisibility = () => { if (document.hidden) arm(); };
     document.addEventListener("visibilitychange", onVisibility);
     arm();
     return () => {
-      events.forEach((e) => window.removeEventListener(e, arm));
+      ACTIVITY_EVENTS.forEach((e) => window.removeEventListener(e, arm));
       document.removeEventListener("visibilitychange", onVisibility);
-      if (timerRef.current) clearTimeout(timerRef.current);
+      lock.dispose();
+      lockRef.current = null;
     };
   }, [canLock, locked]);
 
   const unlock = () => {
     setLocked(false);
     setValue("");
-    try { sessionStorage.removeItem(STORAGE_KEY); } catch {}
+    writeLockedFlag(typeof window !== "undefined" ? window.sessionStorage : null, false);
   };
+
 
   const submitPin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -113,7 +122,7 @@ export function AppLock() {
   };
 
   const signOut = async () => {
-    try { sessionStorage.removeItem(STORAGE_KEY); } catch {}
+    writeLockedFlag(window.sessionStorage, false);
     await supabase.auth.signOut();
     window.location.href = "/auth";
   };
@@ -153,17 +162,18 @@ export function AppLock() {
         )}
 
         <div className="mt-4 flex flex-wrap justify-center gap-2 text-xs">
-          {status?.app_pin_enabled && mode !== "pin" && (
+          {factors.pin && mode !== "pin" && (
             <Button variant="ghost" size="sm" onClick={() => { setMode("pin"); setValue(""); }}>
               <Lock className="mr-1 h-3 w-3" /> Use PIN
             </Button>
           )}
-          {status?.totp_enabled && mode !== "totp" && (
+          {factors.totp && mode !== "totp" && (
             <Button variant="ghost" size="sm" onClick={() => { setMode("totp"); setValue(""); }}>
               <KeyRound className="mr-1 h-3 w-3" /> Use 2FA code
             </Button>
           )}
-          {(status?.passkey_count ?? 0) > 0 && (
+          {factors.passkey && (
+
             <Button variant="ghost" size="sm" onClick={submitPasskey} disabled={busy}>
               <Fingerprint className="mr-1 h-3 w-3" /> Use passkey
             </Button>

@@ -29,6 +29,8 @@ const groups: { label: string; items: NavItem[] }[] = [
     items: [
       { to: "/files", label: "My Files", icon: FolderOpen },
       { to: "/shared", label: "Shared", icon: Share2 },
+      { to: "/share-diagnostics", label: "Link Diagnostics", icon: Share2 },
+
       { to: "/favorites", label: "Favorites", icon: Star },
       { to: "/trash", label: "Trash", icon: Trash2 },
       { to: "/storage-analytics", label: "Analytics", icon: BarChart3 },
