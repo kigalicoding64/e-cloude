@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { corsPreflight } from "@/lib/cors";
+import { corsPreflight, CORS_HEADERS } from "@/lib/cors";
 
 // Per-model gateway. Client calls with X-API-Key: eck_live_...
 // Body is forwarded to the running deployment's orchestrator at /v1/chat/completions.
@@ -71,6 +71,7 @@ export const Route = createFileRoute("/api/public/v1/chat/$slug")({
               "Retry-After": "60",
               "X-RateLimit-Limit": String(gkey.rate_limit_per_min),
               "X-RateLimit-Remaining": "0",
+              ...CORS_HEADERS,
             },
           });
         }
@@ -139,6 +140,7 @@ export const Route = createFileRoute("/api/public/v1/chat/$slug")({
             "X-RateLimit-Limit": String(gkey.rate_limit_per_min),
             "X-RateLimit-Remaining": String(Math.max(0, gkey.rate_limit_per_min - (count ?? 0) - 1)),
             "X-Quota-Remaining": String(Math.max(0, gkey.quota_tokens_month - tokensUsed - total)),
+            ...CORS_HEADERS,
           },
         });
       },
@@ -149,7 +151,7 @@ export const Route = createFileRoute("/api/public/v1/chat/$slug")({
 function json(data: unknown, status = 200): Response {
   return new Response(JSON.stringify(data), {
     status,
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", ...CORS_HEADERS },
   });
 }
 
