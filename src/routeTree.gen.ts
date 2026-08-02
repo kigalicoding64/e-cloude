@@ -41,6 +41,7 @@ import { Route as ApiPublicV1UploadsIdRouteImport } from './routes/api/public/v1
 import { Route as ApiPublicV1SharesTokenRouteImport } from './routes/api/public/v1/shares/$token'
 import { Route as ApiPublicV1FilesUploadUrlRouteImport } from './routes/api/public/v1/files/upload-url'
 import { Route as ApiPublicV1FilesUploadRouteImport } from './routes/api/public/v1/files/upload'
+import { Route as ApiPublicV1FilesCommitRouteImport } from './routes/api/public/v1/files/commit'
 import { Route as ApiPublicV1FilesIdRouteImport } from './routes/api/public/v1/files/$id'
 import { Route as ApiPublicV1ChatSlugRouteImport } from './routes/api/public/v1/chat.$slug'
 import { Route as ApiPublicV1AgentHeartbeatRouteImport } from './routes/api/public/v1/agent/heartbeat'
@@ -220,6 +221,11 @@ const ApiPublicV1FilesUploadRoute = ApiPublicV1FilesUploadRouteImport.update({
   path: '/api/public/v1/files/upload',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicV1FilesCommitRoute = ApiPublicV1FilesCommitRouteImport.update({
+  id: '/api/public/v1/files/commit',
+  path: '/api/public/v1/files/commit',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicV1FilesIdRoute = ApiPublicV1FilesIdRouteImport.update({
   id: '/api/public/v1/files/$id',
   path: '/api/public/v1/files/$id',
@@ -308,6 +314,7 @@ export interface FileRoutesByFullPath {
   '/api/public/v1/agent/heartbeat': typeof ApiPublicV1AgentHeartbeatRoute
   '/api/public/v1/chat/$slug': typeof ApiPublicV1ChatSlugRoute
   '/api/public/v1/files/$id': typeof ApiPublicV1FilesIdRouteWithChildren
+  '/api/public/v1/files/commit': typeof ApiPublicV1FilesCommitRoute
   '/api/public/v1/files/upload': typeof ApiPublicV1FilesUploadRoute
   '/api/public/v1/files/upload-url': typeof ApiPublicV1FilesUploadUrlRoute
   '/api/public/v1/shares/$token': typeof ApiPublicV1SharesTokenRoute
@@ -351,6 +358,7 @@ export interface FileRoutesByTo {
   '/api/public/v1/agent/heartbeat': typeof ApiPublicV1AgentHeartbeatRoute
   '/api/public/v1/chat/$slug': typeof ApiPublicV1ChatSlugRoute
   '/api/public/v1/files/$id': typeof ApiPublicV1FilesIdRouteWithChildren
+  '/api/public/v1/files/commit': typeof ApiPublicV1FilesCommitRoute
   '/api/public/v1/files/upload': typeof ApiPublicV1FilesUploadRoute
   '/api/public/v1/files/upload-url': typeof ApiPublicV1FilesUploadUrlRoute
   '/api/public/v1/shares/$token': typeof ApiPublicV1SharesTokenRoute
@@ -396,6 +404,7 @@ export interface FileRoutesById {
   '/api/public/v1/agent/heartbeat': typeof ApiPublicV1AgentHeartbeatRoute
   '/api/public/v1/chat/$slug': typeof ApiPublicV1ChatSlugRoute
   '/api/public/v1/files/$id': typeof ApiPublicV1FilesIdRouteWithChildren
+  '/api/public/v1/files/commit': typeof ApiPublicV1FilesCommitRoute
   '/api/public/v1/files/upload': typeof ApiPublicV1FilesUploadRoute
   '/api/public/v1/files/upload-url': typeof ApiPublicV1FilesUploadUrlRoute
   '/api/public/v1/shares/$token': typeof ApiPublicV1SharesTokenRoute
@@ -441,6 +450,7 @@ export interface FileRouteTypes {
     | '/api/public/v1/agent/heartbeat'
     | '/api/public/v1/chat/$slug'
     | '/api/public/v1/files/$id'
+    | '/api/public/v1/files/commit'
     | '/api/public/v1/files/upload'
     | '/api/public/v1/files/upload-url'
     | '/api/public/v1/shares/$token'
@@ -484,6 +494,7 @@ export interface FileRouteTypes {
     | '/api/public/v1/agent/heartbeat'
     | '/api/public/v1/chat/$slug'
     | '/api/public/v1/files/$id'
+    | '/api/public/v1/files/commit'
     | '/api/public/v1/files/upload'
     | '/api/public/v1/files/upload-url'
     | '/api/public/v1/shares/$token'
@@ -528,6 +539,7 @@ export interface FileRouteTypes {
     | '/api/public/v1/agent/heartbeat'
     | '/api/public/v1/chat/$slug'
     | '/api/public/v1/files/$id'
+    | '/api/public/v1/files/commit'
     | '/api/public/v1/files/upload'
     | '/api/public/v1/files/upload-url'
     | '/api/public/v1/shares/$token'
@@ -552,6 +564,7 @@ export interface RootRouteChildren {
   ApiPublicV1AgentHeartbeatRoute: typeof ApiPublicV1AgentHeartbeatRoute
   ApiPublicV1ChatSlugRoute: typeof ApiPublicV1ChatSlugRoute
   ApiPublicV1FilesIdRoute: typeof ApiPublicV1FilesIdRouteWithChildren
+  ApiPublicV1FilesCommitRoute: typeof ApiPublicV1FilesCommitRoute
   ApiPublicV1FilesUploadRoute: typeof ApiPublicV1FilesUploadRoute
   ApiPublicV1FilesUploadUrlRoute: typeof ApiPublicV1FilesUploadUrlRoute
   ApiPublicV1SharesTokenRoute: typeof ApiPublicV1SharesTokenRoute
@@ -790,6 +803,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicV1FilesUploadRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/v1/files/commit': {
+      id: '/api/public/v1/files/commit'
+      path: '/api/public/v1/files/commit'
+      fullPath: '/api/public/v1/files/commit'
+      preLoaderRoute: typeof ApiPublicV1FilesCommitRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/v1/files/$id': {
       id: '/api/public/v1/files/$id'
       path: '/api/public/v1/files/$id'
@@ -970,6 +990,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicV1AgentHeartbeatRoute: ApiPublicV1AgentHeartbeatRoute,
   ApiPublicV1ChatSlugRoute: ApiPublicV1ChatSlugRoute,
   ApiPublicV1FilesIdRoute: ApiPublicV1FilesIdRouteWithChildren,
+  ApiPublicV1FilesCommitRoute: ApiPublicV1FilesCommitRoute,
   ApiPublicV1FilesUploadRoute: ApiPublicV1FilesUploadRoute,
   ApiPublicV1FilesUploadUrlRoute: ApiPublicV1FilesUploadUrlRoute,
   ApiPublicV1SharesTokenRoute: ApiPublicV1SharesTokenRoute,
