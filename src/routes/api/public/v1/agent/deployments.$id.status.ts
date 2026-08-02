@@ -1,9 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { corsPreflight } from "@/lib/cors";
 
 // Agent posts status transitions: building | running | failed | stopped
 export const Route = createFileRoute("/api/public/v1/agent/deployments/$id/status")({
   server: {
     handlers: {
+      OPTIONS: async () => corsPreflight(),
       POST: async ({ request, params }) => {
         const { authenticateAgent, json, jsonError } = await import("@/lib/agent-auth.server");
         const auth = await authenticateAgent(request);

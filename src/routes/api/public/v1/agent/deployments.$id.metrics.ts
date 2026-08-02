@@ -1,9 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { corsPreflight } from "@/lib/cors";
 
 // Agent posts GPU/memory/throughput samples. Accepts single or batch.
 export const Route = createFileRoute("/api/public/v1/agent/deployments/$id/metrics")({
   server: {
     handlers: {
+      OPTIONS: async () => corsPreflight(),
       POST: async ({ request, params }) => {
         const { authenticateAgent, json, jsonError } = await import("@/lib/agent-auth.server");
         const auth = await authenticateAgent(request);

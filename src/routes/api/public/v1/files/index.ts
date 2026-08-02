@@ -1,8 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { corsPreflight } from "@/lib/cors";
 
 export const Route = createFileRoute("/api/public/v1/files/")({
   server: {
     handlers: {
+      OPTIONS: async () => corsPreflight(),
       GET: async ({ request }) => {
         const { authenticateApiKey, json, jsonError } = await import("@/lib/api-auth.server");
         const auth = await authenticateApiKey(request);

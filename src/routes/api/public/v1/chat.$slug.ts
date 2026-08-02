@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { corsPreflight } from "@/lib/cors";
 
 // Per-model gateway. Client calls with X-API-Key: eck_live_...
 // Body is forwarded to the running deployment's orchestrator at /v1/chat/completions.
@@ -6,6 +7,7 @@ import { createFileRoute } from "@tanstack/react-router";
 export const Route = createFileRoute("/api/public/v1/chat/$slug")({
   server: {
     handlers: {
+      OPTIONS: async () => corsPreflight(),
       POST: async ({ request, params }) => {
         const started = Date.now();
         const key = request.headers.get("x-api-key") ?? "";

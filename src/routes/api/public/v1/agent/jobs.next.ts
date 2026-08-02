@@ -1,10 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { corsPreflight } from "@/lib/cors";
 
 // Agent polls this to fetch the next pending deployment job.
 // Assigns unassigned jobs to this orchestrator, or picks up ones already assigned to it.
 export const Route = createFileRoute("/api/public/v1/agent/jobs/next")({
   server: {
     handlers: {
+      OPTIONS: async () => corsPreflight(),
       GET: async ({ request }) => {
         const { authenticateAgent, json, jsonError } = await import("@/lib/agent-auth.server");
         const auth = await authenticateAgent(request);

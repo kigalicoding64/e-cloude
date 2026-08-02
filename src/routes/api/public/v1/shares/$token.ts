@@ -1,10 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { sha256Hex } from "@/lib/hash";
+import { corsPreflight } from "@/lib/cors";
 
 // Public share resolver — anyone can request; server checks expiry + password.
 export const Route = createFileRoute("/api/public/v1/shares/$token")({
   server: {
     handlers: {
+      OPTIONS: async () => corsPreflight(),
       POST: async ({ request, params }) => {
         const { json, jsonError } = await import("@/lib/api-auth.server");
         const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
