@@ -1,5 +1,6 @@
 // Resolves an API key (X-API-Key: eck_live_...) to its owner user_id.
 import { sha256Hex } from "@/lib/hash";
+import { CORS_HEADERS } from "@/lib/cors";
 
 export type ApiCaller = { userId: string; keyId: string };
 
@@ -27,10 +28,11 @@ export async function authenticateApiKey(request: Request): Promise<ApiCaller | 
 export function json(data: unknown, status = 200): Response {
   return new Response(JSON.stringify(data), {
     status,
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", ...CORS_HEADERS },
   });
 }
 
 export function jsonError(message: string, status: number): Response {
   return json({ error: message }, status);
 }
+

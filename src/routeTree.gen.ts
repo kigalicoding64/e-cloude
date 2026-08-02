@@ -34,18 +34,21 @@ import { Route as AuthenticatedOrganizationsIdRouteImport } from './routes/_auth
 import { Route as AuthenticatedAiOrchestratorsRouteImport } from './routes/_authenticated/ai.orchestrators'
 import { Route as AuthenticatedAiModelsRouteImport } from './routes/_authenticated/ai.models'
 import { Route as AuthenticatedAiDeploymentsRouteImport } from './routes/_authenticated/ai.deployments'
-import { Route as ApiV1UploadsInitRouteImport } from './routes/api/v1/uploads/init'
-import { Route as ApiV1UploadsIdRouteImport } from './routes/api/v1/uploads/$id'
-import { Route as ApiV1ChatSlugRouteImport } from './routes/api/v1/chat.$slug'
 import { Route as AuthenticatedAiModelsSlugRouteImport } from './routes/_authenticated/ai.models.$slug'
 import { Route as ApiPublicV1FilesIndexRouteImport } from './routes/api/public/v1/files/index'
-import { Route as ApiV1UploadsIdCompleteRouteImport } from './routes/api/v1/uploads/$id.complete'
+import { Route as ApiPublicV1UploadsInitRouteImport } from './routes/api/public/v1/uploads/init'
+import { Route as ApiPublicV1UploadsIdRouteImport } from './routes/api/public/v1/uploads/$id'
 import { Route as ApiPublicV1SharesTokenRouteImport } from './routes/api/public/v1/shares/$token'
+import { Route as ApiPublicV1FilesUploadUrlRouteImport } from './routes/api/public/v1/files/upload-url'
 import { Route as ApiPublicV1FilesUploadRouteImport } from './routes/api/public/v1/files/upload'
+import { Route as ApiPublicV1FilesCommitRouteImport } from './routes/api/public/v1/files/commit'
 import { Route as ApiPublicV1FilesIdRouteImport } from './routes/api/public/v1/files/$id'
+import { Route as ApiPublicV1ChatSlugRouteImport } from './routes/api/public/v1/chat.$slug'
 import { Route as ApiPublicV1AgentHeartbeatRouteImport } from './routes/api/public/v1/agent/heartbeat'
-import { Route as ApiV1UploadsIdChunksIndexRouteImport } from './routes/api/v1/uploads/$id.chunks.$index'
+import { Route as ApiPublicV1UploadsIdCompleteRouteImport } from './routes/api/public/v1/uploads/$id.complete'
+import { Route as ApiPublicV1FilesIdSignedUrlRouteImport } from './routes/api/public/v1/files/$id.signed-url'
 import { Route as ApiPublicV1AgentJobsNextRouteImport } from './routes/api/public/v1/agent/jobs.next'
+import { Route as ApiPublicV1UploadsIdChunksIndexRouteImport } from './routes/api/public/v1/uploads/$id.chunks.$index'
 import { Route as ApiPublicV1AgentDeploymentsIdStatusRouteImport } from './routes/api/public/v1/agent/deployments.$id.status'
 import { Route as ApiPublicV1AgentDeploymentsIdMetricsRouteImport } from './routes/api/public/v1/agent/deployments.$id.metrics'
 import { Route as ApiPublicV1AgentDeploymentsIdLogsRouteImport } from './routes/api/public/v1/agent/deployments.$id.logs'
@@ -181,21 +184,6 @@ const AuthenticatedAiDeploymentsRoute =
     path: '/ai/deployments',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
-const ApiV1UploadsInitRoute = ApiV1UploadsInitRouteImport.update({
-  id: '/api/v1/uploads/init',
-  path: '/api/v1/uploads/init',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiV1UploadsIdRoute = ApiV1UploadsIdRouteImport.update({
-  id: '/api/v1/uploads/$id',
-  path: '/api/v1/uploads/$id',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiV1ChatSlugRoute = ApiV1ChatSlugRouteImport.update({
-  id: '/api/v1/chat/$slug',
-  path: '/api/v1/chat/$slug',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AuthenticatedAiModelsSlugRoute =
   AuthenticatedAiModelsSlugRouteImport.update({
     id: '/$slug',
@@ -207,24 +195,45 @@ const ApiPublicV1FilesIndexRoute = ApiPublicV1FilesIndexRouteImport.update({
   path: '/api/public/v1/files/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiV1UploadsIdCompleteRoute = ApiV1UploadsIdCompleteRouteImport.update({
-  id: '/complete',
-  path: '/complete',
-  getParentRoute: () => ApiV1UploadsIdRoute,
+const ApiPublicV1UploadsInitRoute = ApiPublicV1UploadsInitRouteImport.update({
+  id: '/api/public/v1/uploads/init',
+  path: '/api/public/v1/uploads/init',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicV1UploadsIdRoute = ApiPublicV1UploadsIdRouteImport.update({
+  id: '/api/public/v1/uploads/$id',
+  path: '/api/public/v1/uploads/$id',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicV1SharesTokenRoute = ApiPublicV1SharesTokenRouteImport.update({
   id: '/api/public/v1/shares/$token',
   path: '/api/public/v1/shares/$token',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicV1FilesUploadUrlRoute =
+  ApiPublicV1FilesUploadUrlRouteImport.update({
+    id: '/api/public/v1/files/upload-url',
+    path: '/api/public/v1/files/upload-url',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicV1FilesUploadRoute = ApiPublicV1FilesUploadRouteImport.update({
   id: '/api/public/v1/files/upload',
   path: '/api/public/v1/files/upload',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicV1FilesCommitRoute = ApiPublicV1FilesCommitRouteImport.update({
+  id: '/api/public/v1/files/commit',
+  path: '/api/public/v1/files/commit',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicV1FilesIdRoute = ApiPublicV1FilesIdRouteImport.update({
   id: '/api/public/v1/files/$id',
   path: '/api/public/v1/files/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicV1ChatSlugRoute = ApiPublicV1ChatSlugRouteImport.update({
+  id: '/api/public/v1/chat/$slug',
+  path: '/api/public/v1/chat/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicV1AgentHeartbeatRoute =
@@ -233,17 +242,29 @@ const ApiPublicV1AgentHeartbeatRoute =
     path: '/api/public/v1/agent/heartbeat',
     getParentRoute: () => rootRouteImport,
   } as any)
-const ApiV1UploadsIdChunksIndexRoute =
-  ApiV1UploadsIdChunksIndexRouteImport.update({
-    id: '/chunks/$index',
-    path: '/chunks/$index',
-    getParentRoute: () => ApiV1UploadsIdRoute,
+const ApiPublicV1UploadsIdCompleteRoute =
+  ApiPublicV1UploadsIdCompleteRouteImport.update({
+    id: '/complete',
+    path: '/complete',
+    getParentRoute: () => ApiPublicV1UploadsIdRoute,
+  } as any)
+const ApiPublicV1FilesIdSignedUrlRoute =
+  ApiPublicV1FilesIdSignedUrlRouteImport.update({
+    id: '/signed-url',
+    path: '/signed-url',
+    getParentRoute: () => ApiPublicV1FilesIdRoute,
   } as any)
 const ApiPublicV1AgentJobsNextRoute =
   ApiPublicV1AgentJobsNextRouteImport.update({
     id: '/api/public/v1/agent/jobs/next',
     path: '/api/public/v1/agent/jobs/next',
     getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicV1UploadsIdChunksIndexRoute =
+  ApiPublicV1UploadsIdChunksIndexRouteImport.update({
+    id: '/chunks/$index',
+    path: '/chunks/$index',
+    getParentRoute: () => ApiPublicV1UploadsIdRoute,
   } as any)
 const ApiPublicV1AgentDeploymentsIdStatusRoute =
   ApiPublicV1AgentDeploymentsIdStatusRouteImport.update({
@@ -290,20 +311,23 @@ export interface FileRoutesByFullPath {
   '/ai/orchestrators': typeof AuthenticatedAiOrchestratorsRoute
   '/organizations/$id': typeof AuthenticatedOrganizationsIdRoute
   '/ai/models/$slug': typeof AuthenticatedAiModelsSlugRoute
-  '/api/v1/chat/$slug': typeof ApiV1ChatSlugRoute
-  '/api/v1/uploads/$id': typeof ApiV1UploadsIdRouteWithChildren
-  '/api/v1/uploads/init': typeof ApiV1UploadsInitRoute
   '/api/public/v1/agent/heartbeat': typeof ApiPublicV1AgentHeartbeatRoute
-  '/api/public/v1/files/$id': typeof ApiPublicV1FilesIdRoute
+  '/api/public/v1/chat/$slug': typeof ApiPublicV1ChatSlugRoute
+  '/api/public/v1/files/$id': typeof ApiPublicV1FilesIdRouteWithChildren
+  '/api/public/v1/files/commit': typeof ApiPublicV1FilesCommitRoute
   '/api/public/v1/files/upload': typeof ApiPublicV1FilesUploadRoute
+  '/api/public/v1/files/upload-url': typeof ApiPublicV1FilesUploadUrlRoute
   '/api/public/v1/shares/$token': typeof ApiPublicV1SharesTokenRoute
-  '/api/v1/uploads/$id/complete': typeof ApiV1UploadsIdCompleteRoute
+  '/api/public/v1/uploads/$id': typeof ApiPublicV1UploadsIdRouteWithChildren
+  '/api/public/v1/uploads/init': typeof ApiPublicV1UploadsInitRoute
   '/api/public/v1/files/': typeof ApiPublicV1FilesIndexRoute
   '/api/public/v1/agent/jobs/next': typeof ApiPublicV1AgentJobsNextRoute
-  '/api/v1/uploads/$id/chunks/$index': typeof ApiV1UploadsIdChunksIndexRoute
+  '/api/public/v1/files/$id/signed-url': typeof ApiPublicV1FilesIdSignedUrlRoute
+  '/api/public/v1/uploads/$id/complete': typeof ApiPublicV1UploadsIdCompleteRoute
   '/api/public/v1/agent/deployments/$id/logs': typeof ApiPublicV1AgentDeploymentsIdLogsRoute
   '/api/public/v1/agent/deployments/$id/metrics': typeof ApiPublicV1AgentDeploymentsIdMetricsRoute
   '/api/public/v1/agent/deployments/$id/status': typeof ApiPublicV1AgentDeploymentsIdStatusRoute
+  '/api/public/v1/uploads/$id/chunks/$index': typeof ApiPublicV1UploadsIdChunksIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -331,20 +355,23 @@ export interface FileRoutesByTo {
   '/ai/orchestrators': typeof AuthenticatedAiOrchestratorsRoute
   '/organizations/$id': typeof AuthenticatedOrganizationsIdRoute
   '/ai/models/$slug': typeof AuthenticatedAiModelsSlugRoute
-  '/api/v1/chat/$slug': typeof ApiV1ChatSlugRoute
-  '/api/v1/uploads/$id': typeof ApiV1UploadsIdRouteWithChildren
-  '/api/v1/uploads/init': typeof ApiV1UploadsInitRoute
   '/api/public/v1/agent/heartbeat': typeof ApiPublicV1AgentHeartbeatRoute
-  '/api/public/v1/files/$id': typeof ApiPublicV1FilesIdRoute
+  '/api/public/v1/chat/$slug': typeof ApiPublicV1ChatSlugRoute
+  '/api/public/v1/files/$id': typeof ApiPublicV1FilesIdRouteWithChildren
+  '/api/public/v1/files/commit': typeof ApiPublicV1FilesCommitRoute
   '/api/public/v1/files/upload': typeof ApiPublicV1FilesUploadRoute
+  '/api/public/v1/files/upload-url': typeof ApiPublicV1FilesUploadUrlRoute
   '/api/public/v1/shares/$token': typeof ApiPublicV1SharesTokenRoute
-  '/api/v1/uploads/$id/complete': typeof ApiV1UploadsIdCompleteRoute
+  '/api/public/v1/uploads/$id': typeof ApiPublicV1UploadsIdRouteWithChildren
+  '/api/public/v1/uploads/init': typeof ApiPublicV1UploadsInitRoute
   '/api/public/v1/files': typeof ApiPublicV1FilesIndexRoute
   '/api/public/v1/agent/jobs/next': typeof ApiPublicV1AgentJobsNextRoute
-  '/api/v1/uploads/$id/chunks/$index': typeof ApiV1UploadsIdChunksIndexRoute
+  '/api/public/v1/files/$id/signed-url': typeof ApiPublicV1FilesIdSignedUrlRoute
+  '/api/public/v1/uploads/$id/complete': typeof ApiPublicV1UploadsIdCompleteRoute
   '/api/public/v1/agent/deployments/$id/logs': typeof ApiPublicV1AgentDeploymentsIdLogsRoute
   '/api/public/v1/agent/deployments/$id/metrics': typeof ApiPublicV1AgentDeploymentsIdMetricsRoute
   '/api/public/v1/agent/deployments/$id/status': typeof ApiPublicV1AgentDeploymentsIdStatusRoute
+  '/api/public/v1/uploads/$id/chunks/$index': typeof ApiPublicV1UploadsIdChunksIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -374,20 +401,23 @@ export interface FileRoutesById {
   '/_authenticated/ai/orchestrators': typeof AuthenticatedAiOrchestratorsRoute
   '/_authenticated/organizations/$id': typeof AuthenticatedOrganizationsIdRoute
   '/_authenticated/ai/models/$slug': typeof AuthenticatedAiModelsSlugRoute
-  '/api/v1/chat/$slug': typeof ApiV1ChatSlugRoute
-  '/api/v1/uploads/$id': typeof ApiV1UploadsIdRouteWithChildren
-  '/api/v1/uploads/init': typeof ApiV1UploadsInitRoute
   '/api/public/v1/agent/heartbeat': typeof ApiPublicV1AgentHeartbeatRoute
-  '/api/public/v1/files/$id': typeof ApiPublicV1FilesIdRoute
+  '/api/public/v1/chat/$slug': typeof ApiPublicV1ChatSlugRoute
+  '/api/public/v1/files/$id': typeof ApiPublicV1FilesIdRouteWithChildren
+  '/api/public/v1/files/commit': typeof ApiPublicV1FilesCommitRoute
   '/api/public/v1/files/upload': typeof ApiPublicV1FilesUploadRoute
+  '/api/public/v1/files/upload-url': typeof ApiPublicV1FilesUploadUrlRoute
   '/api/public/v1/shares/$token': typeof ApiPublicV1SharesTokenRoute
-  '/api/v1/uploads/$id/complete': typeof ApiV1UploadsIdCompleteRoute
+  '/api/public/v1/uploads/$id': typeof ApiPublicV1UploadsIdRouteWithChildren
+  '/api/public/v1/uploads/init': typeof ApiPublicV1UploadsInitRoute
   '/api/public/v1/files/': typeof ApiPublicV1FilesIndexRoute
   '/api/public/v1/agent/jobs/next': typeof ApiPublicV1AgentJobsNextRoute
-  '/api/v1/uploads/$id/chunks/$index': typeof ApiV1UploadsIdChunksIndexRoute
+  '/api/public/v1/files/$id/signed-url': typeof ApiPublicV1FilesIdSignedUrlRoute
+  '/api/public/v1/uploads/$id/complete': typeof ApiPublicV1UploadsIdCompleteRoute
   '/api/public/v1/agent/deployments/$id/logs': typeof ApiPublicV1AgentDeploymentsIdLogsRoute
   '/api/public/v1/agent/deployments/$id/metrics': typeof ApiPublicV1AgentDeploymentsIdMetricsRoute
   '/api/public/v1/agent/deployments/$id/status': typeof ApiPublicV1AgentDeploymentsIdStatusRoute
+  '/api/public/v1/uploads/$id/chunks/$index': typeof ApiPublicV1UploadsIdChunksIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -417,20 +447,23 @@ export interface FileRouteTypes {
     | '/ai/orchestrators'
     | '/organizations/$id'
     | '/ai/models/$slug'
-    | '/api/v1/chat/$slug'
-    | '/api/v1/uploads/$id'
-    | '/api/v1/uploads/init'
     | '/api/public/v1/agent/heartbeat'
+    | '/api/public/v1/chat/$slug'
     | '/api/public/v1/files/$id'
+    | '/api/public/v1/files/commit'
     | '/api/public/v1/files/upload'
+    | '/api/public/v1/files/upload-url'
     | '/api/public/v1/shares/$token'
-    | '/api/v1/uploads/$id/complete'
+    | '/api/public/v1/uploads/$id'
+    | '/api/public/v1/uploads/init'
     | '/api/public/v1/files/'
     | '/api/public/v1/agent/jobs/next'
-    | '/api/v1/uploads/$id/chunks/$index'
+    | '/api/public/v1/files/$id/signed-url'
+    | '/api/public/v1/uploads/$id/complete'
     | '/api/public/v1/agent/deployments/$id/logs'
     | '/api/public/v1/agent/deployments/$id/metrics'
     | '/api/public/v1/agent/deployments/$id/status'
+    | '/api/public/v1/uploads/$id/chunks/$index'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -458,20 +491,23 @@ export interface FileRouteTypes {
     | '/ai/orchestrators'
     | '/organizations/$id'
     | '/ai/models/$slug'
-    | '/api/v1/chat/$slug'
-    | '/api/v1/uploads/$id'
-    | '/api/v1/uploads/init'
     | '/api/public/v1/agent/heartbeat'
+    | '/api/public/v1/chat/$slug'
     | '/api/public/v1/files/$id'
+    | '/api/public/v1/files/commit'
     | '/api/public/v1/files/upload'
+    | '/api/public/v1/files/upload-url'
     | '/api/public/v1/shares/$token'
-    | '/api/v1/uploads/$id/complete'
+    | '/api/public/v1/uploads/$id'
+    | '/api/public/v1/uploads/init'
     | '/api/public/v1/files'
     | '/api/public/v1/agent/jobs/next'
-    | '/api/v1/uploads/$id/chunks/$index'
+    | '/api/public/v1/files/$id/signed-url'
+    | '/api/public/v1/uploads/$id/complete'
     | '/api/public/v1/agent/deployments/$id/logs'
     | '/api/public/v1/agent/deployments/$id/metrics'
     | '/api/public/v1/agent/deployments/$id/status'
+    | '/api/public/v1/uploads/$id/chunks/$index'
   id:
     | '__root__'
     | '/'
@@ -500,20 +536,23 @@ export interface FileRouteTypes {
     | '/_authenticated/ai/orchestrators'
     | '/_authenticated/organizations/$id'
     | '/_authenticated/ai/models/$slug'
-    | '/api/v1/chat/$slug'
-    | '/api/v1/uploads/$id'
-    | '/api/v1/uploads/init'
     | '/api/public/v1/agent/heartbeat'
+    | '/api/public/v1/chat/$slug'
     | '/api/public/v1/files/$id'
+    | '/api/public/v1/files/commit'
     | '/api/public/v1/files/upload'
+    | '/api/public/v1/files/upload-url'
     | '/api/public/v1/shares/$token'
-    | '/api/v1/uploads/$id/complete'
+    | '/api/public/v1/uploads/$id'
+    | '/api/public/v1/uploads/init'
     | '/api/public/v1/files/'
     | '/api/public/v1/agent/jobs/next'
-    | '/api/v1/uploads/$id/chunks/$index'
+    | '/api/public/v1/files/$id/signed-url'
+    | '/api/public/v1/uploads/$id/complete'
     | '/api/public/v1/agent/deployments/$id/logs'
     | '/api/public/v1/agent/deployments/$id/metrics'
     | '/api/public/v1/agent/deployments/$id/status'
+    | '/api/public/v1/uploads/$id/chunks/$index'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -522,13 +561,15 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   STokenRoute: typeof STokenRoute
-  ApiV1ChatSlugRoute: typeof ApiV1ChatSlugRoute
-  ApiV1UploadsIdRoute: typeof ApiV1UploadsIdRouteWithChildren
-  ApiV1UploadsInitRoute: typeof ApiV1UploadsInitRoute
   ApiPublicV1AgentHeartbeatRoute: typeof ApiPublicV1AgentHeartbeatRoute
-  ApiPublicV1FilesIdRoute: typeof ApiPublicV1FilesIdRoute
+  ApiPublicV1ChatSlugRoute: typeof ApiPublicV1ChatSlugRoute
+  ApiPublicV1FilesIdRoute: typeof ApiPublicV1FilesIdRouteWithChildren
+  ApiPublicV1FilesCommitRoute: typeof ApiPublicV1FilesCommitRoute
   ApiPublicV1FilesUploadRoute: typeof ApiPublicV1FilesUploadRoute
+  ApiPublicV1FilesUploadUrlRoute: typeof ApiPublicV1FilesUploadUrlRoute
   ApiPublicV1SharesTokenRoute: typeof ApiPublicV1SharesTokenRoute
+  ApiPublicV1UploadsIdRoute: typeof ApiPublicV1UploadsIdRouteWithChildren
+  ApiPublicV1UploadsInitRoute: typeof ApiPublicV1UploadsInitRoute
   ApiPublicV1FilesIndexRoute: typeof ApiPublicV1FilesIndexRoute
   ApiPublicV1AgentJobsNextRoute: typeof ApiPublicV1AgentJobsNextRoute
   ApiPublicV1AgentDeploymentsIdLogsRoute: typeof ApiPublicV1AgentDeploymentsIdLogsRoute
@@ -713,27 +754,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAiDeploymentsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/api/v1/uploads/init': {
-      id: '/api/v1/uploads/init'
-      path: '/api/v1/uploads/init'
-      fullPath: '/api/v1/uploads/init'
-      preLoaderRoute: typeof ApiV1UploadsInitRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/v1/uploads/$id': {
-      id: '/api/v1/uploads/$id'
-      path: '/api/v1/uploads/$id'
-      fullPath: '/api/v1/uploads/$id'
-      preLoaderRoute: typeof ApiV1UploadsIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/v1/chat/$slug': {
-      id: '/api/v1/chat/$slug'
-      path: '/api/v1/chat/$slug'
-      fullPath: '/api/v1/chat/$slug'
-      preLoaderRoute: typeof ApiV1ChatSlugRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/_authenticated/ai/models/$slug': {
       id: '/_authenticated/ai/models/$slug'
       path: '/$slug'
@@ -748,18 +768,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicV1FilesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/v1/uploads/$id/complete': {
-      id: '/api/v1/uploads/$id/complete'
-      path: '/complete'
-      fullPath: '/api/v1/uploads/$id/complete'
-      preLoaderRoute: typeof ApiV1UploadsIdCompleteRouteImport
-      parentRoute: typeof ApiV1UploadsIdRoute
+    '/api/public/v1/uploads/init': {
+      id: '/api/public/v1/uploads/init'
+      path: '/api/public/v1/uploads/init'
+      fullPath: '/api/public/v1/uploads/init'
+      preLoaderRoute: typeof ApiPublicV1UploadsInitRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/uploads/$id': {
+      id: '/api/public/v1/uploads/$id'
+      path: '/api/public/v1/uploads/$id'
+      fullPath: '/api/public/v1/uploads/$id'
+      preLoaderRoute: typeof ApiPublicV1UploadsIdRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/api/public/v1/shares/$token': {
       id: '/api/public/v1/shares/$token'
       path: '/api/public/v1/shares/$token'
       fullPath: '/api/public/v1/shares/$token'
       preLoaderRoute: typeof ApiPublicV1SharesTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/files/upload-url': {
+      id: '/api/public/v1/files/upload-url'
+      path: '/api/public/v1/files/upload-url'
+      fullPath: '/api/public/v1/files/upload-url'
+      preLoaderRoute: typeof ApiPublicV1FilesUploadUrlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/v1/files/upload': {
@@ -769,11 +803,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicV1FilesUploadRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/v1/files/commit': {
+      id: '/api/public/v1/files/commit'
+      path: '/api/public/v1/files/commit'
+      fullPath: '/api/public/v1/files/commit'
+      preLoaderRoute: typeof ApiPublicV1FilesCommitRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/v1/files/$id': {
       id: '/api/public/v1/files/$id'
       path: '/api/public/v1/files/$id'
       fullPath: '/api/public/v1/files/$id'
       preLoaderRoute: typeof ApiPublicV1FilesIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/chat/$slug': {
+      id: '/api/public/v1/chat/$slug'
+      path: '/api/public/v1/chat/$slug'
+      fullPath: '/api/public/v1/chat/$slug'
+      preLoaderRoute: typeof ApiPublicV1ChatSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/v1/agent/heartbeat': {
@@ -783,12 +831,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicV1AgentHeartbeatRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/v1/uploads/$id/chunks/$index': {
-      id: '/api/v1/uploads/$id/chunks/$index'
-      path: '/chunks/$index'
-      fullPath: '/api/v1/uploads/$id/chunks/$index'
-      preLoaderRoute: typeof ApiV1UploadsIdChunksIndexRouteImport
-      parentRoute: typeof ApiV1UploadsIdRoute
+    '/api/public/v1/uploads/$id/complete': {
+      id: '/api/public/v1/uploads/$id/complete'
+      path: '/complete'
+      fullPath: '/api/public/v1/uploads/$id/complete'
+      preLoaderRoute: typeof ApiPublicV1UploadsIdCompleteRouteImport
+      parentRoute: typeof ApiPublicV1UploadsIdRoute
+    }
+    '/api/public/v1/files/$id/signed-url': {
+      id: '/api/public/v1/files/$id/signed-url'
+      path: '/signed-url'
+      fullPath: '/api/public/v1/files/$id/signed-url'
+      preLoaderRoute: typeof ApiPublicV1FilesIdSignedUrlRouteImport
+      parentRoute: typeof ApiPublicV1FilesIdRoute
     }
     '/api/public/v1/agent/jobs/next': {
       id: '/api/public/v1/agent/jobs/next'
@@ -796,6 +851,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/api/public/v1/agent/jobs/next'
       preLoaderRoute: typeof ApiPublicV1AgentJobsNextRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/uploads/$id/chunks/$index': {
+      id: '/api/public/v1/uploads/$id/chunks/$index'
+      path: '/chunks/$index'
+      fullPath: '/api/public/v1/uploads/$id/chunks/$index'
+      preLoaderRoute: typeof ApiPublicV1UploadsIdChunksIndexRouteImport
+      parentRoute: typeof ApiPublicV1UploadsIdRoute
     }
     '/api/public/v1/agent/deployments/$id/status': {
       id: '/api/public/v1/agent/deployments/$id/status'
@@ -895,19 +957,29 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
 const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
-interface ApiV1UploadsIdRouteChildren {
-  ApiV1UploadsIdCompleteRoute: typeof ApiV1UploadsIdCompleteRoute
-  ApiV1UploadsIdChunksIndexRoute: typeof ApiV1UploadsIdChunksIndexRoute
+interface ApiPublicV1FilesIdRouteChildren {
+  ApiPublicV1FilesIdSignedUrlRoute: typeof ApiPublicV1FilesIdSignedUrlRoute
 }
 
-const ApiV1UploadsIdRouteChildren: ApiV1UploadsIdRouteChildren = {
-  ApiV1UploadsIdCompleteRoute: ApiV1UploadsIdCompleteRoute,
-  ApiV1UploadsIdChunksIndexRoute: ApiV1UploadsIdChunksIndexRoute,
+const ApiPublicV1FilesIdRouteChildren: ApiPublicV1FilesIdRouteChildren = {
+  ApiPublicV1FilesIdSignedUrlRoute: ApiPublicV1FilesIdSignedUrlRoute,
 }
 
-const ApiV1UploadsIdRouteWithChildren = ApiV1UploadsIdRoute._addFileChildren(
-  ApiV1UploadsIdRouteChildren,
-)
+const ApiPublicV1FilesIdRouteWithChildren =
+  ApiPublicV1FilesIdRoute._addFileChildren(ApiPublicV1FilesIdRouteChildren)
+
+interface ApiPublicV1UploadsIdRouteChildren {
+  ApiPublicV1UploadsIdCompleteRoute: typeof ApiPublicV1UploadsIdCompleteRoute
+  ApiPublicV1UploadsIdChunksIndexRoute: typeof ApiPublicV1UploadsIdChunksIndexRoute
+}
+
+const ApiPublicV1UploadsIdRouteChildren: ApiPublicV1UploadsIdRouteChildren = {
+  ApiPublicV1UploadsIdCompleteRoute: ApiPublicV1UploadsIdCompleteRoute,
+  ApiPublicV1UploadsIdChunksIndexRoute: ApiPublicV1UploadsIdChunksIndexRoute,
+}
+
+const ApiPublicV1UploadsIdRouteWithChildren =
+  ApiPublicV1UploadsIdRoute._addFileChildren(ApiPublicV1UploadsIdRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -915,13 +987,15 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   STokenRoute: STokenRoute,
-  ApiV1ChatSlugRoute: ApiV1ChatSlugRoute,
-  ApiV1UploadsIdRoute: ApiV1UploadsIdRouteWithChildren,
-  ApiV1UploadsInitRoute: ApiV1UploadsInitRoute,
   ApiPublicV1AgentHeartbeatRoute: ApiPublicV1AgentHeartbeatRoute,
-  ApiPublicV1FilesIdRoute: ApiPublicV1FilesIdRoute,
+  ApiPublicV1ChatSlugRoute: ApiPublicV1ChatSlugRoute,
+  ApiPublicV1FilesIdRoute: ApiPublicV1FilesIdRouteWithChildren,
+  ApiPublicV1FilesCommitRoute: ApiPublicV1FilesCommitRoute,
   ApiPublicV1FilesUploadRoute: ApiPublicV1FilesUploadRoute,
+  ApiPublicV1FilesUploadUrlRoute: ApiPublicV1FilesUploadUrlRoute,
   ApiPublicV1SharesTokenRoute: ApiPublicV1SharesTokenRoute,
+  ApiPublicV1UploadsIdRoute: ApiPublicV1UploadsIdRouteWithChildren,
+  ApiPublicV1UploadsInitRoute: ApiPublicV1UploadsInitRoute,
   ApiPublicV1FilesIndexRoute: ApiPublicV1FilesIndexRoute,
   ApiPublicV1AgentJobsNextRoute: ApiPublicV1AgentJobsNextRoute,
   ApiPublicV1AgentDeploymentsIdLogsRoute:
@@ -934,13 +1008,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

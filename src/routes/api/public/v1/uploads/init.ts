@@ -1,12 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { authenticateApiKey, json, jsonError } from "@/lib/api-auth.server";
+import { corsPreflight } from "@/lib/cors";
 
-// POST /api/v1/uploads/init
+// POST /api/public/v1/uploads/init
 // Body: { filename, size, mime_type?, chunk_size?, folder_id?, password? }
 // Returns: { session_id, chunk_size, total_chunks, upload_url_template, expires_at }
-export const Route = createFileRoute("/api/v1/uploads/init")({
+export const Route = createFileRoute("/api/public/v1/uploads/init")({
   server: {
     handlers: {
+      OPTIONS: async () => corsPreflight(),
       POST: async ({ request }) => {
         const caller = await authenticateApiKey(request);
         if (!caller) return jsonError("invalid API key", 401);
@@ -69,9 +71,9 @@ export const Route = createFileRoute("/api/v1/uploads/init")({
           chunk_size: data.chunk_size,
           total_chunks: data.total_chunks,
           expires_at: data.expires_at,
-          upload_url_template: `/api/v1/uploads/${data.id}/chunks/{index}`,
-          status_url: `/api/v1/uploads/${data.id}`,
-          complete_url: `/api/v1/uploads/${data.id}/complete`,
+          upload_url_template: `/api/public/v1/uploads/${data.id}/chunks/{index}`,
+          status_url: `/api/public/v1/uploads/${data.id}`,
+          complete_url: `/api/public/v1/uploads/${data.id}/complete`,
         });
       },
     },

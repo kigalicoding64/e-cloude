@@ -1,11 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { authenticateApiKey, json, jsonError } from "@/lib/api-auth.server";
+import { corsPreflight } from "@/lib/cors";
 
-// GET /api/v1/uploads/:id  -> status (for resume)
-// DELETE /api/v1/uploads/:id -> abort + cleanup chunks
-export const Route = createFileRoute("/api/v1/uploads/$id")({
+// GET /api/public/v1/uploads/:id  -> status (for resume)
+// DELETE /api/public/v1/uploads/:id -> abort + cleanup chunks
+export const Route = createFileRoute("/api/public/v1/uploads/$id")({
   server: {
     handlers: {
+      OPTIONS: async () => corsPreflight(),
       GET: async ({ request, params }) => {
         const caller = await authenticateApiKey(request);
         if (!caller) return jsonError("invalid API key", 401);

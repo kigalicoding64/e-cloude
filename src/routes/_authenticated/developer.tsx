@@ -13,29 +13,68 @@ const endpoints: Endpoint[] = [
   {
     method: "GET", path: "/api/public/v1/files",
     desc: "List all files owned by the API key's user. Supports ?folder=<uuid> and ?limit=&offset= params.",
-    sample: `curl https://YOUR_APP/api/public/v1/files \\
+    sample: `curl https://cloud.egreedtech.org/api/public/v1/files \\
   -H "X-API-Key: eck_live_..."`,
   },
   {
     method: "POST", path: "/api/public/v1/files/upload",
     desc: "Upload a file. Send as multipart/form-data with field 'file'. Optional 'folder' (folder UUID).",
-    sample: `curl -X POST https://YOUR_APP/api/public/v1/files/upload \\
+    sample: `curl -X POST https://cloud.egreedtech.org/api/public/v1/files/upload \\
   -H "X-API-Key: eck_live_..." \\
   -F "file=@invoice.pdf"`,
   },
   {
     method: "GET", path: "/api/public/v1/files/:id",
     desc: "Get file metadata and a short-lived signed download URL (60s).",
-    sample: `curl https://YOUR_APP/api/public/v1/files/{id} \\
+    sample: `curl https://cloud.egreedtech.org/api/public/v1/files/{id} \\
   -H "X-API-Key: eck_live_..."`,
   },
   {
     method: "DELETE", path: "/api/public/v1/files/:id",
     desc: "Delete a file permanently (removes from storage and frees quota).",
-    sample: `curl -X DELETE https://YOUR_APP/api/public/v1/files/{id} \\
+    sample: `curl -X DELETE https://cloud.egreedtech.org/api/public/v1/files/{id} \\
   -H "X-API-Key: eck_live_..."`,
   },
+  {
+    method: "POST", path: "/api/public/v1/files/:id/signed-url",
+    desc: "Mint a time-limited signed download URL. expires_in is in seconds (30 – 604800, default 300). Response includes expires_in and the exact expires_at timestamp.",
+    sample: `curl -X POST https://cloud.egreedtech.org/api/public/v1/files/{id}/signed-url \\
+  -H "X-API-Key: eck_live_..." \\
+  -H "Content-Type: application/json" \\
+  -d '{"expires_in": 3600}'
+
+# => { "download_url": "https://...", "expires_in": 3600,
+#      "expires_at": "2026-08-02T23:59:00.000Z" }`,
+  },
+  {
+    method: "POST", path: "/api/public/v1/files/upload-url",
+    desc: "Mint a time-limited signed UPLOAD URL for direct-to-storage uploads (no proxy, no size limit on our side). PUT the bytes to upload_url, then call /files/commit.",
+    sample: `curl -X POST https://cloud.egreedtech.org/api/public/v1/files/upload-url \\
+  -H "X-API-Key: eck_live_..." -H "Content-Type: application/json" \\
+  -d '{"filename":"scan.pdf","size":1048576,"expires_in":3600}'
+
+curl -X PUT "<upload_url>" --data-binary @scan.pdf
+
+curl -X POST https://cloud.egreedtech.org/api/public/v1/files/commit \\
+  -H "X-API-Key: eck_live_..." -H "Content-Type: application/json" \\
+  -d '{"storage_path":"<storage_path>","name":"scan.pdf"}'`,
+  },
+  {
+    method: "POST", path: "/api/public/v1/uploads/init",
+    desc: "Start a resumable chunked upload. Returns session_id, chunk_size, total_chunks and URL templates. PUT each chunk to /api/public/v1/uploads/:id/chunks/:index, GET the session for missing_chunks[] to resume, then POST /complete.",
+    sample: `curl -X POST https://cloud.egreedtech.org/api/public/v1/uploads/init \\
+  -H "X-API-Key: eck_live_..." -H "Content-Type: application/json" \\
+  -d '{"filename":"video.mp4","size":52428800,"chunk_size":5242880}'`,
+  },
+  {
+    method: "POST", path: "/api/public/v1/chat/:model",
+    desc: "AI gateway — OpenAI-compatible chat completions proxied to your running deployment. Authenticate with a minted gateway key; rate limits and monthly token quotas are enforced.",
+    sample: `curl -X POST https://cloud.egreedtech.org/api/public/v1/chat/{model-slug} \\
+  -H "X-API-Key: eck_live_..." -H "Content-Type: application/json" \\
+  -d '{"messages":[{"role":"user","content":"hi"}]}'`,
+  },
 ];
+
 
 function methodBadge(m: string) {
   const map: Record<string, string> = {
@@ -81,6 +120,16 @@ function DeveloperPage() {
           </Card>
         ))}
       </div>
+
+      <Card className="mt-8 p-6">
+        <h2 className="mb-2 font-display text-lg font-semibold">CORS</h2>
+        <p className="mb-3 text-sm text-muted-foreground">
+          Every <code className="font-mono text-xs">/api/public/v1/*</code> endpoint answers cross-origin
+          requests (<code className="font-mono text-xs">OPTIONS</code> preflight included) and allows the
+          <code className="font-mono text-xs"> X-API-Key</code>, <code className="font-mono text-xs">Authorization</code> and
+          <code className="font-mono text-xs"> Content-Type</code> headers — so browser-side SDKs on any domain can call it directly.
+        </p>
+      </Card>
 
       <Card className="mt-8 p-6">
         <h2 className="mb-2 font-display text-lg font-semibold">Response format</h2>
