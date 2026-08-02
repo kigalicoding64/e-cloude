@@ -32,10 +32,49 @@ const endpoints: Endpoint[] = [
   {
     method: "DELETE", path: "/api/public/v1/files/:id",
     desc: "Delete a file permanently (removes from storage and frees quota).",
-    sample: `curl -X DELETE https://YOUR_APP/api/public/v1/files/{id} \\
+    sample: `curl -X DELETE https://cloud.egreedtech.org/api/public/v1/files/{id} \\
   -H "X-API-Key: eck_live_..."`,
   },
+  {
+    method: "POST", path: "/api/public/v1/files/:id/signed-url",
+    desc: "Mint a time-limited signed download URL. expires_in is in seconds (30 – 604800, default 300). Response includes expires_in and the exact expires_at timestamp.",
+    sample: `curl -X POST https://cloud.egreedtech.org/api/public/v1/files/{id}/signed-url \\
+  -H "X-API-Key: eck_live_..." \\
+  -H "Content-Type: application/json" \\
+  -d '{"expires_in": 3600}'
+
+# => { "download_url": "https://...", "expires_in": 3600,
+#      "expires_at": "2026-08-02T23:59:00.000Z" }`,
+  },
+  {
+    method: "POST", path: "/api/public/v1/files/upload-url",
+    desc: "Mint a time-limited signed UPLOAD URL for direct-to-storage uploads (no proxy, no size limit on our side). PUT the bytes to upload_url, then call /files/commit.",
+    sample: `curl -X POST https://cloud.egreedtech.org/api/public/v1/files/upload-url \\
+  -H "X-API-Key: eck_live_..." -H "Content-Type: application/json" \\
+  -d '{"filename":"scan.pdf","size":1048576,"expires_in":3600}'
+
+curl -X PUT "<upload_url>" --data-binary @scan.pdf
+
+curl -X POST https://cloud.egreedtech.org/api/public/v1/files/commit \\
+  -H "X-API-Key: eck_live_..." -H "Content-Type: application/json" \\
+  -d '{"storage_path":"<storage_path>","name":"scan.pdf"}'`,
+  },
+  {
+    method: "POST", path: "/api/public/v1/uploads/init",
+    desc: "Start a resumable chunked upload. Returns session_id, chunk_size, total_chunks and URL templates. PUT each chunk to /api/public/v1/uploads/:id/chunks/:index, GET the session for missing_chunks[] to resume, then POST /complete.",
+    sample: `curl -X POST https://cloud.egreedtech.org/api/public/v1/uploads/init \\
+  -H "X-API-Key: eck_live_..." -H "Content-Type: application/json" \\
+  -d '{"filename":"video.mp4","size":52428800,"chunk_size":5242880}'`,
+  },
+  {
+    method: "POST", path: "/api/public/v1/chat/:model",
+    desc: "AI gateway — OpenAI-compatible chat completions proxied to your running deployment. Authenticate with a minted gateway key; rate limits and monthly token quotas are enforced.",
+    sample: `curl -X POST https://cloud.egreedtech.org/api/public/v1/chat/{model-slug} \\
+  -H "X-API-Key: eck_live_..." -H "Content-Type: application/json" \\
+  -d '{"messages":[{"role":"user","content":"hi"}]}'`,
+  },
 ];
+
 
 function methodBadge(m: string) {
   const map: Record<string, string> = {
