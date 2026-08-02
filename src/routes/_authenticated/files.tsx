@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState, useRef, type ChangeEvent } from "react";
+import { useState, useRef, useEffect, type ChangeEvent } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useSession } from "@/lib/session";
 import { Card } from "@/components/ui/card";
@@ -13,7 +13,7 @@ import {
 import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
-import { Folder, FolderPlus, Upload, Star, Trash2, Share2, Download, MoreVertical, ChevronRight, Home, LayoutGrid, List as ListIcon, Search, Lock, Unlock } from "lucide-react";
+import { Clock, Folder, FolderPlus, Upload, Star, Trash2, Share2, Download, MoreVertical, ChevronRight, Home, LayoutGrid, List as ListIcon, Search, Lock, Unlock } from "lucide-react";
 import { toast } from "sonner";
 import { formatBytes, formatDate, iconForMime } from "@/lib/format";
 import { randomToken } from "@/lib/hash";
@@ -43,6 +43,7 @@ function FilesPage() {
   const [newFolderOpen, setNewFolderOpen] = useState(false);
   const [newFolderName, setNewFolderName] = useState("");
   const [shareFileId, setShareFileId] = useState<string | null>(null);
+  const [detailsFile, setDetailsFile] = useState<FileRow | null>(null);
   const [lockTarget, setLockTarget] = useState<{ id: string; name: string; hasPassword: boolean; hasPin: boolean } | null>(null);
   const [renameTarget, setRenameTarget] = useState<{ id: string; name: string; kind: "file" | "folder" } | null>(null);
   const [renameValue, setRenameValue] = useState("");
@@ -339,6 +340,7 @@ function FilesPage() {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                   <DropdownMenuItem onClick={() => downloadFile(f)}><Download className="mr-2 h-4 w-4" /> Download</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setDetailsFile(f)}><Clock className="mr-2 h-4 w-4" /> Details &amp; secure link</DropdownMenuItem>
                   <DropdownMenuItem onClick={() => setShareFileId(f.id)}><Share2 className="mr-2 h-4 w-4" /> Share</DropdownMenuItem>
                   <DropdownMenuItem onClick={() => toggleFav.mutate({ id: f.id, val: !f.is_favorite })}>
                     <Star className={`mr-2 h-4 w-4 ${f.is_favorite ? "fill-primary text-primary" : ""}`} />
@@ -419,7 +421,8 @@ function FilesPage() {
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuItem onClick={() => downloadFile(f)}><Download className="mr-2 h-4 w-4" /> Download</DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => setShareFileId(f.id)}><Share2 className="mr-2 h-4 w-4" /> Share</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => setDetailsFile(f)}><Clock className="mr-2 h-4 w-4" /> Details &amp; secure link</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setShareFileId(f.id)}><Share2 className="mr-2 h-4 w-4" /> Share</DropdownMenuItem>
                         <DropdownMenuItem onClick={() => toggleFav.mutate({ id: f.id, val: !f.is_favorite })}>
                           <Star className={`mr-2 h-4 w-4 ${f.is_favorite ? "fill-primary text-primary" : ""}`} />
                           {f.is_favorite ? "Unfavorite" : "Favorite"}
@@ -442,6 +445,7 @@ function FilesPage() {
         </Card>
       )}
 
+      <FileDetailsDialog file={detailsFile} onClose={() => setDetailsFile(null)} />
       <ShareDialog fileId={shareFileId} onClose={() => setShareFileId(null)} />
       <LockDialog target={lockTarget} onClose={() => setLockTarget(null)} onChanged={() => { setVerifiedIds(new Set()); qc.invalidateQueries({ queryKey: ["files"] }); }} />
 
@@ -456,6 +460,106 @@ function FilesPage() {
         </DialogContent>
       </Dialog>
     </div>
+  );
+}
+
+type FileRow = {
+  id: string; name: string; size: number; mime_type: string | null; storage_path: string;
+  created_at: string; updated_at: string; password_hash: string | null; pin_hash: string | null;
+};
+
+const EXPIRY_OPTIONS = [
+  { label: "5 minutes", seconds: 300 },
+  { label: "1 hour", seconds: 3600 },
+  { label: "24 hours", seconds: 86400 },
+  { label: "7 days", seconds: 604800 },
+];
+
+function FileDetailsDialog({ file, onClose }: { file: FileRow | null; onClose: () => void }) {
+  const [seconds, setSeconds] = useState(3600);
+  const [link, setLink] = useState<{ url: string; expiresAt: number } | null>(null);
+  const [now, setNow] = useState(Date.now());
+  const [busy, setBusy] = useState(false);
+
+  useEffect(() => {
+    setLink(null);
+    setSeconds(3600);
+  }, [file?.id]);
+
+  useEffect(() => {
+    if (!link) return;
+    const t = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(t);
+  }, [link]);
+
+  const remaining = link ? Math.max(0, Math.floor((link.expiresAt - now) / 1000)) : 0;
+  const lock = file ? fileLockState(file) : null;
+
+  const generate = async () => {
+    if (!file) return;
+    setBusy(true);
+    const { data, error } = await supabase.storage
+      .from("user-files")
+      .createSignedUrl(file.storage_path, seconds, { download: file.name });
+    setBusy(false);
+    if (error || !data) return toast.error(error?.message ?? "Could not create link");
+    setLink({ url: data.signedUrl, expiresAt: Date.now() + seconds * 1000 });
+  };
+
+  return (
+    <Dialog open={!!file} onOpenChange={(o) => !o && onClose()}>
+      <DialogContent className="max-w-lg">
+        <DialogHeader><DialogTitle className="truncate">{file?.name}</DialogTitle></DialogHeader>
+        {file && (
+          <div className="space-y-4 text-sm">
+            <dl className="grid grid-cols-2 gap-y-2">
+              <dt className="text-muted-foreground">Size</dt><dd>{formatBytes(file.size)}</dd>
+              <dt className="text-muted-foreground">Type</dt><dd className="truncate">{file.mime_type ?? "unknown"}</dd>
+              <dt className="text-muted-foreground">Created</dt><dd>{formatDate(file.created_at)}</dd>
+              <dt className="text-muted-foreground">Modified</dt><dd>{formatDate(file.updated_at)}</dd>
+              <dt className="text-muted-foreground">Security</dt><dd>{lockSummary(file)}</dd>
+            </dl>
+
+            <div className="space-y-2 rounded-lg border p-3">
+              <Label className="flex items-center gap-2"><Clock className="h-4 w-4" /> Time-limited download link</Label>
+              <div className="flex flex-wrap gap-2">
+                {EXPIRY_OPTIONS.map((o) => (
+                  <Button
+                    key={o.seconds}
+                    size="sm"
+                    variant={seconds === o.seconds ? "default" : "outline"}
+                    onClick={() => setSeconds(o.seconds)}
+                  >
+                    {o.label}
+                  </Button>
+                ))}
+              </div>
+              <Button size="sm" onClick={generate} disabled={busy || !!lock?.locked}>
+                {busy ? "Signing…" : "Generate signed link"}
+              </Button>
+              {lock?.locked && (
+                <p className="text-xs text-muted-foreground">
+                  Unlock this file (Manage security) before issuing signed links.
+                </p>
+              )}
+              {link && (
+                <div className="space-y-2">
+                  <Input readOnly value={link.url} onFocus={(e) => e.currentTarget.select()} />
+                  <p className="text-xs text-muted-foreground">
+                    Expires {new Date(link.expiresAt).toLocaleString()} ·{" "}
+                    {remaining > 0 ? `${Math.floor(remaining / 3600)}h ${Math.floor((remaining % 3600) / 60)}m ${remaining % 60}s left` : "expired"}
+                  </p>
+                  <Button size="sm" variant="outline" onClick={() => { navigator.clipboard.writeText(link.url); toast.success("Link copied"); }}>
+                    Copy link
+                  </Button>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+        <DialogFooter><Button variant="outline" onClick={onClose}>Close</Button></DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }
 
