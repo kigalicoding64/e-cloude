@@ -1,5 +1,6 @@
 // Resolves an API key (X-API-Key: eck_live_...) to its owner user_id.
 import { sha256Hex } from "@/lib/hash";
+import { CORS_HEADERS } from "@/lib/cors";
 
 export type ApiCaller = { userId: string; keyId: string };
 
