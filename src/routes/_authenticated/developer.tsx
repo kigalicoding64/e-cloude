@@ -13,20 +13,20 @@ const endpoints: Endpoint[] = [
   {
     method: "GET", path: "/api/public/v1/files",
     desc: "List all files owned by the API key's user. Supports ?folder=<uuid> and ?limit=&offset= params.",
-    sample: `curl https://YOUR_APP/api/public/v1/files \\
+    sample: `curl https://cloud.egreedtech.org/api/public/v1/files \\
   -H "X-API-Key: eck_live_..."`,
   },
   {
     method: "POST", path: "/api/public/v1/files/upload",
     desc: "Upload a file. Send as multipart/form-data with field 'file'. Optional 'folder' (folder UUID).",
-    sample: `curl -X POST https://YOUR_APP/api/public/v1/files/upload \\
+    sample: `curl -X POST https://cloud.egreedtech.org/api/public/v1/files/upload \\
   -H "X-API-Key: eck_live_..." \\
   -F "file=@invoice.pdf"`,
   },
   {
     method: "GET", path: "/api/public/v1/files/:id",
     desc: "Get file metadata and a short-lived signed download URL (60s).",
-    sample: `curl https://YOUR_APP/api/public/v1/files/{id} \\
+    sample: `curl https://cloud.egreedtech.org/api/public/v1/files/{id} \\
   -H "X-API-Key: eck_live_..."`,
   },
   {
@@ -120,6 +120,16 @@ function DeveloperPage() {
           </Card>
         ))}
       </div>
+
+      <Card className="mt-8 p-6">
+        <h2 className="mb-2 font-display text-lg font-semibold">CORS</h2>
+        <p className="mb-3 text-sm text-muted-foreground">
+          Every <code className="font-mono text-xs">/api/public/v1/*</code> endpoint answers cross-origin
+          requests (<code className="font-mono text-xs">OPTIONS</code> preflight included) and allows the
+          <code className="font-mono text-xs"> X-API-Key</code>, <code className="font-mono text-xs">Authorization</code> and
+          <code className="font-mono text-xs"> Content-Type</code> headers — so browser-side SDKs on any domain can call it directly.
+        </p>
+      </Card>
 
       <Card className="mt-8 p-6">
         <h2 className="mb-2 font-display text-lg font-semibold">Response format</h2>
