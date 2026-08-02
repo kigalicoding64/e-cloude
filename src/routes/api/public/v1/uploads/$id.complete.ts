@@ -1,10 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { authenticateApiKey, json, jsonError } from "@/lib/api-auth.server";
 
-// POST /api/v1/uploads/:id/complete
+// POST /api/public/v1/uploads/:id/complete
 // Assembles all chunks into a single object at files/{user_id}/{fileId}/{filename}
 // and inserts a `files` row.
-export const Route = createFileRoute("/api/v1/uploads/$id/complete")({
+export const Route = createFileRoute("/api/public/v1/uploads/$id/complete")({
   server: {
     handlers: {
       POST: async ({ request, params }) => {

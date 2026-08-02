@@ -3,7 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 // Per-model gateway. Client calls with X-API-Key: eck_live_...
 // Body is forwarded to the running deployment's orchestrator at /v1/chat/completions.
 // Applies rate limiting (per-minute requests) and monthly token quota.
-export const Route = createFileRoute("/api/v1/chat/$slug")({
+export const Route = createFileRoute("/api/public/v1/chat/$slug")({
   server: {
     handlers: {
       POST: async ({ request, params }) => {

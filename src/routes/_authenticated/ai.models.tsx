@@ -77,7 +77,7 @@ function ModelsPage() {
         task: form.task,
         gpu_type: form.gpu_type,
         memory_mb: form.memory_mb,
-        endpoint_path: `/api/v1/chat/${slug}`,
+        endpoint_path: `/api/public/v1/chat/${slug}`,
         status: "draft",
       }).select("id").single();
       if (error) throw error;

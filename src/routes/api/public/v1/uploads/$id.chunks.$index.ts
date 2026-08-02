@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { authenticateApiKey, json, jsonError } from "@/lib/api-auth.server";
 
-// PUT /api/v1/uploads/:id/chunks/:index
+// PUT /api/public/v1/uploads/:id/chunks/:index
 // Body: raw bytes of the chunk. Idempotent — re-uploads OK.
-export const Route = createFileRoute("/api/v1/uploads/$id/chunks/$index")({
+export const Route = createFileRoute("/api/public/v1/uploads/$id/chunks/$index")({
   server: {
     handlers: {
       PUT: async ({ request, params }) => {

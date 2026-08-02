@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { authenticateApiKey, json, jsonError } from "@/lib/api-auth.server";
 
-// GET /api/v1/uploads/:id  -> status (for resume)
-// DELETE /api/v1/uploads/:id -> abort + cleanup chunks
-export const Route = createFileRoute("/api/v1/uploads/$id")({
+// GET /api/public/v1/uploads/:id  -> status (for resume)
+// DELETE /api/public/v1/uploads/:id -> abort + cleanup chunks
+export const Route = createFileRoute("/api/public/v1/uploads/$id")({
   server: {
     handlers: {
       GET: async ({ request, params }) => {
