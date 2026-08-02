@@ -39,6 +39,7 @@ import { Route as ApiPublicV1FilesIndexRouteImport } from './routes/api/public/v
 import { Route as ApiPublicV1UploadsInitRouteImport } from './routes/api/public/v1/uploads/init'
 import { Route as ApiPublicV1UploadsIdRouteImport } from './routes/api/public/v1/uploads/$id'
 import { Route as ApiPublicV1SharesTokenRouteImport } from './routes/api/public/v1/shares/$token'
+import { Route as ApiPublicV1FilesUploadUrlRouteImport } from './routes/api/public/v1/files/upload-url'
 import { Route as ApiPublicV1FilesUploadRouteImport } from './routes/api/public/v1/files/upload'
 import { Route as ApiPublicV1FilesIdRouteImport } from './routes/api/public/v1/files/$id'
 import { Route as ApiPublicV1ChatSlugRouteImport } from './routes/api/public/v1/chat.$slug'
@@ -208,6 +209,12 @@ const ApiPublicV1SharesTokenRoute = ApiPublicV1SharesTokenRouteImport.update({
   path: '/api/public/v1/shares/$token',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicV1FilesUploadUrlRoute =
+  ApiPublicV1FilesUploadUrlRouteImport.update({
+    id: '/api/public/v1/files/upload-url',
+    path: '/api/public/v1/files/upload-url',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicV1FilesUploadRoute = ApiPublicV1FilesUploadRouteImport.update({
   id: '/api/public/v1/files/upload',
   path: '/api/public/v1/files/upload',
@@ -302,6 +309,7 @@ export interface FileRoutesByFullPath {
   '/api/public/v1/chat/$slug': typeof ApiPublicV1ChatSlugRoute
   '/api/public/v1/files/$id': typeof ApiPublicV1FilesIdRouteWithChildren
   '/api/public/v1/files/upload': typeof ApiPublicV1FilesUploadRoute
+  '/api/public/v1/files/upload-url': typeof ApiPublicV1FilesUploadUrlRoute
   '/api/public/v1/shares/$token': typeof ApiPublicV1SharesTokenRoute
   '/api/public/v1/uploads/$id': typeof ApiPublicV1UploadsIdRouteWithChildren
   '/api/public/v1/uploads/init': typeof ApiPublicV1UploadsInitRoute
@@ -344,6 +352,7 @@ export interface FileRoutesByTo {
   '/api/public/v1/chat/$slug': typeof ApiPublicV1ChatSlugRoute
   '/api/public/v1/files/$id': typeof ApiPublicV1FilesIdRouteWithChildren
   '/api/public/v1/files/upload': typeof ApiPublicV1FilesUploadRoute
+  '/api/public/v1/files/upload-url': typeof ApiPublicV1FilesUploadUrlRoute
   '/api/public/v1/shares/$token': typeof ApiPublicV1SharesTokenRoute
   '/api/public/v1/uploads/$id': typeof ApiPublicV1UploadsIdRouteWithChildren
   '/api/public/v1/uploads/init': typeof ApiPublicV1UploadsInitRoute
@@ -388,6 +397,7 @@ export interface FileRoutesById {
   '/api/public/v1/chat/$slug': typeof ApiPublicV1ChatSlugRoute
   '/api/public/v1/files/$id': typeof ApiPublicV1FilesIdRouteWithChildren
   '/api/public/v1/files/upload': typeof ApiPublicV1FilesUploadRoute
+  '/api/public/v1/files/upload-url': typeof ApiPublicV1FilesUploadUrlRoute
   '/api/public/v1/shares/$token': typeof ApiPublicV1SharesTokenRoute
   '/api/public/v1/uploads/$id': typeof ApiPublicV1UploadsIdRouteWithChildren
   '/api/public/v1/uploads/init': typeof ApiPublicV1UploadsInitRoute
@@ -432,6 +442,7 @@ export interface FileRouteTypes {
     | '/api/public/v1/chat/$slug'
     | '/api/public/v1/files/$id'
     | '/api/public/v1/files/upload'
+    | '/api/public/v1/files/upload-url'
     | '/api/public/v1/shares/$token'
     | '/api/public/v1/uploads/$id'
     | '/api/public/v1/uploads/init'
@@ -474,6 +485,7 @@ export interface FileRouteTypes {
     | '/api/public/v1/chat/$slug'
     | '/api/public/v1/files/$id'
     | '/api/public/v1/files/upload'
+    | '/api/public/v1/files/upload-url'
     | '/api/public/v1/shares/$token'
     | '/api/public/v1/uploads/$id'
     | '/api/public/v1/uploads/init'
@@ -517,6 +529,7 @@ export interface FileRouteTypes {
     | '/api/public/v1/chat/$slug'
     | '/api/public/v1/files/$id'
     | '/api/public/v1/files/upload'
+    | '/api/public/v1/files/upload-url'
     | '/api/public/v1/shares/$token'
     | '/api/public/v1/uploads/$id'
     | '/api/public/v1/uploads/init'
@@ -540,6 +553,7 @@ export interface RootRouteChildren {
   ApiPublicV1ChatSlugRoute: typeof ApiPublicV1ChatSlugRoute
   ApiPublicV1FilesIdRoute: typeof ApiPublicV1FilesIdRouteWithChildren
   ApiPublicV1FilesUploadRoute: typeof ApiPublicV1FilesUploadRoute
+  ApiPublicV1FilesUploadUrlRoute: typeof ApiPublicV1FilesUploadUrlRoute
   ApiPublicV1SharesTokenRoute: typeof ApiPublicV1SharesTokenRoute
   ApiPublicV1UploadsIdRoute: typeof ApiPublicV1UploadsIdRouteWithChildren
   ApiPublicV1UploadsInitRoute: typeof ApiPublicV1UploadsInitRoute
@@ -762,6 +776,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicV1SharesTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/v1/files/upload-url': {
+      id: '/api/public/v1/files/upload-url'
+      path: '/api/public/v1/files/upload-url'
+      fullPath: '/api/public/v1/files/upload-url'
+      preLoaderRoute: typeof ApiPublicV1FilesUploadUrlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/v1/files/upload': {
       id: '/api/public/v1/files/upload'
       path: '/api/public/v1/files/upload'
@@ -950,6 +971,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicV1ChatSlugRoute: ApiPublicV1ChatSlugRoute,
   ApiPublicV1FilesIdRoute: ApiPublicV1FilesIdRouteWithChildren,
   ApiPublicV1FilesUploadRoute: ApiPublicV1FilesUploadRoute,
+  ApiPublicV1FilesUploadUrlRoute: ApiPublicV1FilesUploadUrlRoute,
   ApiPublicV1SharesTokenRoute: ApiPublicV1SharesTokenRoute,
   ApiPublicV1UploadsIdRoute: ApiPublicV1UploadsIdRouteWithChildren,
   ApiPublicV1UploadsInitRoute: ApiPublicV1UploadsInitRoute,
