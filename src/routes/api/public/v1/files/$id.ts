@@ -23,6 +23,52 @@ export const Route = createFileRoute("/api/public/v1/files/$id")({
           download_expires_in: 60,
         });
       },
+      PATCH: async ({ request, params }) => {
+        const { authenticateApiKey, json, jsonError } = await import("@/lib/api-auth.server");
+        const auth = await authenticateApiKey(request);
+        if (!auth) return jsonError("Invalid or missing API key", 401);
+        const body = (await request.json().catch(() => null)) as
+          | { name?: unknown; folder_id?: unknown; is_favorite?: unknown; is_trashed?: unknown }
+          | null;
+        if (!body) return jsonError("body required", 400);
+
+        const patch: {
+          name?: string;
+          folder_id?: string | null;
+          is_favorite?: boolean;
+          is_trashed?: boolean;
+          trashed_at?: string | null;
+        } = {};
+        if (body.name !== undefined) {
+          const name = String(body.name).trim().slice(0, 200);
+          if (!name) return jsonError("Invalid 'name'", 400);
+          patch.name = name;
+        }
+        if (body.folder_id !== undefined) patch.folder_id = body.folder_id === null ? null : String(body.folder_id);
+        if (body.is_favorite !== undefined) patch.is_favorite = Boolean(body.is_favorite);
+        if (body.is_trashed !== undefined) {
+          patch.is_trashed = Boolean(body.is_trashed);
+          patch.trashed_at = patch.is_trashed ? new Date().toISOString() : null;
+        }
+        if (Object.keys(patch).length === 0) return jsonError("Nothing to update", 400);
+
+        const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+        if (typeof patch.folder_id === "string") {
+          const { data: folder } = await supabaseAdmin
+            .from("folders").select("id").eq("id", patch.folder_id).eq("user_id", auth.userId).maybeSingle();
+          if (!folder) return jsonError("Folder not found", 404);
+        }
+        const { data, error } = await supabaseAdmin
+          .from("files")
+          .update(patch)
+          .eq("id", params.id)
+          .eq("user_id", auth.userId)
+          .select("id,name,size,mime_type,folder_id,is_favorite,is_trashed,updated_at")
+          .maybeSingle();
+        if (error) return jsonError(error.message, 500);
+        if (!data) return jsonError("Not found", 404);
+        return json(data);
+      },
       DELETE: async ({ request, params }) => {
         const { authenticateApiKey, json, jsonError } = await import("@/lib/api-auth.server");
         const auth = await authenticateApiKey(request);

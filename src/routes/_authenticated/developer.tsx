@@ -11,6 +11,40 @@ type Endpoint = { method: string; path: string; desc: string; sample: string };
 
 const endpoints: Endpoint[] = [
   {
+    method: "GET", path: "/api/public/v1",
+    desc: "Discovery document — lists every endpoint, the auth scheme and the error format. No API key required, so SDKs can self-configure.",
+    sample: `curl https://cloud.egreedtech.org/api/public/v1`,
+  },
+  {
+    method: "GET", path: "/api/public/v1/health",
+    desc: "Liveness probe (no key required). Returns 200 when API + database are reachable, 503 when degraded.",
+    sample: `curl https://cloud.egreedtech.org/api/public/v1/health
+# => { "status": "ok", "api": "ok", "database": "ok" }`,
+  },
+  {
+    method: "GET", path: "/api/public/v1/me",
+    desc: "Account the API key belongs to, with file count and storage usage/quota — use it to verify a key and check remaining space before uploading.",
+    sample: `curl https://cloud.egreedtech.org/api/public/v1/me \\
+  -H "X-API-Key: eck_live_..."`,
+  },
+  {
+    method: "PATCH", path: "/api/public/v1/files/:id",
+    desc: "Rename, move between folders, favorite, or trash/restore a file.",
+    sample: `curl -X PATCH https://cloud.egreedtech.org/api/public/v1/files/{id} \\
+  -H "X-API-Key: eck_live_..." -H "Content-Type: application/json" \\
+  -d '{"name":"report-final.pdf","folder_id":null,"is_favorite":true}'`,
+  },
+  {
+    method: "GET", path: "/api/public/v1/folders",
+    desc: "List folders (optional ?parent=<id>). POST to create one, PATCH /folders/:id to rename or move, DELETE /folders/:id when empty.",
+    sample: `curl https://cloud.egreedtech.org/api/public/v1/folders \\
+  -H "X-API-Key: eck_live_..."
+
+curl -X POST https://cloud.egreedtech.org/api/public/v1/folders \\
+  -H "X-API-Key: eck_live_..." -H "Content-Type: application/json" \\
+  -d '{"name":"Clinic scans"}'`,
+  },
+  {
     method: "GET", path: "/api/public/v1/files",
     desc: "List all files owned by the API key's user. Supports ?folder=<uuid> and ?limit=&offset= params.",
     sample: `curl https://cloud.egreedtech.org/api/public/v1/files \\
