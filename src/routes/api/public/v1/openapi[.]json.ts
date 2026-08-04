@@ -3,7 +3,7 @@ import { corsPreflight, CORS_HEADERS } from "@/lib/cors";
 import { buildOpenApiSpec } from "@/lib/openapi";
 
 // GET /api/public/v1/openapi.json -> OpenAPI 3.1 spec
-export const Route = createFileRoute("/api/public/v1/openapi[.]json")({
+export const Route = createFileRoute("/api/public/v1/openapi.json")({
   server: {
     handlers: {
       OPTIONS: async () => corsPreflight(),

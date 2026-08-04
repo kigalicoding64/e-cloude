@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as DeveloperDocsRouteImport } from './routes/developer-docs'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
@@ -35,6 +36,7 @@ import { Route as AuthenticatedAiOrchestratorsRouteImport } from './routes/_auth
 import { Route as AuthenticatedAiModelsRouteImport } from './routes/_authenticated/ai.models'
 import { Route as AuthenticatedAiDeploymentsRouteImport } from './routes/_authenticated/ai.deployments'
 import { Route as ApiPublicV1IndexRouteImport } from './routes/api/public/v1/index'
+import { Route as ApiPublicV1OpenapiDotjsonRouteImport } from './routes/api/public/v1/openapi[.]json'
 import { Route as ApiPublicV1MeRouteImport } from './routes/api/public/v1/me'
 import { Route as ApiPublicV1HealthRouteImport } from './routes/api/public/v1/health'
 import { Route as AuthenticatedAiModelsSlugRouteImport } from './routes/_authenticated/ai.models.$slug'
@@ -61,6 +63,11 @@ import { Route as ApiPublicV1AgentDeploymentsIdLogsRouteImport } from './routes/
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DeveloperDocsRoute = DeveloperDocsRouteImport.update({
+  id: '/developer-docs',
+  path: '/developer-docs',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -194,6 +201,12 @@ const ApiPublicV1IndexRoute = ApiPublicV1IndexRouteImport.update({
   path: '/api/public/v1/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicV1OpenapiDotjsonRoute =
+  ApiPublicV1OpenapiDotjsonRouteImport.update({
+    id: '/api/public/v1/openapi.json',
+    path: '/api/public/v1/openapi.json',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicV1MeRoute = ApiPublicV1MeRouteImport.update({
   id: '/api/public/v1/me',
   path: '/api/public/v1/me',
@@ -318,6 +331,7 @@ const ApiPublicV1AgentDeploymentsIdLogsRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/developer-docs': typeof DeveloperDocsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/activity': typeof AuthenticatedActivityRoute
   '/admin': typeof AuthenticatedAdminRoute
@@ -343,6 +357,7 @@ export interface FileRoutesByFullPath {
   '/ai/models/$slug': typeof AuthenticatedAiModelsSlugRoute
   '/api/public/v1/health': typeof ApiPublicV1HealthRoute
   '/api/public/v1/me': typeof ApiPublicV1MeRoute
+  '/api/public/v1/openapi.json': typeof ApiPublicV1OpenapiDotjsonRoute
   '/api/public/v1/': typeof ApiPublicV1IndexRoute
   '/api/public/v1/agent/heartbeat': typeof ApiPublicV1AgentHeartbeatRoute
   '/api/public/v1/chat/$slug': typeof ApiPublicV1ChatSlugRoute
@@ -367,6 +382,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/developer-docs': typeof DeveloperDocsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/activity': typeof AuthenticatedActivityRoute
   '/admin': typeof AuthenticatedAdminRoute
@@ -392,6 +408,7 @@ export interface FileRoutesByTo {
   '/ai/models/$slug': typeof AuthenticatedAiModelsSlugRoute
   '/api/public/v1/health': typeof ApiPublicV1HealthRoute
   '/api/public/v1/me': typeof ApiPublicV1MeRoute
+  '/api/public/v1/openapi.json': typeof ApiPublicV1OpenapiDotjsonRoute
   '/api/public/v1': typeof ApiPublicV1IndexRoute
   '/api/public/v1/agent/heartbeat': typeof ApiPublicV1AgentHeartbeatRoute
   '/api/public/v1/chat/$slug': typeof ApiPublicV1ChatSlugRoute
@@ -418,6 +435,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/developer-docs': typeof DeveloperDocsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/_authenticated/activity': typeof AuthenticatedActivityRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
@@ -443,6 +461,7 @@ export interface FileRoutesById {
   '/_authenticated/ai/models/$slug': typeof AuthenticatedAiModelsSlugRoute
   '/api/public/v1/health': typeof ApiPublicV1HealthRoute
   '/api/public/v1/me': typeof ApiPublicV1MeRoute
+  '/api/public/v1/openapi.json': typeof ApiPublicV1OpenapiDotjsonRoute
   '/api/public/v1/': typeof ApiPublicV1IndexRoute
   '/api/public/v1/agent/heartbeat': typeof ApiPublicV1AgentHeartbeatRoute
   '/api/public/v1/chat/$slug': typeof ApiPublicV1ChatSlugRoute
@@ -469,6 +488,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth'
+    | '/developer-docs'
     | '/sitemap.xml'
     | '/activity'
     | '/admin'
@@ -494,6 +514,7 @@ export interface FileRouteTypes {
     | '/ai/models/$slug'
     | '/api/public/v1/health'
     | '/api/public/v1/me'
+    | '/api/public/v1/openapi.json'
     | '/api/public/v1/'
     | '/api/public/v1/agent/heartbeat'
     | '/api/public/v1/chat/$slug'
@@ -518,6 +539,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/auth'
+    | '/developer-docs'
     | '/sitemap.xml'
     | '/activity'
     | '/admin'
@@ -543,6 +565,7 @@ export interface FileRouteTypes {
     | '/ai/models/$slug'
     | '/api/public/v1/health'
     | '/api/public/v1/me'
+    | '/api/public/v1/openapi.json'
     | '/api/public/v1'
     | '/api/public/v1/agent/heartbeat'
     | '/api/public/v1/chat/$slug'
@@ -568,6 +591,7 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/developer-docs'
     | '/sitemap.xml'
     | '/_authenticated/activity'
     | '/_authenticated/admin'
@@ -593,6 +617,7 @@ export interface FileRouteTypes {
     | '/_authenticated/ai/models/$slug'
     | '/api/public/v1/health'
     | '/api/public/v1/me'
+    | '/api/public/v1/openapi.json'
     | '/api/public/v1/'
     | '/api/public/v1/agent/heartbeat'
     | '/api/public/v1/chat/$slug'
@@ -619,10 +644,12 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  DeveloperDocsRoute: typeof DeveloperDocsRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   STokenRoute: typeof STokenRoute
   ApiPublicV1HealthRoute: typeof ApiPublicV1HealthRoute
   ApiPublicV1MeRoute: typeof ApiPublicV1MeRoute
+  ApiPublicV1OpenapiDotjsonRoute: typeof ApiPublicV1OpenapiDotjsonRoute
   ApiPublicV1IndexRoute: typeof ApiPublicV1IndexRoute
   ApiPublicV1AgentHeartbeatRoute: typeof ApiPublicV1AgentHeartbeatRoute
   ApiPublicV1ChatSlugRoute: typeof ApiPublicV1ChatSlugRoute
@@ -649,6 +676,13 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/developer-docs': {
+      id: '/developer-docs'
+      path: '/developer-docs'
+      fullPath: '/developer-docs'
+      preLoaderRoute: typeof DeveloperDocsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -824,6 +858,13 @@ declare module '@tanstack/react-router' {
       path: '/api/public/v1'
       fullPath: '/api/public/v1/'
       preLoaderRoute: typeof ApiPublicV1IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/openapi.json': {
+      id: '/api/public/v1/openapi.json'
+      path: '/api/public/v1/openapi.json'
+      fullPath: '/api/public/v1/openapi.json'
+      preLoaderRoute: typeof ApiPublicV1OpenapiDotjsonRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/v1/me': {
@@ -1085,10 +1126,12 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
+  DeveloperDocsRoute: DeveloperDocsRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   STokenRoute: STokenRoute,
   ApiPublicV1HealthRoute: ApiPublicV1HealthRoute,
   ApiPublicV1MeRoute: ApiPublicV1MeRoute,
+  ApiPublicV1OpenapiDotjsonRoute: ApiPublicV1OpenapiDotjsonRoute,
   ApiPublicV1IndexRoute: ApiPublicV1IndexRoute,
   ApiPublicV1AgentHeartbeatRoute: ApiPublicV1AgentHeartbeatRoute,
   ApiPublicV1ChatSlugRoute: ApiPublicV1ChatSlugRoute,
