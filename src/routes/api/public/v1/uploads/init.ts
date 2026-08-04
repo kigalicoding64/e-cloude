@@ -11,7 +11,8 @@ export const Route = createFileRoute("/api/public/v1/uploads/init")({
       OPTIONS: async () => corsPreflight(),
       POST: async ({ request }) => {
         const caller = await authenticateApiKey(request);
-        if (!caller) return jsonError("invalid API key", 401);
+        if (!caller) return jsonError("Invalid, revoked or missing API key", 401, "invalid_api_key");
+        if (!caller.scopes.includes("upload")) return jsonError("This API key is missing the 'upload' scope.", 403, "insufficient_scope");
 
         let body: any;
         try {

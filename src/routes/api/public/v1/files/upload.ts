@@ -7,41 +7,54 @@ export const Route = createFileRoute("/api/public/v1/files/upload")({
     handlers: {
       OPTIONS: async () => corsPreflight(),
       POST: async ({ request }) => {
-        const { authenticateApiKey, json, jsonError } = await import("@/lib/api-auth.server");
-        const auth = await authenticateApiKey(request);
-        if (!auth) return jsonError("Invalid or missing API key", 401);
+        const { authorize, apiError, beginIdempotency, finishIdempotency, json } =
+          await import("@/lib/api-auth.server");
+        const { caller, error } = await authorize(request, "upload");
+        if (error) return error;
 
         let form: FormData;
         try {
           form = await request.formData();
         } catch {
-          return jsonError("Expected multipart/form-data", 400);
+          return apiError("bad_request", "Expected multipart/form-data");
         }
         const file = form.get("file");
-        if (!(file instanceof File)) return jsonError("Missing 'file' field", 400);
-        if (file.size > 500 * 1024 * 1024) return jsonError("File too large (max 500MB)", 413);
+        if (!(file instanceof File)) return apiError("validation_failed", "Missing 'file' field");
+        if (file.size > 500 * 1024 * 1024) {
+          return apiError("payload_too_large", "File too large (max 500MB) — use the chunked upload API");
+        }
         const folder = form.get("folder");
         const folderId = typeof folder === "string" && folder ? folder : null;
+
+        const fingerprint = `${file.name}:${file.size}:${folderId ?? ""}`;
+        const { replay, handle } = await beginIdempotency(
+          request, caller, "POST /files/upload", fingerprint,
+        );
+        if (replay) return replay;
 
         const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
         // Quota check
-        const { data: prof } = await supabaseAdmin.from("profiles").select("storage_used, storage_quota").eq("id", auth.userId).maybeSingle();
+        const { data: prof } = await supabaseAdmin.from("profiles").select("storage_used, storage_quota").eq("id", caller.userId).maybeSingle();
         if (prof && Number(prof.storage_used) + file.size > Number(prof.storage_quota)) {
-          return jsonError("Storage quota exceeded", 413);
+          await finishIdempotency(handle, 413, null);
+          return apiError("quota_exceeded", "Storage quota exceeded");
         }
 
         const safeName = file.name.slice(0, 200);
-        const storagePath = `${auth.userId}/${randomToken(16)}-${safeName}`;
+        const storagePath = `${caller.userId}/${randomToken(16)}-${safeName}`;
         const buf = new Uint8Array(await file.arrayBuffer());
         const { error: upErr } = await supabaseAdmin.storage.from("user-files").upload(storagePath, buf, {
           contentType: file.type || "application/octet-stream",
           upsert: false,
         });
-        if (upErr) return jsonError(`Upload failed: ${upErr.message}`, 500);
+        if (upErr) {
+          await finishIdempotency(handle, 500, null);
+          return apiError("storage_error", `Upload failed: ${upErr.message}`);
+        }
 
         const { data: row, error: dbErr } = await supabaseAdmin.from("files").insert({
-          user_id: auth.userId,
+          user_id: caller.userId,
           folder_id: folderId,
           name: safeName,
           size: file.size,
@@ -50,13 +63,14 @@ export const Route = createFileRoute("/api/public/v1/files/upload")({
         }).select("id,name,size,mime_type,folder_id,created_at").single();
         if (dbErr) {
           await supabaseAdmin.storage.from("user-files").remove([storagePath]);
-          return jsonError(dbErr.message, 500);
+          await finishIdempotency(handle, 500, null);
+          return apiError("internal_error", dbErr.message);
         }
 
-        // Update quota
         const newUsed = Number(prof?.storage_used ?? 0) + file.size;
-        await supabaseAdmin.from("profiles").update({ storage_used: newUsed }).eq("id", auth.userId);
+        await supabaseAdmin.from("profiles").update({ storage_used: newUsed }).eq("id", caller.userId);
 
+        await finishIdempotency(handle, 201, row);
         return json(row, 201);
       },
     },

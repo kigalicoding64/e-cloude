@@ -456,6 +456,56 @@ export type Database = {
         }
         Relationships: []
       }
+      api_idempotency_records: {
+        Row: {
+          api_key_id: string | null
+          created_at: string
+          endpoint: string
+          id: string
+          idempotency_key: string
+          request_fingerprint: string | null
+          response: Json | null
+          state: string
+          status: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          api_key_id?: string | null
+          created_at?: string
+          endpoint: string
+          id?: string
+          idempotency_key: string
+          request_fingerprint?: string | null
+          response?: Json | null
+          state?: string
+          status?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          api_key_id?: string | null
+          created_at?: string
+          endpoint?: string
+          id?: string
+          idempotency_key?: string
+          request_fingerprint?: string | null
+          response?: Json | null
+          state?: string
+          status?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "api_idempotency_records_api_key_id_fkey"
+            columns: ["api_key_id"]
+            isOneToOne: false
+            referencedRelation: "api_keys"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       api_keys: {
         Row: {
           created_at: string
@@ -465,6 +515,7 @@ export type Database = {
           key_prefix: string
           last_used_at: string | null
           name: string
+          scopes: string[]
           user_id: string
         }
         Insert: {
@@ -475,6 +526,7 @@ export type Database = {
           key_prefix: string
           last_used_at?: string | null
           name: string
+          scopes?: string[]
           user_id: string
         }
         Update: {
@@ -485,6 +537,7 @@ export type Database = {
           key_prefix?: string
           last_used_at?: string | null
           name?: string
+          scopes?: string[]
           user_id?: string
         }
         Relationships: []
