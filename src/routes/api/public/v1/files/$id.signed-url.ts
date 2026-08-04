@@ -3,7 +3,6 @@ import { corsPreflight, clampExpiresIn, expiryInfo } from "@/lib/cors";
 
 // POST|GET /api/public/v1/files/:id/signed-url
 // Body/query: { expires_in?: seconds (30..604800, default 300) }
-// Returns a time-limited signed download URL plus its exact expiry timestamp.
 export const Route = createFileRoute("/api/public/v1/files/$id/signed-url")({
   server: {
     handlers: {
@@ -15,9 +14,9 @@ export const Route = createFileRoute("/api/public/v1/files/$id/signed-url")({
 });
 
 async function handle(request: Request, id: string): Promise<Response> {
-  const { authenticateApiKey, json, jsonError } = await import("@/lib/api-auth.server");
-  const auth = await authenticateApiKey(request);
-  if (!auth) return jsonError("Invalid or missing API key", 401);
+  const { authorize, json, apiError } = await import("@/lib/api-auth.server");
+  const { caller, error } = await authorize(request, "download");
+  if (error) return error;
 
   let requested: unknown = new URL(request.url).searchParams.get("expires_in");
   if (request.method === "POST") {
@@ -33,17 +32,17 @@ async function handle(request: Request, id: string): Promise<Response> {
     .from("files")
     .select("id, name, size, mime_type, storage_path, password_hash, pin_hash, is_trashed")
     .eq("id", id)
-    .eq("user_id", auth.userId)
+    .eq("user_id", caller.userId)
     .maybeSingle();
-  if (!file || file.is_trashed) return jsonError("Not found", 404);
+  if (!file || file.is_trashed) return apiError("not_found", "File not found");
   if (file.password_hash || file.pin_hash) {
-    return jsonError("File is locked — unlock it in the dashboard before issuing links", 403);
+    return apiError("file_locked", "File is locked — unlock it in the dashboard before issuing links");
   }
 
-  const { data: signed, error } = await supabaseAdmin.storage
+  const { data: signed, error: signErr } = await supabaseAdmin.storage
     .from("user-files")
     .createSignedUrl(file.storage_path, expiresIn, { download: file.name });
-  if (error || !signed) return jsonError(error?.message ?? "Could not sign URL", 500);
+  if (signErr || !signed) return apiError("storage_error", signErr?.message ?? "Could not sign URL");
 
   return json({
     file_id: file.id,

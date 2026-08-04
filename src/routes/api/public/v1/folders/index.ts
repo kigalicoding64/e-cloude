@@ -1,38 +1,38 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { corsPreflight } from "@/lib/cors";
 
-// GET  /api/public/v1/folders            -> list folders
-// POST /api/public/v1/folders            -> { name, parent_id? }
+// GET  /api/public/v1/folders            -> list folders (scope: read)
+// POST /api/public/v1/folders            -> { name, parent_id? } (scope: manage)
 export const Route = createFileRoute("/api/public/v1/folders/")({
   server: {
     handlers: {
       OPTIONS: async () => corsPreflight(),
       GET: async ({ request }) => {
-        const { authenticateApiKey, json, jsonError } = await import("@/lib/api-auth.server");
-        const auth = await authenticateApiKey(request);
-        if (!auth) return jsonError("Invalid or missing API key", 401);
+        const { authorize, json, apiError } = await import("@/lib/api-auth.server");
+        const { caller, error } = await authorize(request, "read");
+        if (error) return error;
         const url = new URL(request.url);
         const parent = url.searchParams.get("parent");
         const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
         let q = supabaseAdmin
           .from("folders")
           .select("id,name,parent_id,created_at,updated_at")
-          .eq("user_id", auth.userId)
+          .eq("user_id", caller.userId)
           .order("name", { ascending: true });
         if (parent) q = q.eq("parent_id", parent);
-        const { data, error } = await q;
-        if (error) return jsonError(error.message, 500);
+        const { data, error: dbErr } = await q;
+        if (dbErr) return apiError("internal_error", dbErr.message);
         return json({ folders: data ?? [] });
       },
       POST: async ({ request }) => {
-        const { authenticateApiKey, json, jsonError } = await import("@/lib/api-auth.server");
-        const auth = await authenticateApiKey(request);
-        if (!auth) return jsonError("Invalid or missing API key", 401);
+        const { authorize, json, apiError } = await import("@/lib/api-auth.server");
+        const { caller, error } = await authorize(request, "manage");
+        if (error) return error;
         const body = (await request.json().catch(() => null)) as
           | { name?: unknown; parent_id?: unknown }
           | null;
         const name = String(body?.name ?? "").trim().slice(0, 120);
-        if (!name) return jsonError("Missing 'name'", 400);
+        if (!name) return apiError("validation_failed", "Missing 'name'");
 
         const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
         let parentId: string | null = null;
@@ -42,16 +42,16 @@ export const Route = createFileRoute("/api/public/v1/folders/")({
             .from("folders")
             .select("id")
             .eq("id", parentId)
-            .eq("user_id", auth.userId)
+            .eq("user_id", caller.userId)
             .maybeSingle();
-          if (!parent) return jsonError("Parent folder not found", 404);
+          if (!parent) return apiError("not_found", "Parent folder not found");
         }
-        const { data, error } = await supabaseAdmin
+        const { data, error: dbErr } = await supabaseAdmin
           .from("folders")
-          .insert({ user_id: auth.userId, name, parent_id: parentId })
+          .insert({ user_id: caller.userId, name, parent_id: parentId })
           .select("id,name,parent_id,created_at")
           .single();
-        if (error) return jsonError(error.message, 500);
+        if (dbErr) return apiError("internal_error", dbErr.message);
         return json(data, 201);
       },
     },
