@@ -10,7 +10,8 @@ export const Route = createFileRoute("/api/public/v1/folders/$id")({
       PATCH: async ({ request, params }) => {
         const { authenticateApiKey, json, jsonError } = await import("@/lib/api-auth.server");
         const auth = await authenticateApiKey(request);
-        if (!auth) return jsonError("Invalid or missing API key", 401);
+        if (!auth) return jsonError("Invalid, revoked or missing API key", 401, "invalid_api_key");
+        if (!auth.scopes.includes("manage")) return jsonError("This API key is missing the 'manage' scope.", 403, "insufficient_scope");
         const body = (await request.json().catch(() => null)) as
           | { name?: unknown; parent_id?: unknown }
           | null;
@@ -43,7 +44,8 @@ export const Route = createFileRoute("/api/public/v1/folders/$id")({
       DELETE: async ({ request, params }) => {
         const { authenticateApiKey, json, jsonError } = await import("@/lib/api-auth.server");
         const auth = await authenticateApiKey(request);
-        if (!auth) return jsonError("Invalid or missing API key", 401);
+        if (!auth) return jsonError("Invalid, revoked or missing API key", 401, "invalid_api_key");
+        if (!auth.scopes.includes("manage")) return jsonError("This API key is missing the 'manage' scope.", 403, "insufficient_scope");
         const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
         const { data: folder } = await supabaseAdmin
           .from("folders")
