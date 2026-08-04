@@ -32,7 +32,13 @@ export const Route = createFileRoute("/api/public/v1/files/$id")({
           | null;
         if (!body) return jsonError("body required", 400);
 
-        const patch: Record<string, unknown> = {};
+        const patch: {
+          name?: string;
+          folder_id?: string | null;
+          is_favorite?: boolean;
+          is_trashed?: boolean;
+          trashed_at?: string | null;
+        } = {};
         if (body.name !== undefined) {
           const name = String(body.name).trim().slice(0, 200);
           if (!name) return jsonError("Invalid 'name'", 400);
