@@ -20,6 +20,7 @@ import { Route as BrunoDotjsonRouteImport } from './routes/bruno[.]json'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as SdkEgreed_cloudDotpyRouteImport } from './routes/sdk/egreed_cloud[.]py'
 import { Route as SdkEgreedCloudDotjsRouteImport } from './routes/sdk/egreed-cloud[.]js'
 import { Route as STokenRouteImport } from './routes/s.$token'
 import { Route as AuthenticatedTrashRouteImport } from './routes/_authenticated/trash'
@@ -124,6 +125,11 @@ const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SdkEgreed_cloudDotpyRoute = SdkEgreed_cloudDotpyRouteImport.update({
+  id: '/sdk/egreed_cloud.py',
+  path: '/sdk/egreed_cloud.py',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SdkEgreedCloudDotjsRoute = SdkEgreedCloudDotjsRouteImport.update({
@@ -432,6 +438,7 @@ export interface FileRoutesByFullPath {
   '/trash': typeof AuthenticatedTrashRoute
   '/s/$token': typeof STokenRoute
   '/sdk/egreed-cloud.js': typeof SdkEgreedCloudDotjsRoute
+  '/sdk/egreed_cloud.py': typeof SdkEgreed_cloudDotpyRoute
   '/ai/deployments': typeof AuthenticatedAiDeploymentsRoute
   '/ai/models': typeof AuthenticatedAiModelsRouteWithChildren
   '/ai/orchestrators': typeof AuthenticatedAiOrchestratorsRoute
@@ -495,6 +502,7 @@ export interface FileRoutesByTo {
   '/trash': typeof AuthenticatedTrashRoute
   '/s/$token': typeof STokenRoute
   '/sdk/egreed-cloud.js': typeof SdkEgreedCloudDotjsRoute
+  '/sdk/egreed_cloud.py': typeof SdkEgreed_cloudDotpyRoute
   '/ai/deployments': typeof AuthenticatedAiDeploymentsRoute
   '/ai/models': typeof AuthenticatedAiModelsRouteWithChildren
   '/ai/orchestrators': typeof AuthenticatedAiOrchestratorsRoute
@@ -560,6 +568,7 @@ export interface FileRoutesById {
   '/_authenticated/trash': typeof AuthenticatedTrashRoute
   '/s/$token': typeof STokenRoute
   '/sdk/egreed-cloud.js': typeof SdkEgreedCloudDotjsRoute
+  '/sdk/egreed_cloud.py': typeof SdkEgreed_cloudDotpyRoute
   '/_authenticated/ai/deployments': typeof AuthenticatedAiDeploymentsRoute
   '/_authenticated/ai/models': typeof AuthenticatedAiModelsRouteWithChildren
   '/_authenticated/ai/orchestrators': typeof AuthenticatedAiOrchestratorsRoute
@@ -625,6 +634,7 @@ export interface FileRouteTypes {
     | '/trash'
     | '/s/$token'
     | '/sdk/egreed-cloud.js'
+    | '/sdk/egreed_cloud.py'
     | '/ai/deployments'
     | '/ai/models'
     | '/ai/orchestrators'
@@ -688,6 +698,7 @@ export interface FileRouteTypes {
     | '/trash'
     | '/s/$token'
     | '/sdk/egreed-cloud.js'
+    | '/sdk/egreed_cloud.py'
     | '/ai/deployments'
     | '/ai/models'
     | '/ai/orchestrators'
@@ -752,6 +763,7 @@ export interface FileRouteTypes {
     | '/_authenticated/trash'
     | '/s/$token'
     | '/sdk/egreed-cloud.js'
+    | '/sdk/egreed_cloud.py'
     | '/_authenticated/ai/deployments'
     | '/_authenticated/ai/models'
     | '/_authenticated/ai/orchestrators'
@@ -801,6 +813,7 @@ export interface RootRouteChildren {
   DotwellKnownEgreedCloudDotjsonRoute: typeof DotwellKnownEgreedCloudDotjsonRoute
   STokenRoute: typeof STokenRoute
   SdkEgreedCloudDotjsRoute: typeof SdkEgreedCloudDotjsRoute
+  SdkEgreed_cloudDotpyRoute: typeof SdkEgreed_cloudDotpyRoute
   ApiPublicV1HealthRoute: typeof ApiPublicV1HealthRoute
   ApiPublicV1LiveRoute: typeof ApiPublicV1LiveRoute
   ApiPublicV1MeRoute: typeof ApiPublicV1MeRoute
@@ -904,6 +917,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sdk/egreed_cloud.py': {
+      id: '/sdk/egreed_cloud.py'
+      path: '/sdk/egreed_cloud.py'
+      fullPath: '/sdk/egreed_cloud.py'
+      preLoaderRoute: typeof SdkEgreed_cloudDotpyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/sdk/egreed-cloud.js': {
@@ -1379,6 +1399,7 @@ const rootRouteChildren: RootRouteChildren = {
   DotwellKnownEgreedCloudDotjsonRoute: DotwellKnownEgreedCloudDotjsonRoute,
   STokenRoute: STokenRoute,
   SdkEgreedCloudDotjsRoute: SdkEgreedCloudDotjsRoute,
+  SdkEgreed_cloudDotpyRoute: SdkEgreed_cloudDotpyRoute,
   ApiPublicV1HealthRoute: ApiPublicV1HealthRoute,
   ApiPublicV1LiveRoute: ApiPublicV1LiveRoute,
   ApiPublicV1MeRoute: ApiPublicV1MeRoute,
