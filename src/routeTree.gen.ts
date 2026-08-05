@@ -20,6 +20,7 @@ import { Route as BrunoDotjsonRouteImport } from './routes/bruno[.]json'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as SdkEgreedCloudDotjsRouteImport } from './routes/sdk/egreed-cloud[.]js'
 import { Route as STokenRouteImport } from './routes/s.$token'
 import { Route as AuthenticatedTrashRouteImport } from './routes/_authenticated/trash'
 import { Route as AuthenticatedStorageAnalyticsRouteImport } from './routes/_authenticated/storage-analytics'
@@ -123,6 +124,11 @@ const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SdkEgreedCloudDotjsRoute = SdkEgreedCloudDotjsRouteImport.update({
+  id: '/sdk/egreed-cloud.js',
+  path: '/sdk/egreed-cloud.js',
   getParentRoute: () => rootRouteImport,
 } as any)
 const STokenRoute = STokenRouteImport.update({
@@ -425,6 +431,7 @@ export interface FileRoutesByFullPath {
   '/storage-analytics': typeof AuthenticatedStorageAnalyticsRoute
   '/trash': typeof AuthenticatedTrashRoute
   '/s/$token': typeof STokenRoute
+  '/sdk/egreed-cloud.js': typeof SdkEgreedCloudDotjsRoute
   '/ai/deployments': typeof AuthenticatedAiDeploymentsRoute
   '/ai/models': typeof AuthenticatedAiModelsRouteWithChildren
   '/ai/orchestrators': typeof AuthenticatedAiOrchestratorsRoute
@@ -487,6 +494,7 @@ export interface FileRoutesByTo {
   '/storage-analytics': typeof AuthenticatedStorageAnalyticsRoute
   '/trash': typeof AuthenticatedTrashRoute
   '/s/$token': typeof STokenRoute
+  '/sdk/egreed-cloud.js': typeof SdkEgreedCloudDotjsRoute
   '/ai/deployments': typeof AuthenticatedAiDeploymentsRoute
   '/ai/models': typeof AuthenticatedAiModelsRouteWithChildren
   '/ai/orchestrators': typeof AuthenticatedAiOrchestratorsRoute
@@ -551,6 +559,7 @@ export interface FileRoutesById {
   '/_authenticated/storage-analytics': typeof AuthenticatedStorageAnalyticsRoute
   '/_authenticated/trash': typeof AuthenticatedTrashRoute
   '/s/$token': typeof STokenRoute
+  '/sdk/egreed-cloud.js': typeof SdkEgreedCloudDotjsRoute
   '/_authenticated/ai/deployments': typeof AuthenticatedAiDeploymentsRoute
   '/_authenticated/ai/models': typeof AuthenticatedAiModelsRouteWithChildren
   '/_authenticated/ai/orchestrators': typeof AuthenticatedAiOrchestratorsRoute
@@ -615,6 +624,7 @@ export interface FileRouteTypes {
     | '/storage-analytics'
     | '/trash'
     | '/s/$token'
+    | '/sdk/egreed-cloud.js'
     | '/ai/deployments'
     | '/ai/models'
     | '/ai/orchestrators'
@@ -677,6 +687,7 @@ export interface FileRouteTypes {
     | '/storage-analytics'
     | '/trash'
     | '/s/$token'
+    | '/sdk/egreed-cloud.js'
     | '/ai/deployments'
     | '/ai/models'
     | '/ai/orchestrators'
@@ -740,6 +751,7 @@ export interface FileRouteTypes {
     | '/_authenticated/storage-analytics'
     | '/_authenticated/trash'
     | '/s/$token'
+    | '/sdk/egreed-cloud.js'
     | '/_authenticated/ai/deployments'
     | '/_authenticated/ai/models'
     | '/_authenticated/ai/orchestrators'
@@ -788,6 +800,7 @@ export interface RootRouteChildren {
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   DotwellKnownEgreedCloudDotjsonRoute: typeof DotwellKnownEgreedCloudDotjsonRoute
   STokenRoute: typeof STokenRoute
+  SdkEgreedCloudDotjsRoute: typeof SdkEgreedCloudDotjsRoute
   ApiPublicV1HealthRoute: typeof ApiPublicV1HealthRoute
   ApiPublicV1LiveRoute: typeof ApiPublicV1LiveRoute
   ApiPublicV1MeRoute: typeof ApiPublicV1MeRoute
@@ -891,6 +904,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sdk/egreed-cloud.js': {
+      id: '/sdk/egreed-cloud.js'
+      path: '/sdk/egreed-cloud.js'
+      fullPath: '/sdk/egreed-cloud.js'
+      preLoaderRoute: typeof SdkEgreedCloudDotjsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/s/$token': {
@@ -1358,6 +1378,7 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   DotwellKnownEgreedCloudDotjsonRoute: DotwellKnownEgreedCloudDotjsonRoute,
   STokenRoute: STokenRoute,
+  SdkEgreedCloudDotjsRoute: SdkEgreedCloudDotjsRoute,
   ApiPublicV1HealthRoute: ApiPublicV1HealthRoute,
   ApiPublicV1LiveRoute: ApiPublicV1LiveRoute,
   ApiPublicV1MeRoute: ApiPublicV1MeRoute,
