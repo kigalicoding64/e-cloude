@@ -10,7 +10,13 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as PostmanDotjsonRouteImport } from './routes/postman[.]json'
+import { Route as OpenapiDotyamlRouteImport } from './routes/openapi[.]yaml'
+import { Route as OpenapiDotjsonRouteImport } from './routes/openapi[.]json'
+import { Route as LlmsDottxtRouteImport } from './routes/llms[.]txt'
+import { Route as InsomniaDotjsonRouteImport } from './routes/insomnia[.]json'
 import { Route as DeveloperDocsRouteImport } from './routes/developer-docs'
+import { Route as BrunoDotjsonRouteImport } from './routes/bruno[.]json'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
@@ -31,13 +37,16 @@ import { Route as AuthenticatedBackupRouteImport } from './routes/_authenticated
 import { Route as AuthenticatedApiKeysRouteImport } from './routes/_authenticated/api-keys'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedActivityRouteImport } from './routes/_authenticated/activity'
+import { Route as DotwellKnownEgreedCloudDotjsonRouteImport } from './routes/[.]well-known/egreed-cloud[.]json'
 import { Route as AuthenticatedOrganizationsIdRouteImport } from './routes/_authenticated/organizations.$id'
 import { Route as AuthenticatedAiOrchestratorsRouteImport } from './routes/_authenticated/ai.orchestrators'
 import { Route as AuthenticatedAiModelsRouteImport } from './routes/_authenticated/ai.models'
 import { Route as AuthenticatedAiDeploymentsRouteImport } from './routes/_authenticated/ai.deployments'
 import { Route as ApiPublicV1IndexRouteImport } from './routes/api/public/v1/index'
+import { Route as ApiPublicV1OpenapiDotyamlRouteImport } from './routes/api/public/v1/openapi[.]yaml'
 import { Route as ApiPublicV1OpenapiDotjsonRouteImport } from './routes/api/public/v1/openapi[.]json'
 import { Route as ApiPublicV1MeRouteImport } from './routes/api/public/v1/me'
+import { Route as ApiPublicV1LiveRouteImport } from './routes/api/public/v1/live'
 import { Route as ApiPublicV1HealthRouteImport } from './routes/api/public/v1/health'
 import { Route as AuthenticatedAiModelsSlugRouteImport } from './routes/_authenticated/ai.models.$slug'
 import { Route as ApiPublicV1FoldersIndexRouteImport } from './routes/api/public/v1/folders/index'
@@ -65,9 +74,39 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PostmanDotjsonRoute = PostmanDotjsonRouteImport.update({
+  id: '/postman.json',
+  path: '/postman.json',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OpenapiDotyamlRoute = OpenapiDotyamlRouteImport.update({
+  id: '/openapi.yaml',
+  path: '/openapi.yaml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OpenapiDotjsonRoute = OpenapiDotjsonRouteImport.update({
+  id: '/openapi.json',
+  path: '/openapi.json',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LlmsDottxtRoute = LlmsDottxtRouteImport.update({
+  id: '/llms.txt',
+  path: '/llms.txt',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InsomniaDotjsonRoute = InsomniaDotjsonRouteImport.update({
+  id: '/insomnia.json',
+  path: '/insomnia.json',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DeveloperDocsRoute = DeveloperDocsRouteImport.update({
   id: '/developer-docs',
   path: '/developer-docs',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BrunoDotjsonRoute = BrunoDotjsonRouteImport.update({
+  id: '/bruno.json',
+  path: '/bruno.json',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -173,6 +212,12 @@ const AuthenticatedActivityRoute = AuthenticatedActivityRouteImport.update({
   path: '/activity',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const DotwellKnownEgreedCloudDotjsonRoute =
+  DotwellKnownEgreedCloudDotjsonRouteImport.update({
+    id: '/.well-known/egreed-cloud.json',
+    path: '/.well-known/egreed-cloud.json',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const AuthenticatedOrganizationsIdRoute =
   AuthenticatedOrganizationsIdRouteImport.update({
     id: '/$id',
@@ -201,6 +246,12 @@ const ApiPublicV1IndexRoute = ApiPublicV1IndexRouteImport.update({
   path: '/api/public/v1/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicV1OpenapiDotyamlRoute =
+  ApiPublicV1OpenapiDotyamlRouteImport.update({
+    id: '/api/public/v1/openapi.yaml',
+    path: '/api/public/v1/openapi.yaml',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicV1OpenapiDotjsonRoute =
   ApiPublicV1OpenapiDotjsonRouteImport.update({
     id: '/api/public/v1/openapi.json',
@@ -210,6 +261,11 @@ const ApiPublicV1OpenapiDotjsonRoute =
 const ApiPublicV1MeRoute = ApiPublicV1MeRouteImport.update({
   id: '/api/public/v1/me',
   path: '/api/public/v1/me',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicV1LiveRoute = ApiPublicV1LiveRouteImport.update({
+  id: '/api/public/v1/live',
+  path: '/api/public/v1/live',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicV1HealthRoute = ApiPublicV1HealthRouteImport.update({
@@ -331,8 +387,15 @@ const ApiPublicV1AgentDeploymentsIdLogsRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/bruno.json': typeof BrunoDotjsonRoute
   '/developer-docs': typeof DeveloperDocsRoute
+  '/insomnia.json': typeof InsomniaDotjsonRoute
+  '/llms.txt': typeof LlmsDottxtRoute
+  '/openapi.json': typeof OpenapiDotjsonRoute
+  '/openapi.yaml': typeof OpenapiDotyamlRoute
+  '/postman.json': typeof PostmanDotjsonRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/.well-known/egreed-cloud.json': typeof DotwellKnownEgreedCloudDotjsonRoute
   '/activity': typeof AuthenticatedActivityRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/api-keys': typeof AuthenticatedApiKeysRoute
@@ -356,8 +419,10 @@ export interface FileRoutesByFullPath {
   '/organizations/$id': typeof AuthenticatedOrganizationsIdRoute
   '/ai/models/$slug': typeof AuthenticatedAiModelsSlugRoute
   '/api/public/v1/health': typeof ApiPublicV1HealthRoute
+  '/api/public/v1/live': typeof ApiPublicV1LiveRoute
   '/api/public/v1/me': typeof ApiPublicV1MeRoute
   '/api/public/v1/openapi.json': typeof ApiPublicV1OpenapiDotjsonRoute
+  '/api/public/v1/openapi.yaml': typeof ApiPublicV1OpenapiDotyamlRoute
   '/api/public/v1/': typeof ApiPublicV1IndexRoute
   '/api/public/v1/agent/heartbeat': typeof ApiPublicV1AgentHeartbeatRoute
   '/api/public/v1/chat/$slug': typeof ApiPublicV1ChatSlugRoute
@@ -382,8 +447,15 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/bruno.json': typeof BrunoDotjsonRoute
   '/developer-docs': typeof DeveloperDocsRoute
+  '/insomnia.json': typeof InsomniaDotjsonRoute
+  '/llms.txt': typeof LlmsDottxtRoute
+  '/openapi.json': typeof OpenapiDotjsonRoute
+  '/openapi.yaml': typeof OpenapiDotyamlRoute
+  '/postman.json': typeof PostmanDotjsonRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/.well-known/egreed-cloud.json': typeof DotwellKnownEgreedCloudDotjsonRoute
   '/activity': typeof AuthenticatedActivityRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/api-keys': typeof AuthenticatedApiKeysRoute
@@ -407,8 +479,10 @@ export interface FileRoutesByTo {
   '/organizations/$id': typeof AuthenticatedOrganizationsIdRoute
   '/ai/models/$slug': typeof AuthenticatedAiModelsSlugRoute
   '/api/public/v1/health': typeof ApiPublicV1HealthRoute
+  '/api/public/v1/live': typeof ApiPublicV1LiveRoute
   '/api/public/v1/me': typeof ApiPublicV1MeRoute
   '/api/public/v1/openapi.json': typeof ApiPublicV1OpenapiDotjsonRoute
+  '/api/public/v1/openapi.yaml': typeof ApiPublicV1OpenapiDotyamlRoute
   '/api/public/v1': typeof ApiPublicV1IndexRoute
   '/api/public/v1/agent/heartbeat': typeof ApiPublicV1AgentHeartbeatRoute
   '/api/public/v1/chat/$slug': typeof ApiPublicV1ChatSlugRoute
@@ -435,8 +509,15 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/bruno.json': typeof BrunoDotjsonRoute
   '/developer-docs': typeof DeveloperDocsRoute
+  '/insomnia.json': typeof InsomniaDotjsonRoute
+  '/llms.txt': typeof LlmsDottxtRoute
+  '/openapi.json': typeof OpenapiDotjsonRoute
+  '/openapi.yaml': typeof OpenapiDotyamlRoute
+  '/postman.json': typeof PostmanDotjsonRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/.well-known/egreed-cloud.json': typeof DotwellKnownEgreedCloudDotjsonRoute
   '/_authenticated/activity': typeof AuthenticatedActivityRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/api-keys': typeof AuthenticatedApiKeysRoute
@@ -460,8 +541,10 @@ export interface FileRoutesById {
   '/_authenticated/organizations/$id': typeof AuthenticatedOrganizationsIdRoute
   '/_authenticated/ai/models/$slug': typeof AuthenticatedAiModelsSlugRoute
   '/api/public/v1/health': typeof ApiPublicV1HealthRoute
+  '/api/public/v1/live': typeof ApiPublicV1LiveRoute
   '/api/public/v1/me': typeof ApiPublicV1MeRoute
   '/api/public/v1/openapi.json': typeof ApiPublicV1OpenapiDotjsonRoute
+  '/api/public/v1/openapi.yaml': typeof ApiPublicV1OpenapiDotyamlRoute
   '/api/public/v1/': typeof ApiPublicV1IndexRoute
   '/api/public/v1/agent/heartbeat': typeof ApiPublicV1AgentHeartbeatRoute
   '/api/public/v1/chat/$slug': typeof ApiPublicV1ChatSlugRoute
@@ -488,8 +571,15 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth'
+    | '/bruno.json'
     | '/developer-docs'
+    | '/insomnia.json'
+    | '/llms.txt'
+    | '/openapi.json'
+    | '/openapi.yaml'
+    | '/postman.json'
     | '/sitemap.xml'
+    | '/.well-known/egreed-cloud.json'
     | '/activity'
     | '/admin'
     | '/api-keys'
@@ -513,8 +603,10 @@ export interface FileRouteTypes {
     | '/organizations/$id'
     | '/ai/models/$slug'
     | '/api/public/v1/health'
+    | '/api/public/v1/live'
     | '/api/public/v1/me'
     | '/api/public/v1/openapi.json'
+    | '/api/public/v1/openapi.yaml'
     | '/api/public/v1/'
     | '/api/public/v1/agent/heartbeat'
     | '/api/public/v1/chat/$slug'
@@ -539,8 +631,15 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/auth'
+    | '/bruno.json'
     | '/developer-docs'
+    | '/insomnia.json'
+    | '/llms.txt'
+    | '/openapi.json'
+    | '/openapi.yaml'
+    | '/postman.json'
     | '/sitemap.xml'
+    | '/.well-known/egreed-cloud.json'
     | '/activity'
     | '/admin'
     | '/api-keys'
@@ -564,8 +663,10 @@ export interface FileRouteTypes {
     | '/organizations/$id'
     | '/ai/models/$slug'
     | '/api/public/v1/health'
+    | '/api/public/v1/live'
     | '/api/public/v1/me'
     | '/api/public/v1/openapi.json'
+    | '/api/public/v1/openapi.yaml'
     | '/api/public/v1'
     | '/api/public/v1/agent/heartbeat'
     | '/api/public/v1/chat/$slug'
@@ -591,8 +692,15 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/bruno.json'
     | '/developer-docs'
+    | '/insomnia.json'
+    | '/llms.txt'
+    | '/openapi.json'
+    | '/openapi.yaml'
+    | '/postman.json'
     | '/sitemap.xml'
+    | '/.well-known/egreed-cloud.json'
     | '/_authenticated/activity'
     | '/_authenticated/admin'
     | '/_authenticated/api-keys'
@@ -616,8 +724,10 @@ export interface FileRouteTypes {
     | '/_authenticated/organizations/$id'
     | '/_authenticated/ai/models/$slug'
     | '/api/public/v1/health'
+    | '/api/public/v1/live'
     | '/api/public/v1/me'
     | '/api/public/v1/openapi.json'
+    | '/api/public/v1/openapi.yaml'
     | '/api/public/v1/'
     | '/api/public/v1/agent/heartbeat'
     | '/api/public/v1/chat/$slug'
@@ -644,12 +754,21 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  BrunoDotjsonRoute: typeof BrunoDotjsonRoute
   DeveloperDocsRoute: typeof DeveloperDocsRoute
+  InsomniaDotjsonRoute: typeof InsomniaDotjsonRoute
+  LlmsDottxtRoute: typeof LlmsDottxtRoute
+  OpenapiDotjsonRoute: typeof OpenapiDotjsonRoute
+  OpenapiDotyamlRoute: typeof OpenapiDotyamlRoute
+  PostmanDotjsonRoute: typeof PostmanDotjsonRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  DotwellKnownEgreedCloudDotjsonRoute: typeof DotwellKnownEgreedCloudDotjsonRoute
   STokenRoute: typeof STokenRoute
   ApiPublicV1HealthRoute: typeof ApiPublicV1HealthRoute
+  ApiPublicV1LiveRoute: typeof ApiPublicV1LiveRoute
   ApiPublicV1MeRoute: typeof ApiPublicV1MeRoute
   ApiPublicV1OpenapiDotjsonRoute: typeof ApiPublicV1OpenapiDotjsonRoute
+  ApiPublicV1OpenapiDotyamlRoute: typeof ApiPublicV1OpenapiDotyamlRoute
   ApiPublicV1IndexRoute: typeof ApiPublicV1IndexRoute
   ApiPublicV1AgentHeartbeatRoute: typeof ApiPublicV1AgentHeartbeatRoute
   ApiPublicV1ChatSlugRoute: typeof ApiPublicV1ChatSlugRoute
@@ -678,11 +797,53 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/postman.json': {
+      id: '/postman.json'
+      path: '/postman.json'
+      fullPath: '/postman.json'
+      preLoaderRoute: typeof PostmanDotjsonRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/openapi.yaml': {
+      id: '/openapi.yaml'
+      path: '/openapi.yaml'
+      fullPath: '/openapi.yaml'
+      preLoaderRoute: typeof OpenapiDotyamlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/openapi.json': {
+      id: '/openapi.json'
+      path: '/openapi.json'
+      fullPath: '/openapi.json'
+      preLoaderRoute: typeof OpenapiDotjsonRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/llms.txt': {
+      id: '/llms.txt'
+      path: '/llms.txt'
+      fullPath: '/llms.txt'
+      preLoaderRoute: typeof LlmsDottxtRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/insomnia.json': {
+      id: '/insomnia.json'
+      path: '/insomnia.json'
+      fullPath: '/insomnia.json'
+      preLoaderRoute: typeof InsomniaDotjsonRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/developer-docs': {
       id: '/developer-docs'
       path: '/developer-docs'
       fullPath: '/developer-docs'
       preLoaderRoute: typeof DeveloperDocsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/bruno.json': {
+      id: '/bruno.json'
+      path: '/bruno.json'
+      fullPath: '/bruno.json'
+      preLoaderRoute: typeof BrunoDotjsonRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -825,6 +986,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedActivityRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/.well-known/egreed-cloud.json': {
+      id: '/.well-known/egreed-cloud.json'
+      path: '/.well-known/egreed-cloud.json'
+      fullPath: '/.well-known/egreed-cloud.json'
+      preLoaderRoute: typeof DotwellKnownEgreedCloudDotjsonRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/organizations/$id': {
       id: '/_authenticated/organizations/$id'
       path: '/$id'
@@ -860,6 +1028,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicV1IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/v1/openapi.yaml': {
+      id: '/api/public/v1/openapi.yaml'
+      path: '/api/public/v1/openapi.yaml'
+      fullPath: '/api/public/v1/openapi.yaml'
+      preLoaderRoute: typeof ApiPublicV1OpenapiDotyamlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/v1/openapi.json': {
       id: '/api/public/v1/openapi.json'
       path: '/api/public/v1/openapi.json'
@@ -872,6 +1047,13 @@ declare module '@tanstack/react-router' {
       path: '/api/public/v1/me'
       fullPath: '/api/public/v1/me'
       preLoaderRoute: typeof ApiPublicV1MeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/live': {
+      id: '/api/public/v1/live'
+      path: '/api/public/v1/live'
+      fullPath: '/api/public/v1/live'
+      preLoaderRoute: typeof ApiPublicV1LiveRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/v1/health': {
@@ -1126,12 +1308,21 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
+  BrunoDotjsonRoute: BrunoDotjsonRoute,
   DeveloperDocsRoute: DeveloperDocsRoute,
+  InsomniaDotjsonRoute: InsomniaDotjsonRoute,
+  LlmsDottxtRoute: LlmsDottxtRoute,
+  OpenapiDotjsonRoute: OpenapiDotjsonRoute,
+  OpenapiDotyamlRoute: OpenapiDotyamlRoute,
+  PostmanDotjsonRoute: PostmanDotjsonRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  DotwellKnownEgreedCloudDotjsonRoute: DotwellKnownEgreedCloudDotjsonRoute,
   STokenRoute: STokenRoute,
   ApiPublicV1HealthRoute: ApiPublicV1HealthRoute,
+  ApiPublicV1LiveRoute: ApiPublicV1LiveRoute,
   ApiPublicV1MeRoute: ApiPublicV1MeRoute,
   ApiPublicV1OpenapiDotjsonRoute: ApiPublicV1OpenapiDotjsonRoute,
+  ApiPublicV1OpenapiDotyamlRoute: ApiPublicV1OpenapiDotyamlRoute,
   ApiPublicV1IndexRoute: ApiPublicV1IndexRoute,
   ApiPublicV1AgentHeartbeatRoute: ApiPublicV1AgentHeartbeatRoute,
   ApiPublicV1ChatSlugRoute: ApiPublicV1ChatSlugRoute,

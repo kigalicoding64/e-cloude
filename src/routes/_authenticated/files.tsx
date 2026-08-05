@@ -25,9 +25,8 @@ import { z } from "zod";
 
 export const Route = createFileRoute("/_authenticated/files")({
   head: () => ({ meta: [{ title: "My Files — E-Cloud" }] }),
-  validateSearch: (s: Record<string, unknown>) => ({
-    folder: (s.folder as string | undefined) ?? null,
-  }),
+  validateSearch: (s: Record<string, unknown>): { folder?: string } =>
+    typeof s.folder === "string" && s.folder ? { folder: s.folder } : {},
   component: FilesPage,
 });
 
@@ -35,7 +34,8 @@ const folderNameSchema = z.string().trim().min(1).max(80);
 const fileNameSchema = z.string().trim().min(1).max(200);
 
 function FilesPage() {
-  const { folder: folderId } = Route.useSearch();
+  const { folder } = Route.useSearch();
+  const folderId = folder ?? null;
   const { user } = useSession();
   const qc = useQueryClient();
   const [view, setView] = useState<"grid" | "list">("grid");

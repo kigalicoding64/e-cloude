@@ -4,6 +4,7 @@ import { sha256Hex } from "@/lib/hash";
 import { CORS_HEADERS } from "@/lib/cors";
 import {
   type ApiErrorCode,
+  newRequestId,
   type ApiScope,
   buildErrorBody,
   normalizeScopes,
@@ -52,12 +53,18 @@ export function jsonError(
   code?: ApiErrorCode,
   details?: unknown,
 ): Response {
-  return json(buildErrorBody(message, status, code, details), status);
+  const requestId = newRequestId();
+  return json(buildErrorBody(message, status, code, details, requestId), status, {
+    "X-Request-Id": requestId,
+  });
 }
 
 export function apiError(code: ApiErrorCode, message: string, details?: unknown): Response {
   const status = statusForCode(code);
-  return json(buildErrorBody(message, status, code, details), status);
+  const requestId = newRequestId();
+  return json(buildErrorBody(message, status, code, details, requestId), status, {
+    "X-Request-Id": requestId,
+  });
 }
 
 /**
