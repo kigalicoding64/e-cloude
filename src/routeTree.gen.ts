@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as PostmanDotjsonRouteImport } from './routes/postman[.]json'
+import { Route as PlaygroundRouteImport } from './routes/playground'
 import { Route as OpenapiDotyamlRouteImport } from './routes/openapi[.]yaml'
 import { Route as OpenapiDotjsonRouteImport } from './routes/openapi[.]json'
 import { Route as LlmsDottxtRouteImport } from './routes/llms[.]txt'
@@ -82,6 +83,11 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
 const PostmanDotjsonRoute = PostmanDotjsonRouteImport.update({
   id: '/postman.json',
   path: '/postman.json',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PlaygroundRoute = PlaygroundRouteImport.update({
+  id: '/playground',
+  path: '/playground',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OpenapiDotyamlRoute = OpenapiDotyamlRouteImport.update({
@@ -424,6 +430,7 @@ export interface FileRoutesByFullPath {
   '/llms.txt': typeof LlmsDottxtRoute
   '/openapi.json': typeof OpenapiDotjsonRoute
   '/openapi.yaml': typeof OpenapiDotyamlRoute
+  '/playground': typeof PlaygroundRoute
   '/postman.json': typeof PostmanDotjsonRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/.well-known/egreed-cloud.json': typeof DotwellKnownEgreedCloudDotjsonRoute
@@ -489,6 +496,7 @@ export interface FileRoutesByTo {
   '/llms.txt': typeof LlmsDottxtRoute
   '/openapi.json': typeof OpenapiDotjsonRoute
   '/openapi.yaml': typeof OpenapiDotyamlRoute
+  '/playground': typeof PlaygroundRoute
   '/postman.json': typeof PostmanDotjsonRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/.well-known/egreed-cloud.json': typeof DotwellKnownEgreedCloudDotjsonRoute
@@ -556,6 +564,7 @@ export interface FileRoutesById {
   '/llms.txt': typeof LlmsDottxtRoute
   '/openapi.json': typeof OpenapiDotjsonRoute
   '/openapi.yaml': typeof OpenapiDotyamlRoute
+  '/playground': typeof PlaygroundRoute
   '/postman.json': typeof PostmanDotjsonRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/.well-known/egreed-cloud.json': typeof DotwellKnownEgreedCloudDotjsonRoute
@@ -623,6 +632,7 @@ export interface FileRouteTypes {
     | '/llms.txt'
     | '/openapi.json'
     | '/openapi.yaml'
+    | '/playground'
     | '/postman.json'
     | '/sitemap.xml'
     | '/.well-known/egreed-cloud.json'
@@ -688,6 +698,7 @@ export interface FileRouteTypes {
     | '/llms.txt'
     | '/openapi.json'
     | '/openapi.yaml'
+    | '/playground'
     | '/postman.json'
     | '/sitemap.xml'
     | '/.well-known/egreed-cloud.json'
@@ -754,6 +765,7 @@ export interface FileRouteTypes {
     | '/llms.txt'
     | '/openapi.json'
     | '/openapi.yaml'
+    | '/playground'
     | '/postman.json'
     | '/sitemap.xml'
     | '/.well-known/egreed-cloud.json'
@@ -821,6 +833,7 @@ export interface RootRouteChildren {
   LlmsDottxtRoute: typeof LlmsDottxtRoute
   OpenapiDotjsonRoute: typeof OpenapiDotjsonRoute
   OpenapiDotyamlRoute: typeof OpenapiDotyamlRoute
+  PlaygroundRoute: typeof PlaygroundRoute
   PostmanDotjsonRoute: typeof PostmanDotjsonRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   DotwellKnownEgreedCloudDotjsonRoute: typeof DotwellKnownEgreedCloudDotjsonRoute
@@ -867,6 +880,13 @@ declare module '@tanstack/react-router' {
       path: '/postman.json'
       fullPath: '/postman.json'
       preLoaderRoute: typeof PostmanDotjsonRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/playground': {
+      id: '/playground'
+      path: '/playground'
+      fullPath: '/playground'
+      preLoaderRoute: typeof PlaygroundRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/openapi.yaml': {
@@ -1415,6 +1435,7 @@ const rootRouteChildren: RootRouteChildren = {
   LlmsDottxtRoute: LlmsDottxtRoute,
   OpenapiDotjsonRoute: OpenapiDotjsonRoute,
   OpenapiDotyamlRoute: OpenapiDotyamlRoute,
+  PlaygroundRoute: PlaygroundRoute,
   PostmanDotjsonRoute: PostmanDotjsonRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   DotwellKnownEgreedCloudDotjsonRoute: DotwellKnownEgreedCloudDotjsonRoute,
