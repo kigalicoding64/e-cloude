@@ -15,6 +15,7 @@ import { Route as OpenapiDotyamlRouteImport } from './routes/openapi[.]yaml'
 import { Route as OpenapiDotjsonRouteImport } from './routes/openapi[.]json'
 import { Route as LlmsDottxtRouteImport } from './routes/llms[.]txt'
 import { Route as InsomniaDotjsonRouteImport } from './routes/insomnia[.]json'
+import { Route as DocsRouteImport } from './routes/docs'
 import { Route as DeveloperDocsRouteImport } from './routes/developer-docs'
 import { Route as BrunoDotjsonRouteImport } from './routes/bruno[.]json'
 import { Route as AuthRouteImport } from './routes/auth'
@@ -101,6 +102,11 @@ const LlmsDottxtRoute = LlmsDottxtRouteImport.update({
 const InsomniaDotjsonRoute = InsomniaDotjsonRouteImport.update({
   id: '/insomnia.json',
   path: '/insomnia.json',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DocsRoute = DocsRouteImport.update({
+  id: '/docs',
+  path: '/docs',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DeveloperDocsRoute = DeveloperDocsRouteImport.update({
@@ -413,6 +419,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/bruno.json': typeof BrunoDotjsonRoute
   '/developer-docs': typeof DeveloperDocsRoute
+  '/docs': typeof DocsRoute
   '/insomnia.json': typeof InsomniaDotjsonRoute
   '/llms.txt': typeof LlmsDottxtRoute
   '/openapi.json': typeof OpenapiDotjsonRoute
@@ -477,6 +484,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/bruno.json': typeof BrunoDotjsonRoute
   '/developer-docs': typeof DeveloperDocsRoute
+  '/docs': typeof DocsRoute
   '/insomnia.json': typeof InsomniaDotjsonRoute
   '/llms.txt': typeof LlmsDottxtRoute
   '/openapi.json': typeof OpenapiDotjsonRoute
@@ -543,6 +551,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/bruno.json': typeof BrunoDotjsonRoute
   '/developer-docs': typeof DeveloperDocsRoute
+  '/docs': typeof DocsRoute
   '/insomnia.json': typeof InsomniaDotjsonRoute
   '/llms.txt': typeof LlmsDottxtRoute
   '/openapi.json': typeof OpenapiDotjsonRoute
@@ -609,6 +618,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/bruno.json'
     | '/developer-docs'
+    | '/docs'
     | '/insomnia.json'
     | '/llms.txt'
     | '/openapi.json'
@@ -673,6 +683,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/bruno.json'
     | '/developer-docs'
+    | '/docs'
     | '/insomnia.json'
     | '/llms.txt'
     | '/openapi.json'
@@ -738,6 +749,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/bruno.json'
     | '/developer-docs'
+    | '/docs'
     | '/insomnia.json'
     | '/llms.txt'
     | '/openapi.json'
@@ -804,6 +816,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   BrunoDotjsonRoute: typeof BrunoDotjsonRoute
   DeveloperDocsRoute: typeof DeveloperDocsRoute
+  DocsRoute: typeof DocsRoute
   InsomniaDotjsonRoute: typeof InsomniaDotjsonRoute
   LlmsDottxtRoute: typeof LlmsDottxtRoute
   OpenapiDotjsonRoute: typeof OpenapiDotjsonRoute
@@ -882,6 +895,13 @@ declare module '@tanstack/react-router' {
       path: '/insomnia.json'
       fullPath: '/insomnia.json'
       preLoaderRoute: typeof InsomniaDotjsonRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/docs': {
+      id: '/docs'
+      path: '/docs'
+      fullPath: '/docs'
+      preLoaderRoute: typeof DocsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/developer-docs': {
@@ -1390,6 +1410,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   BrunoDotjsonRoute: BrunoDotjsonRoute,
   DeveloperDocsRoute: DeveloperDocsRoute,
+  DocsRoute: DocsRoute,
   InsomniaDotjsonRoute: InsomniaDotjsonRoute,
   LlmsDottxtRoute: LlmsDottxtRoute,
   OpenapiDotjsonRoute: OpenapiDotjsonRoute,
