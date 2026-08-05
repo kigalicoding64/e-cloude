@@ -43,6 +43,7 @@ import { Route as AuthenticatedAiOrchestratorsRouteImport } from './routes/_auth
 import { Route as AuthenticatedAiModelsRouteImport } from './routes/_authenticated/ai.models'
 import { Route as AuthenticatedAiDeploymentsRouteImport } from './routes/_authenticated/ai.deployments'
 import { Route as ApiPublicV1IndexRouteImport } from './routes/api/public/v1/index'
+import { Route as ApiPublicV1ReadyRouteImport } from './routes/api/public/v1/ready'
 import { Route as ApiPublicV1OpenapiDotyamlRouteImport } from './routes/api/public/v1/openapi[.]yaml'
 import { Route as ApiPublicV1OpenapiDotjsonRouteImport } from './routes/api/public/v1/openapi[.]json'
 import { Route as ApiPublicV1MeRouteImport } from './routes/api/public/v1/me'
@@ -246,6 +247,11 @@ const ApiPublicV1IndexRoute = ApiPublicV1IndexRouteImport.update({
   path: '/api/public/v1/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicV1ReadyRoute = ApiPublicV1ReadyRouteImport.update({
+  id: '/api/public/v1/ready',
+  path: '/api/public/v1/ready',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicV1OpenapiDotyamlRoute =
   ApiPublicV1OpenapiDotyamlRouteImport.update({
     id: '/api/public/v1/openapi.yaml',
@@ -423,6 +429,7 @@ export interface FileRoutesByFullPath {
   '/api/public/v1/me': typeof ApiPublicV1MeRoute
   '/api/public/v1/openapi.json': typeof ApiPublicV1OpenapiDotjsonRoute
   '/api/public/v1/openapi.yaml': typeof ApiPublicV1OpenapiDotyamlRoute
+  '/api/public/v1/ready': typeof ApiPublicV1ReadyRoute
   '/api/public/v1/': typeof ApiPublicV1IndexRoute
   '/api/public/v1/agent/heartbeat': typeof ApiPublicV1AgentHeartbeatRoute
   '/api/public/v1/chat/$slug': typeof ApiPublicV1ChatSlugRoute
@@ -483,6 +490,7 @@ export interface FileRoutesByTo {
   '/api/public/v1/me': typeof ApiPublicV1MeRoute
   '/api/public/v1/openapi.json': typeof ApiPublicV1OpenapiDotjsonRoute
   '/api/public/v1/openapi.yaml': typeof ApiPublicV1OpenapiDotyamlRoute
+  '/api/public/v1/ready': typeof ApiPublicV1ReadyRoute
   '/api/public/v1': typeof ApiPublicV1IndexRoute
   '/api/public/v1/agent/heartbeat': typeof ApiPublicV1AgentHeartbeatRoute
   '/api/public/v1/chat/$slug': typeof ApiPublicV1ChatSlugRoute
@@ -545,6 +553,7 @@ export interface FileRoutesById {
   '/api/public/v1/me': typeof ApiPublicV1MeRoute
   '/api/public/v1/openapi.json': typeof ApiPublicV1OpenapiDotjsonRoute
   '/api/public/v1/openapi.yaml': typeof ApiPublicV1OpenapiDotyamlRoute
+  '/api/public/v1/ready': typeof ApiPublicV1ReadyRoute
   '/api/public/v1/': typeof ApiPublicV1IndexRoute
   '/api/public/v1/agent/heartbeat': typeof ApiPublicV1AgentHeartbeatRoute
   '/api/public/v1/chat/$slug': typeof ApiPublicV1ChatSlugRoute
@@ -607,6 +616,7 @@ export interface FileRouteTypes {
     | '/api/public/v1/me'
     | '/api/public/v1/openapi.json'
     | '/api/public/v1/openapi.yaml'
+    | '/api/public/v1/ready'
     | '/api/public/v1/'
     | '/api/public/v1/agent/heartbeat'
     | '/api/public/v1/chat/$slug'
@@ -667,6 +677,7 @@ export interface FileRouteTypes {
     | '/api/public/v1/me'
     | '/api/public/v1/openapi.json'
     | '/api/public/v1/openapi.yaml'
+    | '/api/public/v1/ready'
     | '/api/public/v1'
     | '/api/public/v1/agent/heartbeat'
     | '/api/public/v1/chat/$slug'
@@ -728,6 +739,7 @@ export interface FileRouteTypes {
     | '/api/public/v1/me'
     | '/api/public/v1/openapi.json'
     | '/api/public/v1/openapi.yaml'
+    | '/api/public/v1/ready'
     | '/api/public/v1/'
     | '/api/public/v1/agent/heartbeat'
     | '/api/public/v1/chat/$slug'
@@ -769,6 +781,7 @@ export interface RootRouteChildren {
   ApiPublicV1MeRoute: typeof ApiPublicV1MeRoute
   ApiPublicV1OpenapiDotjsonRoute: typeof ApiPublicV1OpenapiDotjsonRoute
   ApiPublicV1OpenapiDotyamlRoute: typeof ApiPublicV1OpenapiDotyamlRoute
+  ApiPublicV1ReadyRoute: typeof ApiPublicV1ReadyRoute
   ApiPublicV1IndexRoute: typeof ApiPublicV1IndexRoute
   ApiPublicV1AgentHeartbeatRoute: typeof ApiPublicV1AgentHeartbeatRoute
   ApiPublicV1ChatSlugRoute: typeof ApiPublicV1ChatSlugRoute
@@ -1026,6 +1039,13 @@ declare module '@tanstack/react-router' {
       path: '/api/public/v1'
       fullPath: '/api/public/v1/'
       preLoaderRoute: typeof ApiPublicV1IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/ready': {
+      id: '/api/public/v1/ready'
+      path: '/api/public/v1/ready'
+      fullPath: '/api/public/v1/ready'
+      preLoaderRoute: typeof ApiPublicV1ReadyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/v1/openapi.yaml': {
@@ -1323,6 +1343,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicV1MeRoute: ApiPublicV1MeRoute,
   ApiPublicV1OpenapiDotjsonRoute: ApiPublicV1OpenapiDotjsonRoute,
   ApiPublicV1OpenapiDotyamlRoute: ApiPublicV1OpenapiDotyamlRoute,
+  ApiPublicV1ReadyRoute: ApiPublicV1ReadyRoute,
   ApiPublicV1IndexRoute: ApiPublicV1IndexRoute,
   ApiPublicV1AgentHeartbeatRoute: ApiPublicV1AgentHeartbeatRoute,
   ApiPublicV1ChatSlugRoute: ApiPublicV1ChatSlugRoute,
