@@ -46,6 +46,7 @@ import { Route as ApiPublicV1IndexRouteImport } from './routes/api/public/v1/ind
 import { Route as ApiPublicV1ReadyRouteImport } from './routes/api/public/v1/ready'
 import { Route as ApiPublicV1OpenapiDotyamlRouteImport } from './routes/api/public/v1/openapi[.]yaml'
 import { Route as ApiPublicV1OpenapiDotjsonRouteImport } from './routes/api/public/v1/openapi[.]json'
+import { Route as ApiPublicV1MetricsRouteImport } from './routes/api/public/v1/metrics'
 import { Route as ApiPublicV1MeRouteImport } from './routes/api/public/v1/me'
 import { Route as ApiPublicV1LiveRouteImport } from './routes/api/public/v1/live'
 import { Route as ApiPublicV1HealthRouteImport } from './routes/api/public/v1/health'
@@ -264,6 +265,11 @@ const ApiPublicV1OpenapiDotjsonRoute =
     path: '/api/public/v1/openapi.json',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicV1MetricsRoute = ApiPublicV1MetricsRouteImport.update({
+  id: '/api/public/v1/metrics',
+  path: '/api/public/v1/metrics',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicV1MeRoute = ApiPublicV1MeRouteImport.update({
   id: '/api/public/v1/me',
   path: '/api/public/v1/me',
@@ -427,6 +433,7 @@ export interface FileRoutesByFullPath {
   '/api/public/v1/health': typeof ApiPublicV1HealthRoute
   '/api/public/v1/live': typeof ApiPublicV1LiveRoute
   '/api/public/v1/me': typeof ApiPublicV1MeRoute
+  '/api/public/v1/metrics': typeof ApiPublicV1MetricsRoute
   '/api/public/v1/openapi.json': typeof ApiPublicV1OpenapiDotjsonRoute
   '/api/public/v1/openapi.yaml': typeof ApiPublicV1OpenapiDotyamlRoute
   '/api/public/v1/ready': typeof ApiPublicV1ReadyRoute
@@ -488,6 +495,7 @@ export interface FileRoutesByTo {
   '/api/public/v1/health': typeof ApiPublicV1HealthRoute
   '/api/public/v1/live': typeof ApiPublicV1LiveRoute
   '/api/public/v1/me': typeof ApiPublicV1MeRoute
+  '/api/public/v1/metrics': typeof ApiPublicV1MetricsRoute
   '/api/public/v1/openapi.json': typeof ApiPublicV1OpenapiDotjsonRoute
   '/api/public/v1/openapi.yaml': typeof ApiPublicV1OpenapiDotyamlRoute
   '/api/public/v1/ready': typeof ApiPublicV1ReadyRoute
@@ -551,6 +559,7 @@ export interface FileRoutesById {
   '/api/public/v1/health': typeof ApiPublicV1HealthRoute
   '/api/public/v1/live': typeof ApiPublicV1LiveRoute
   '/api/public/v1/me': typeof ApiPublicV1MeRoute
+  '/api/public/v1/metrics': typeof ApiPublicV1MetricsRoute
   '/api/public/v1/openapi.json': typeof ApiPublicV1OpenapiDotjsonRoute
   '/api/public/v1/openapi.yaml': typeof ApiPublicV1OpenapiDotyamlRoute
   '/api/public/v1/ready': typeof ApiPublicV1ReadyRoute
@@ -614,6 +623,7 @@ export interface FileRouteTypes {
     | '/api/public/v1/health'
     | '/api/public/v1/live'
     | '/api/public/v1/me'
+    | '/api/public/v1/metrics'
     | '/api/public/v1/openapi.json'
     | '/api/public/v1/openapi.yaml'
     | '/api/public/v1/ready'
@@ -675,6 +685,7 @@ export interface FileRouteTypes {
     | '/api/public/v1/health'
     | '/api/public/v1/live'
     | '/api/public/v1/me'
+    | '/api/public/v1/metrics'
     | '/api/public/v1/openapi.json'
     | '/api/public/v1/openapi.yaml'
     | '/api/public/v1/ready'
@@ -737,6 +748,7 @@ export interface FileRouteTypes {
     | '/api/public/v1/health'
     | '/api/public/v1/live'
     | '/api/public/v1/me'
+    | '/api/public/v1/metrics'
     | '/api/public/v1/openapi.json'
     | '/api/public/v1/openapi.yaml'
     | '/api/public/v1/ready'
@@ -779,6 +791,7 @@ export interface RootRouteChildren {
   ApiPublicV1HealthRoute: typeof ApiPublicV1HealthRoute
   ApiPublicV1LiveRoute: typeof ApiPublicV1LiveRoute
   ApiPublicV1MeRoute: typeof ApiPublicV1MeRoute
+  ApiPublicV1MetricsRoute: typeof ApiPublicV1MetricsRoute
   ApiPublicV1OpenapiDotjsonRoute: typeof ApiPublicV1OpenapiDotjsonRoute
   ApiPublicV1OpenapiDotyamlRoute: typeof ApiPublicV1OpenapiDotyamlRoute
   ApiPublicV1ReadyRoute: typeof ApiPublicV1ReadyRoute
@@ -1062,6 +1075,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicV1OpenapiDotjsonRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/v1/metrics': {
+      id: '/api/public/v1/metrics'
+      path: '/api/public/v1/metrics'
+      fullPath: '/api/public/v1/metrics'
+      preLoaderRoute: typeof ApiPublicV1MetricsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/v1/me': {
       id: '/api/public/v1/me'
       path: '/api/public/v1/me'
@@ -1341,6 +1361,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicV1HealthRoute: ApiPublicV1HealthRoute,
   ApiPublicV1LiveRoute: ApiPublicV1LiveRoute,
   ApiPublicV1MeRoute: ApiPublicV1MeRoute,
+  ApiPublicV1MetricsRoute: ApiPublicV1MetricsRoute,
   ApiPublicV1OpenapiDotjsonRoute: ApiPublicV1OpenapiDotjsonRoute,
   ApiPublicV1OpenapiDotyamlRoute: ApiPublicV1OpenapiDotyamlRoute,
   ApiPublicV1ReadyRoute: ApiPublicV1ReadyRoute,
