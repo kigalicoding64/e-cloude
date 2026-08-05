@@ -74,27 +74,67 @@ export function statusForCode(code: ApiErrorCode): number {
 }
 
 export type ApiErrorBody = {
+  /** Always false on errors — lets clients branch without inspecting status. */
+  success: false;
   error: string;
   code: ApiErrorCode;
   status: number;
   details?: unknown;
+  /** Actionable next step for the developer (or LLM) that hit this error. */
+  hint?: string;
+  /** Correlation id — quote this when reporting a problem. */
+  request_id: string;
+  timestamp: string;
   documentation_url: string;
 };
 
-export const DOCS_URL = "https://cloud.egreedtech.org/developer-docs";
+export const DOCS_URL = "https://cloud.egreedtech.org/docs";
+
+/** Human/LLM-friendly remediation hints per error code. */
+export const ERROR_HINTS: Partial<Record<ApiErrorCode, string>> = {
+  missing_api_key: "Send your key as the X-API-Key header, or Authorization: Bearer eck_live_...",
+  invalid_api_key: "Create or rotate a key in the dashboard under API Keys.",
+  insufficient_scope: "Mint a new key with the required scope, or widen the scopes on this key.",
+  file_locked: "Unlock the file (password/PIN) in the dashboard before issuing links.",
+  not_found: "Check the id, and that the resource belongs to the key's owner and is not trashed.",
+  payload_too_large: "Use the chunked upload endpoints (/uploads/init) for large files.",
+  quota_exceeded: "Free up storage or raise the account quota, then retry.",
+  rate_limited: "Back off using the Retry-After header, then retry with exponential backoff.",
+  quota_exhausted: "Wait for the monthly quota reset or raise the key's quota.",
+  session_expired: "Start a new chunked upload session with POST /uploads/init.",
+  idempotency_in_progress: "The original request is still running — retry the same key shortly.",
+  validation_failed: "Fix the fields listed in `details` and resend the request.",
+  invalid_json: "Send a valid JSON body with Content-Type: application/json.",
+  storage_error: "Transient storage failure — retry with backoff; contact support if it persists.",
+};
+
+export function newRequestId(): string {
+  try {
+    return `req_${crypto.randomUUID().replace(/-/g, "")}`;
+  } catch {
+    return `req_${Math.random().toString(36).slice(2)}${Date.now().toString(36)}`;
+  }
+}
 
 export function buildErrorBody(
   message: string,
   status: number,
   code?: ApiErrorCode,
   details?: unknown,
+  requestId?: string,
 ): ApiErrorBody {
   const resolved = code ?? codeForStatus(status);
+  const hint = ERROR_HINTS[resolved];
   return {
+    success: false,
     error: message,
     code: resolved,
     status,
     ...(details === undefined ? {} : { details }),
+    ...(hint ? { hint } : {}),
+    request_id: requestId ?? newRequestId(),
+    timestamp: new Date().toISOString(),
     documentation_url: DOCS_URL,
   };
 }
+
