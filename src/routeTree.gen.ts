@@ -53,6 +53,7 @@ import { Route as AuthenticatedOrganizationsIdRouteImport } from './routes/_auth
 import { Route as AuthenticatedAiOrchestratorsRouteImport } from './routes/_authenticated/ai.orchestrators'
 import { Route as AuthenticatedAiModelsRouteImport } from './routes/_authenticated/ai.models'
 import { Route as AuthenticatedAiDeploymentsRouteImport } from './routes/_authenticated/ai.deployments'
+import { Route as ApiV1FilesIndexRouteImport } from './routes/api/v1/files/index'
 import { Route as ApiPublicV1IndexRouteImport } from './routes/api/public/v1/index'
 import { Route as ApiPublicV1ReadyRouteImport } from './routes/api/public/v1/ready'
 import { Route as ApiPublicV1OpenapiDotyamlRouteImport } from './routes/api/public/v1/openapi[.]yaml'
@@ -309,6 +310,11 @@ const AuthenticatedAiDeploymentsRoute =
     path: '/ai/deployments',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const ApiV1FilesIndexRoute = ApiV1FilesIndexRouteImport.update({
+  id: '/api/v1/files/',
+  path: '/api/v1/files/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicV1IndexRoute = ApiPublicV1IndexRouteImport.update({
   id: '/api/public/v1/',
   path: '/api/public/v1/',
@@ -515,6 +521,7 @@ export interface FileRoutesByFullPath {
   '/api/public/v1/openapi.yaml': typeof ApiPublicV1OpenapiDotyamlRoute
   '/api/public/v1/ready': typeof ApiPublicV1ReadyRoute
   '/api/public/v1/': typeof ApiPublicV1IndexRoute
+  '/api/v1/files/': typeof ApiV1FilesIndexRoute
   '/api/public/v1/agent/heartbeat': typeof ApiPublicV1AgentHeartbeatRoute
   '/api/public/v1/chat/$slug': typeof ApiPublicV1ChatSlugRoute
   '/api/public/v1/files/$id': typeof ApiPublicV1FilesIdRouteWithChildren
@@ -588,6 +595,7 @@ export interface FileRoutesByTo {
   '/api/public/v1/openapi.yaml': typeof ApiPublicV1OpenapiDotyamlRoute
   '/api/public/v1/ready': typeof ApiPublicV1ReadyRoute
   '/api/public/v1': typeof ApiPublicV1IndexRoute
+  '/api/v1/files': typeof ApiV1FilesIndexRoute
   '/api/public/v1/agent/heartbeat': typeof ApiPublicV1AgentHeartbeatRoute
   '/api/public/v1/chat/$slug': typeof ApiPublicV1ChatSlugRoute
   '/api/public/v1/files/$id': typeof ApiPublicV1FilesIdRouteWithChildren
@@ -663,6 +671,7 @@ export interface FileRoutesById {
   '/api/public/v1/openapi.yaml': typeof ApiPublicV1OpenapiDotyamlRoute
   '/api/public/v1/ready': typeof ApiPublicV1ReadyRoute
   '/api/public/v1/': typeof ApiPublicV1IndexRoute
+  '/api/v1/files/': typeof ApiV1FilesIndexRoute
   '/api/public/v1/agent/heartbeat': typeof ApiPublicV1AgentHeartbeatRoute
   '/api/public/v1/chat/$slug': typeof ApiPublicV1ChatSlugRoute
   '/api/public/v1/files/$id': typeof ApiPublicV1FilesIdRouteWithChildren
@@ -738,6 +747,7 @@ export interface FileRouteTypes {
     | '/api/public/v1/openapi.yaml'
     | '/api/public/v1/ready'
     | '/api/public/v1/'
+    | '/api/v1/files/'
     | '/api/public/v1/agent/heartbeat'
     | '/api/public/v1/chat/$slug'
     | '/api/public/v1/files/$id'
@@ -811,6 +821,7 @@ export interface FileRouteTypes {
     | '/api/public/v1/openapi.yaml'
     | '/api/public/v1/ready'
     | '/api/public/v1'
+    | '/api/v1/files'
     | '/api/public/v1/agent/heartbeat'
     | '/api/public/v1/chat/$slug'
     | '/api/public/v1/files/$id'
@@ -885,6 +896,7 @@ export interface FileRouteTypes {
     | '/api/public/v1/openapi.yaml'
     | '/api/public/v1/ready'
     | '/api/public/v1/'
+    | '/api/v1/files/'
     | '/api/public/v1/agent/heartbeat'
     | '/api/public/v1/chat/$slug'
     | '/api/public/v1/files/$id'
@@ -939,6 +951,7 @@ export interface RootRouteChildren {
   ApiPublicV1OpenapiDotyamlRoute: typeof ApiPublicV1OpenapiDotyamlRoute
   ApiPublicV1ReadyRoute: typeof ApiPublicV1ReadyRoute
   ApiPublicV1IndexRoute: typeof ApiPublicV1IndexRoute
+  ApiV1FilesIndexRoute: typeof ApiV1FilesIndexRoute
   ApiPublicV1AgentHeartbeatRoute: typeof ApiPublicV1AgentHeartbeatRoute
   ApiPublicV1ChatSlugRoute: typeof ApiPublicV1ChatSlugRoute
   ApiPublicV1FilesIdRoute: typeof ApiPublicV1FilesIdRouteWithChildren
@@ -1266,6 +1279,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/ai/deployments'
       preLoaderRoute: typeof AuthenticatedAiDeploymentsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/api/v1/files/': {
+      id: '/api/v1/files/'
+      path: '/api/v1/files'
+      fullPath: '/api/v1/files/'
+      preLoaderRoute: typeof ApiV1FilesIndexRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/api/public/v1/': {
       id: '/api/public/v1/'
@@ -1597,6 +1617,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicV1OpenapiDotyamlRoute: ApiPublicV1OpenapiDotyamlRoute,
   ApiPublicV1ReadyRoute: ApiPublicV1ReadyRoute,
   ApiPublicV1IndexRoute: ApiPublicV1IndexRoute,
+  ApiV1FilesIndexRoute: ApiV1FilesIndexRoute,
   ApiPublicV1AgentHeartbeatRoute: ApiPublicV1AgentHeartbeatRoute,
   ApiPublicV1ChatSlugRoute: ApiPublicV1ChatSlugRoute,
   ApiPublicV1FilesIdRoute: ApiPublicV1FilesIdRouteWithChildren,
