@@ -56,6 +56,7 @@ import { Route as AuthenticatedOrganizationsIdRouteImport } from './routes/_auth
 import { Route as AuthenticatedAiOrchestratorsRouteImport } from './routes/_authenticated/ai.orchestrators'
 import { Route as AuthenticatedAiModelsRouteImport } from './routes/_authenticated/ai.models'
 import { Route as AuthenticatedAiDeploymentsRouteImport } from './routes/_authenticated/ai.deployments'
+import { Route as ApiV1FoldersIndexRouteImport } from './routes/api/v1/folders/index'
 import { Route as ApiV1FilesIndexRouteImport } from './routes/api/v1/files/index'
 import { Route as ApiPublicV1IndexRouteImport } from './routes/api/public/v1/index'
 import { Route as ApiV1FilesIdRouteImport } from './routes/api/v1/files/$id'
@@ -329,6 +330,11 @@ const AuthenticatedAiDeploymentsRoute =
     path: '/ai/deployments',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const ApiV1FoldersIndexRoute = ApiV1FoldersIndexRouteImport.update({
+  id: '/api/v1/folders/',
+  path: '/api/v1/folders/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiV1FilesIndexRoute = ApiV1FilesIndexRouteImport.update({
   id: '/api/v1/files/',
   path: '/api/v1/files/',
@@ -550,6 +556,7 @@ export interface FileRoutesByFullPath {
   '/api/v1/files/$id': typeof ApiV1FilesIdRoute
   '/api/public/v1/': typeof ApiPublicV1IndexRoute
   '/api/v1/files/': typeof ApiV1FilesIndexRoute
+  '/api/v1/folders/': typeof ApiV1FoldersIndexRoute
   '/api/public/v1/agent/heartbeat': typeof ApiPublicV1AgentHeartbeatRoute
   '/api/public/v1/chat/$slug': typeof ApiPublicV1ChatSlugRoute
   '/api/public/v1/files/$id': typeof ApiPublicV1FilesIdRouteWithChildren
@@ -628,6 +635,7 @@ export interface FileRoutesByTo {
   '/api/v1/files/$id': typeof ApiV1FilesIdRoute
   '/api/public/v1': typeof ApiPublicV1IndexRoute
   '/api/v1/files': typeof ApiV1FilesIndexRoute
+  '/api/v1/folders': typeof ApiV1FoldersIndexRoute
   '/api/public/v1/agent/heartbeat': typeof ApiPublicV1AgentHeartbeatRoute
   '/api/public/v1/chat/$slug': typeof ApiPublicV1ChatSlugRoute
   '/api/public/v1/files/$id': typeof ApiPublicV1FilesIdRouteWithChildren
@@ -708,6 +716,7 @@ export interface FileRoutesById {
   '/api/v1/files/$id': typeof ApiV1FilesIdRoute
   '/api/public/v1/': typeof ApiPublicV1IndexRoute
   '/api/v1/files/': typeof ApiV1FilesIndexRoute
+  '/api/v1/folders/': typeof ApiV1FoldersIndexRoute
   '/api/public/v1/agent/heartbeat': typeof ApiPublicV1AgentHeartbeatRoute
   '/api/public/v1/chat/$slug': typeof ApiPublicV1ChatSlugRoute
   '/api/public/v1/files/$id': typeof ApiPublicV1FilesIdRouteWithChildren
@@ -788,6 +797,7 @@ export interface FileRouteTypes {
     | '/api/v1/files/$id'
     | '/api/public/v1/'
     | '/api/v1/files/'
+    | '/api/v1/folders/'
     | '/api/public/v1/agent/heartbeat'
     | '/api/public/v1/chat/$slug'
     | '/api/public/v1/files/$id'
@@ -866,6 +876,7 @@ export interface FileRouteTypes {
     | '/api/v1/files/$id'
     | '/api/public/v1'
     | '/api/v1/files'
+    | '/api/v1/folders'
     | '/api/public/v1/agent/heartbeat'
     | '/api/public/v1/chat/$slug'
     | '/api/public/v1/files/$id'
@@ -945,6 +956,7 @@ export interface FileRouteTypes {
     | '/api/v1/files/$id'
     | '/api/public/v1/'
     | '/api/v1/files/'
+    | '/api/v1/folders/'
     | '/api/public/v1/agent/heartbeat'
     | '/api/public/v1/chat/$slug'
     | '/api/public/v1/files/$id'
@@ -1004,6 +1016,7 @@ export interface RootRouteChildren {
   ApiV1FilesIdRoute: typeof ApiV1FilesIdRoute
   ApiPublicV1IndexRoute: typeof ApiPublicV1IndexRoute
   ApiV1FilesIndexRoute: typeof ApiV1FilesIndexRoute
+  ApiV1FoldersIndexRoute: typeof ApiV1FoldersIndexRoute
   ApiPublicV1AgentHeartbeatRoute: typeof ApiPublicV1AgentHeartbeatRoute
   ApiPublicV1ChatSlugRoute: typeof ApiPublicV1ChatSlugRoute
   ApiPublicV1FilesIdRoute: typeof ApiPublicV1FilesIdRouteWithChildren
@@ -1352,6 +1365,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/ai/deployments'
       preLoaderRoute: typeof AuthenticatedAiDeploymentsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/api/v1/folders/': {
+      id: '/api/v1/folders/'
+      path: '/api/v1/folders'
+      fullPath: '/api/v1/folders/'
+      preLoaderRoute: typeof ApiV1FoldersIndexRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/api/v1/files/': {
       id: '/api/v1/files/'
@@ -1702,6 +1722,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiV1FilesIdRoute: ApiV1FilesIdRoute,
   ApiPublicV1IndexRoute: ApiPublicV1IndexRoute,
   ApiV1FilesIndexRoute: ApiV1FilesIndexRoute,
+  ApiV1FoldersIndexRoute: ApiV1FoldersIndexRoute,
   ApiPublicV1AgentHeartbeatRoute: ApiPublicV1AgentHeartbeatRoute,
   ApiPublicV1ChatSlugRoute: ApiPublicV1ChatSlugRoute,
   ApiPublicV1FilesIdRoute: ApiPublicV1FilesIdRouteWithChildren,
