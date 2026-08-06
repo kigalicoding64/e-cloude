@@ -46,6 +46,7 @@ import { Route as AuthenticatedApiKeysRouteImport } from './routes/_authenticate
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedActivityRouteImport } from './routes/_authenticated/activity'
 import { Route as DotwellKnownEgreedCloudDotjsonRouteImport } from './routes/[.]well-known/egreed-cloud[.]json'
+import { Route as ApiFilesIndexRouteImport } from './routes/api/files/index'
 import { Route as ApiV1HealthRouteImport } from './routes/api/v1/health'
 import { Route as AuthenticatedOrganizationsIdRouteImport } from './routes/_authenticated/organizations.$id'
 import { Route as AuthenticatedAiOrchestratorsRouteImport } from './routes/_authenticated/ai.orchestrators'
@@ -269,6 +270,11 @@ const DotwellKnownEgreedCloudDotjsonRoute =
     path: '/.well-known/egreed-cloud.json',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiFilesIndexRoute = ApiFilesIndexRouteImport.update({
+  id: '/api/files/',
+  path: '/api/files/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiV1HealthRoute = ApiV1HealthRouteImport.update({
   id: '/api/v1/health',
   path: '/api/v1/health',
@@ -492,6 +498,7 @@ export interface FileRoutesByFullPath {
   '/ai/orchestrators': typeof AuthenticatedAiOrchestratorsRoute
   '/organizations/$id': typeof AuthenticatedOrganizationsIdRoute
   '/api/v1/health': typeof ApiV1HealthRoute
+  '/api/files/': typeof ApiFilesIndexRoute
   '/ai/models/$slug': typeof AuthenticatedAiModelsSlugRoute
   '/api/public/v1/health': typeof ApiPublicV1HealthRoute
   '/api/public/v1/live': typeof ApiPublicV1LiveRoute
@@ -563,6 +570,7 @@ export interface FileRoutesByTo {
   '/ai/orchestrators': typeof AuthenticatedAiOrchestratorsRoute
   '/organizations/$id': typeof AuthenticatedOrganizationsIdRoute
   '/api/v1/health': typeof ApiV1HealthRoute
+  '/api/files': typeof ApiFilesIndexRoute
   '/ai/models/$slug': typeof AuthenticatedAiModelsSlugRoute
   '/api/public/v1/health': typeof ApiPublicV1HealthRoute
   '/api/public/v1/live': typeof ApiPublicV1LiveRoute
@@ -636,6 +644,7 @@ export interface FileRoutesById {
   '/_authenticated/ai/orchestrators': typeof AuthenticatedAiOrchestratorsRoute
   '/_authenticated/organizations/$id': typeof AuthenticatedOrganizationsIdRoute
   '/api/v1/health': typeof ApiV1HealthRoute
+  '/api/files/': typeof ApiFilesIndexRoute
   '/_authenticated/ai/models/$slug': typeof AuthenticatedAiModelsSlugRoute
   '/api/public/v1/health': typeof ApiPublicV1HealthRoute
   '/api/public/v1/live': typeof ApiPublicV1LiveRoute
@@ -709,6 +718,7 @@ export interface FileRouteTypes {
     | '/ai/orchestrators'
     | '/organizations/$id'
     | '/api/v1/health'
+    | '/api/files/'
     | '/ai/models/$slug'
     | '/api/public/v1/health'
     | '/api/public/v1/live'
@@ -780,6 +790,7 @@ export interface FileRouteTypes {
     | '/ai/orchestrators'
     | '/organizations/$id'
     | '/api/v1/health'
+    | '/api/files'
     | '/ai/models/$slug'
     | '/api/public/v1/health'
     | '/api/public/v1/live'
@@ -852,6 +863,7 @@ export interface FileRouteTypes {
     | '/_authenticated/ai/orchestrators'
     | '/_authenticated/organizations/$id'
     | '/api/v1/health'
+    | '/api/files/'
     | '/_authenticated/ai/models/$slug'
     | '/api/public/v1/health'
     | '/api/public/v1/live'
@@ -905,6 +917,7 @@ export interface RootRouteChildren {
   SdkEgreedCloudDotjsRoute: typeof SdkEgreedCloudDotjsRoute
   SdkEgreed_cloudDotpyRoute: typeof SdkEgreed_cloudDotpyRoute
   ApiV1HealthRoute: typeof ApiV1HealthRoute
+  ApiFilesIndexRoute: typeof ApiFilesIndexRoute
   ApiPublicV1HealthRoute: typeof ApiPublicV1HealthRoute
   ApiPublicV1LiveRoute: typeof ApiPublicV1LiveRoute
   ApiPublicV1MeRoute: typeof ApiPublicV1MeRoute
@@ -1190,6 +1203,13 @@ declare module '@tanstack/react-router' {
       path: '/.well-known/egreed-cloud.json'
       fullPath: '/.well-known/egreed-cloud.json'
       preLoaderRoute: typeof DotwellKnownEgreedCloudDotjsonRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/files/': {
+      id: '/api/files/'
+      path: '/api/files'
+      fullPath: '/api/files/'
+      preLoaderRoute: typeof ApiFilesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/v1/health': {
@@ -1547,6 +1567,7 @@ const rootRouteChildren: RootRouteChildren = {
   SdkEgreedCloudDotjsRoute: SdkEgreedCloudDotjsRoute,
   SdkEgreed_cloudDotpyRoute: SdkEgreed_cloudDotpyRoute,
   ApiV1HealthRoute: ApiV1HealthRoute,
+  ApiFilesIndexRoute: ApiFilesIndexRoute,
   ApiPublicV1HealthRoute: ApiPublicV1HealthRoute,
   ApiPublicV1LiveRoute: ApiPublicV1LiveRoute,
   ApiPublicV1MeRoute: ApiPublicV1MeRoute,
