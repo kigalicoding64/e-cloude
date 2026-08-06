@@ -30,6 +30,7 @@ import { Route as SdkEgreedCloudDotjsRouteImport } from './routes/sdk/egreed-clo
 import { Route as STokenRouteImport } from './routes/s.$token'
 import { Route as ApiUploadRouteImport } from './routes/api/upload'
 import { Route as ApiHealthRouteImport } from './routes/api/health'
+import { Route as ApiSplatRouteImport } from './routes/api/$'
 import { Route as AuthenticatedTrashRouteImport } from './routes/_authenticated/trash'
 import { Route as AuthenticatedStorageAnalyticsRouteImport } from './routes/_authenticated/storage-analytics'
 import { Route as AuthenticatedSharedRouteImport } from './routes/_authenticated/shared'
@@ -190,6 +191,11 @@ const ApiUploadRoute = ApiUploadRouteImport.update({
 const ApiHealthRoute = ApiHealthRouteImport.update({
   id: '/api/health',
   path: '/api/health',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiSplatRoute = ApiSplatRouteImport.update({
+  id: '/api/$',
+  path: '/api/$',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedTrashRoute = AuthenticatedTrashRouteImport.update({
@@ -531,6 +537,7 @@ export interface FileRoutesByFullPath {
   '/shared': typeof AuthenticatedSharedRoute
   '/storage-analytics': typeof AuthenticatedStorageAnalyticsRoute
   '/trash': typeof AuthenticatedTrashRoute
+  '/api/$': typeof ApiSplatRoute
   '/api/health': typeof ApiHealthRoute
   '/api/upload': typeof ApiUploadRoute
   '/s/$token': typeof STokenRoute
@@ -610,6 +617,7 @@ export interface FileRoutesByTo {
   '/shared': typeof AuthenticatedSharedRoute
   '/storage-analytics': typeof AuthenticatedStorageAnalyticsRoute
   '/trash': typeof AuthenticatedTrashRoute
+  '/api/$': typeof ApiSplatRoute
   '/api/health': typeof ApiHealthRoute
   '/api/upload': typeof ApiUploadRoute
   '/s/$token': typeof STokenRoute
@@ -691,6 +699,7 @@ export interface FileRoutesById {
   '/_authenticated/shared': typeof AuthenticatedSharedRoute
   '/_authenticated/storage-analytics': typeof AuthenticatedStorageAnalyticsRoute
   '/_authenticated/trash': typeof AuthenticatedTrashRoute
+  '/api/$': typeof ApiSplatRoute
   '/api/health': typeof ApiHealthRoute
   '/api/upload': typeof ApiUploadRoute
   '/s/$token': typeof STokenRoute
@@ -772,6 +781,7 @@ export interface FileRouteTypes {
     | '/shared'
     | '/storage-analytics'
     | '/trash'
+    | '/api/$'
     | '/api/health'
     | '/api/upload'
     | '/s/$token'
@@ -851,6 +861,7 @@ export interface FileRouteTypes {
     | '/shared'
     | '/storage-analytics'
     | '/trash'
+    | '/api/$'
     | '/api/health'
     | '/api/upload'
     | '/s/$token'
@@ -931,6 +942,7 @@ export interface FileRouteTypes {
     | '/_authenticated/shared'
     | '/_authenticated/storage-analytics'
     | '/_authenticated/trash'
+    | '/api/$'
     | '/api/health'
     | '/api/upload'
     | '/s/$token'
@@ -996,6 +1008,7 @@ export interface RootRouteChildren {
   PostmanDotjsonRoute: typeof PostmanDotjsonRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   DotwellKnownEgreedCloudDotjsonRoute: typeof DotwellKnownEgreedCloudDotjsonRoute
+  ApiSplatRoute: typeof ApiSplatRoute
   ApiHealthRoute: typeof ApiHealthRoute
   ApiUploadRoute: typeof ApiUploadRoute
   STokenRoute: typeof STokenRoute
@@ -1182,6 +1195,13 @@ declare module '@tanstack/react-router' {
       path: '/api/health'
       fullPath: '/api/health'
       preLoaderRoute: typeof ApiHealthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/$': {
+      id: '/api/$'
+      path: '/api/$'
+      fullPath: '/api/$'
+      preLoaderRoute: typeof ApiSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/trash': {
@@ -1702,6 +1722,7 @@ const rootRouteChildren: RootRouteChildren = {
   PostmanDotjsonRoute: PostmanDotjsonRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   DotwellKnownEgreedCloudDotjsonRoute: DotwellKnownEgreedCloudDotjsonRoute,
+  ApiSplatRoute: ApiSplatRoute,
   ApiHealthRoute: ApiHealthRoute,
   ApiUploadRoute: ApiUploadRoute,
   STokenRoute: STokenRoute,
