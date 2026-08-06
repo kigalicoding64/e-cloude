@@ -290,12 +290,13 @@ export async function handleGetFile({
 
   return jsonResponse(
     {
+      // Legacy flat fields first (pre-existing integrations read these),
+      // then the documented envelope fields.
+      ...file,
       success: true,
       client: client.clientName,
       client_id: client.clientId,
       file,
-      // Legacy flat fields (pre-existing integrations read these).
-      ...file,
       download_url: downloadUrl,
       download_expires_in: downloadUrl ? 300 : null,
       download_expires_at: downloadUrl ? new Date(Date.now() + 300_000).toISOString() : null,
