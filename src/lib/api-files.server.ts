@@ -383,3 +383,26 @@ export function handleUnknownApiPath(request: Request): Response {
     404,
   );
 }
+
+/* ------------------------------------------------------------------ */
+/* Internal forwarder                                                  */
+/* ------------------------------------------------------------------ */
+
+/**
+ * Forward a request to the canonical `/api/public/v1/...` implementation so
+ * alias paths behave identically without duplicating logic.
+ */
+export async function forwardToCanonical(request: Request, canonicalPath: string): Promise<Response> {
+  const url = new URL(request.url);
+  const target = new URL(canonicalPath, url.origin);
+  target.search = url.search;
+  const init: RequestInit = {
+    method: request.method,
+    headers: request.headers,
+    ...(request.method === "GET" || request.method === "HEAD" ? {} : { body: await request.arrayBuffer() }),
+  };
+  const response = await fetch(target.toString(), init);
+  const headers = new Headers(response.headers);
+  for (const [k, v] of Object.entries(CORS_HEADERS)) headers.set(k, v);
+  return new Response(response.body, { status: response.status, headers });
+}
