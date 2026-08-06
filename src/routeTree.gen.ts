@@ -49,6 +49,7 @@ import { Route as AuthenticatedActivityRouteImport } from './routes/_authenticat
 import { Route as DotwellKnownEgreedCloudDotjsonRouteImport } from './routes/[.]well-known/egreed-cloud[.]json'
 import { Route as ApiFilesIndexRouteImport } from './routes/api/files/index'
 import { Route as ApiV1UploadRouteImport } from './routes/api/v1/upload'
+import { Route as ApiV1MeRouteImport } from './routes/api/v1/me'
 import { Route as ApiV1HealthRouteImport } from './routes/api/v1/health'
 import { Route as ApiFilesIdRouteImport } from './routes/api/files/$id'
 import { Route as AuthenticatedOrganizationsIdRouteImport } from './routes/_authenticated/organizations.$id'
@@ -288,6 +289,11 @@ const ApiFilesIndexRoute = ApiFilesIndexRouteImport.update({
 const ApiV1UploadRoute = ApiV1UploadRouteImport.update({
   id: '/api/v1/upload',
   path: '/api/v1/upload',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiV1MeRoute = ApiV1MeRouteImport.update({
+  id: '/api/v1/me',
+  path: '/api/v1/me',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiV1HealthRoute = ApiV1HealthRouteImport.update({
@@ -530,6 +536,7 @@ export interface FileRoutesByFullPath {
   '/organizations/$id': typeof AuthenticatedOrganizationsIdRoute
   '/api/files/$id': typeof ApiFilesIdRoute
   '/api/v1/health': typeof ApiV1HealthRoute
+  '/api/v1/me': typeof ApiV1MeRoute
   '/api/v1/upload': typeof ApiV1UploadRoute
   '/api/files/': typeof ApiFilesIndexRoute
   '/ai/models/$slug': typeof AuthenticatedAiModelsSlugRoute
@@ -607,6 +614,7 @@ export interface FileRoutesByTo {
   '/organizations/$id': typeof AuthenticatedOrganizationsIdRoute
   '/api/files/$id': typeof ApiFilesIdRoute
   '/api/v1/health': typeof ApiV1HealthRoute
+  '/api/v1/me': typeof ApiV1MeRoute
   '/api/v1/upload': typeof ApiV1UploadRoute
   '/api/files': typeof ApiFilesIndexRoute
   '/ai/models/$slug': typeof AuthenticatedAiModelsSlugRoute
@@ -686,6 +694,7 @@ export interface FileRoutesById {
   '/_authenticated/organizations/$id': typeof AuthenticatedOrganizationsIdRoute
   '/api/files/$id': typeof ApiFilesIdRoute
   '/api/v1/health': typeof ApiV1HealthRoute
+  '/api/v1/me': typeof ApiV1MeRoute
   '/api/v1/upload': typeof ApiV1UploadRoute
   '/api/files/': typeof ApiFilesIndexRoute
   '/_authenticated/ai/models/$slug': typeof AuthenticatedAiModelsSlugRoute
@@ -765,6 +774,7 @@ export interface FileRouteTypes {
     | '/organizations/$id'
     | '/api/files/$id'
     | '/api/v1/health'
+    | '/api/v1/me'
     | '/api/v1/upload'
     | '/api/files/'
     | '/ai/models/$slug'
@@ -842,6 +852,7 @@ export interface FileRouteTypes {
     | '/organizations/$id'
     | '/api/files/$id'
     | '/api/v1/health'
+    | '/api/v1/me'
     | '/api/v1/upload'
     | '/api/files'
     | '/ai/models/$slug'
@@ -920,6 +931,7 @@ export interface FileRouteTypes {
     | '/_authenticated/organizations/$id'
     | '/api/files/$id'
     | '/api/v1/health'
+    | '/api/v1/me'
     | '/api/v1/upload'
     | '/api/files/'
     | '/_authenticated/ai/models/$slug'
@@ -979,6 +991,7 @@ export interface RootRouteChildren {
   SdkEgreed_cloudDotpyRoute: typeof SdkEgreed_cloudDotpyRoute
   ApiFilesIdRoute: typeof ApiFilesIdRoute
   ApiV1HealthRoute: typeof ApiV1HealthRoute
+  ApiV1MeRoute: typeof ApiV1MeRoute
   ApiV1UploadRoute: typeof ApiV1UploadRoute
   ApiFilesIndexRoute: typeof ApiFilesIndexRoute
   ApiPublicV1HealthRoute: typeof ApiPublicV1HealthRoute
@@ -1289,6 +1302,13 @@ declare module '@tanstack/react-router' {
       path: '/api/v1/upload'
       fullPath: '/api/v1/upload'
       preLoaderRoute: typeof ApiV1UploadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/v1/me': {
+      id: '/api/v1/me'
+      path: '/api/v1/me'
+      fullPath: '/api/v1/me'
+      preLoaderRoute: typeof ApiV1MeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/v1/health': {
@@ -1669,6 +1689,7 @@ const rootRouteChildren: RootRouteChildren = {
   SdkEgreed_cloudDotpyRoute: SdkEgreed_cloudDotpyRoute,
   ApiFilesIdRoute: ApiFilesIdRoute,
   ApiV1HealthRoute: ApiV1HealthRoute,
+  ApiV1MeRoute: ApiV1MeRoute,
   ApiV1UploadRoute: ApiV1UploadRoute,
   ApiFilesIndexRoute: ApiFilesIndexRoute,
   ApiPublicV1HealthRoute: ApiPublicV1HealthRoute,
