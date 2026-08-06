@@ -46,6 +46,7 @@ import { Route as AuthenticatedApiKeysRouteImport } from './routes/_authenticate
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedActivityRouteImport } from './routes/_authenticated/activity'
 import { Route as DotwellKnownEgreedCloudDotjsonRouteImport } from './routes/[.]well-known/egreed-cloud[.]json'
+import { Route as ApiV1HealthRouteImport } from './routes/api/v1/health'
 import { Route as AuthenticatedOrganizationsIdRouteImport } from './routes/_authenticated/organizations.$id'
 import { Route as AuthenticatedAiOrchestratorsRouteImport } from './routes/_authenticated/ai.orchestrators'
 import { Route as AuthenticatedAiModelsRouteImport } from './routes/_authenticated/ai.models'
@@ -268,6 +269,11 @@ const DotwellKnownEgreedCloudDotjsonRoute =
     path: '/.well-known/egreed-cloud.json',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiV1HealthRoute = ApiV1HealthRouteImport.update({
+  id: '/api/v1/health',
+  path: '/api/v1/health',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedOrganizationsIdRoute =
   AuthenticatedOrganizationsIdRouteImport.update({
     id: '/$id',
@@ -485,6 +491,7 @@ export interface FileRoutesByFullPath {
   '/ai/models': typeof AuthenticatedAiModelsRouteWithChildren
   '/ai/orchestrators': typeof AuthenticatedAiOrchestratorsRoute
   '/organizations/$id': typeof AuthenticatedOrganizationsIdRoute
+  '/api/v1/health': typeof ApiV1HealthRoute
   '/ai/models/$slug': typeof AuthenticatedAiModelsSlugRoute
   '/api/public/v1/health': typeof ApiPublicV1HealthRoute
   '/api/public/v1/live': typeof ApiPublicV1LiveRoute
@@ -555,6 +562,7 @@ export interface FileRoutesByTo {
   '/ai/models': typeof AuthenticatedAiModelsRouteWithChildren
   '/ai/orchestrators': typeof AuthenticatedAiOrchestratorsRoute
   '/organizations/$id': typeof AuthenticatedOrganizationsIdRoute
+  '/api/v1/health': typeof ApiV1HealthRoute
   '/ai/models/$slug': typeof AuthenticatedAiModelsSlugRoute
   '/api/public/v1/health': typeof ApiPublicV1HealthRoute
   '/api/public/v1/live': typeof ApiPublicV1LiveRoute
@@ -627,6 +635,7 @@ export interface FileRoutesById {
   '/_authenticated/ai/models': typeof AuthenticatedAiModelsRouteWithChildren
   '/_authenticated/ai/orchestrators': typeof AuthenticatedAiOrchestratorsRoute
   '/_authenticated/organizations/$id': typeof AuthenticatedOrganizationsIdRoute
+  '/api/v1/health': typeof ApiV1HealthRoute
   '/_authenticated/ai/models/$slug': typeof AuthenticatedAiModelsSlugRoute
   '/api/public/v1/health': typeof ApiPublicV1HealthRoute
   '/api/public/v1/live': typeof ApiPublicV1LiveRoute
@@ -699,6 +708,7 @@ export interface FileRouteTypes {
     | '/ai/models'
     | '/ai/orchestrators'
     | '/organizations/$id'
+    | '/api/v1/health'
     | '/ai/models/$slug'
     | '/api/public/v1/health'
     | '/api/public/v1/live'
@@ -769,6 +779,7 @@ export interface FileRouteTypes {
     | '/ai/models'
     | '/ai/orchestrators'
     | '/organizations/$id'
+    | '/api/v1/health'
     | '/ai/models/$slug'
     | '/api/public/v1/health'
     | '/api/public/v1/live'
@@ -840,6 +851,7 @@ export interface FileRouteTypes {
     | '/_authenticated/ai/models'
     | '/_authenticated/ai/orchestrators'
     | '/_authenticated/organizations/$id'
+    | '/api/v1/health'
     | '/_authenticated/ai/models/$slug'
     | '/api/public/v1/health'
     | '/api/public/v1/live'
@@ -892,6 +904,7 @@ export interface RootRouteChildren {
   STokenRoute: typeof STokenRoute
   SdkEgreedCloudDotjsRoute: typeof SdkEgreedCloudDotjsRoute
   SdkEgreed_cloudDotpyRoute: typeof SdkEgreed_cloudDotpyRoute
+  ApiV1HealthRoute: typeof ApiV1HealthRoute
   ApiPublicV1HealthRoute: typeof ApiPublicV1HealthRoute
   ApiPublicV1LiveRoute: typeof ApiPublicV1LiveRoute
   ApiPublicV1MeRoute: typeof ApiPublicV1MeRoute
@@ -1177,6 +1190,13 @@ declare module '@tanstack/react-router' {
       path: '/.well-known/egreed-cloud.json'
       fullPath: '/.well-known/egreed-cloud.json'
       preLoaderRoute: typeof DotwellKnownEgreedCloudDotjsonRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/v1/health': {
+      id: '/api/v1/health'
+      path: '/api/v1/health'
+      fullPath: '/api/v1/health'
+      preLoaderRoute: typeof ApiV1HealthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/organizations/$id': {
@@ -1526,6 +1546,7 @@ const rootRouteChildren: RootRouteChildren = {
   STokenRoute: STokenRoute,
   SdkEgreedCloudDotjsRoute: SdkEgreedCloudDotjsRoute,
   SdkEgreed_cloudDotpyRoute: SdkEgreed_cloudDotpyRoute,
+  ApiV1HealthRoute: ApiV1HealthRoute,
   ApiPublicV1HealthRoute: ApiPublicV1HealthRoute,
   ApiPublicV1LiveRoute: ApiPublicV1LiveRoute,
   ApiPublicV1MeRoute: ApiPublicV1MeRoute,
