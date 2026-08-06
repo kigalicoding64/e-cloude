@@ -16,6 +16,7 @@ import { Route as OpenapiDotyamlRouteImport } from './routes/openapi[.]yaml'
 import { Route as OpenapiDotjsonRouteImport } from './routes/openapi[.]json'
 import { Route as LlmsDottxtRouteImport } from './routes/llms[.]txt'
 import { Route as InsomniaDotjsonRouteImport } from './routes/insomnia[.]json'
+import { Route as HealthRouteImport } from './routes/health'
 import { Route as DocsRouteImport } from './routes/docs'
 import { Route as DevelopersRouteImport } from './routes/developers'
 import { Route as DeveloperDocsRouteImport } from './routes/developer-docs'
@@ -110,6 +111,11 @@ const LlmsDottxtRoute = LlmsDottxtRouteImport.update({
 const InsomniaDotjsonRoute = InsomniaDotjsonRouteImport.update({
   id: '/insomnia.json',
   path: '/insomnia.json',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HealthRoute = HealthRouteImport.update({
+  id: '/health',
+  path: '/health',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DocsRoute = DocsRouteImport.update({
@@ -440,6 +446,7 @@ export interface FileRoutesByFullPath {
   '/developer-docs': typeof DeveloperDocsRoute
   '/developers': typeof DevelopersRoute
   '/docs': typeof DocsRoute
+  '/health': typeof HealthRoute
   '/insomnia.json': typeof InsomniaDotjsonRoute
   '/llms.txt': typeof LlmsDottxtRoute
   '/openapi.json': typeof OpenapiDotjsonRoute
@@ -508,6 +515,7 @@ export interface FileRoutesByTo {
   '/developer-docs': typeof DeveloperDocsRoute
   '/developers': typeof DevelopersRoute
   '/docs': typeof DocsRoute
+  '/health': typeof HealthRoute
   '/insomnia.json': typeof InsomniaDotjsonRoute
   '/llms.txt': typeof LlmsDottxtRoute
   '/openapi.json': typeof OpenapiDotjsonRoute
@@ -578,6 +586,7 @@ export interface FileRoutesById {
   '/developer-docs': typeof DeveloperDocsRoute
   '/developers': typeof DevelopersRoute
   '/docs': typeof DocsRoute
+  '/health': typeof HealthRoute
   '/insomnia.json': typeof InsomniaDotjsonRoute
   '/llms.txt': typeof LlmsDottxtRoute
   '/openapi.json': typeof OpenapiDotjsonRoute
@@ -648,6 +657,7 @@ export interface FileRouteTypes {
     | '/developer-docs'
     | '/developers'
     | '/docs'
+    | '/health'
     | '/insomnia.json'
     | '/llms.txt'
     | '/openapi.json'
@@ -716,6 +726,7 @@ export interface FileRouteTypes {
     | '/developer-docs'
     | '/developers'
     | '/docs'
+    | '/health'
     | '/insomnia.json'
     | '/llms.txt'
     | '/openapi.json'
@@ -785,6 +796,7 @@ export interface FileRouteTypes {
     | '/developer-docs'
     | '/developers'
     | '/docs'
+    | '/health'
     | '/insomnia.json'
     | '/llms.txt'
     | '/openapi.json'
@@ -855,6 +867,7 @@ export interface RootRouteChildren {
   DeveloperDocsRoute: typeof DeveloperDocsRoute
   DevelopersRoute: typeof DevelopersRoute
   DocsRoute: typeof DocsRoute
+  HealthRoute: typeof HealthRoute
   InsomniaDotjsonRoute: typeof InsomniaDotjsonRoute
   LlmsDottxtRoute: typeof LlmsDottxtRoute
   OpenapiDotjsonRoute: typeof OpenapiDotjsonRoute
@@ -941,6 +954,13 @@ declare module '@tanstack/react-router' {
       path: '/insomnia.json'
       fullPath: '/insomnia.json'
       preLoaderRoute: typeof InsomniaDotjsonRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/health': {
+      id: '/health'
+      path: '/health'
+      fullPath: '/health'
+      preLoaderRoute: typeof HealthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/docs': {
@@ -1473,6 +1493,7 @@ const rootRouteChildren: RootRouteChildren = {
   DeveloperDocsRoute: DeveloperDocsRoute,
   DevelopersRoute: DevelopersRoute,
   DocsRoute: DocsRoute,
+  HealthRoute: HealthRoute,
   InsomniaDotjsonRoute: InsomniaDotjsonRoute,
   LlmsDottxtRoute: LlmsDottxtRoute,
   OpenapiDotjsonRoute: OpenapiDotjsonRoute,
@@ -1515,13 +1536,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
