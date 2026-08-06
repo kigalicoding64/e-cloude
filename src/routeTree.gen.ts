@@ -28,6 +28,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as SdkEgreed_cloudDotpyRouteImport } from './routes/sdk/egreed_cloud[.]py'
 import { Route as SdkEgreedCloudDotjsRouteImport } from './routes/sdk/egreed-cloud[.]js'
 import { Route as STokenRouteImport } from './routes/s.$token'
+import { Route as ApiUploadRouteImport } from './routes/api/upload'
 import { Route as ApiHealthRouteImport } from './routes/api/health'
 import { Route as AuthenticatedTrashRouteImport } from './routes/_authenticated/trash'
 import { Route as AuthenticatedStorageAnalyticsRouteImport } from './routes/_authenticated/storage-analytics'
@@ -176,6 +177,11 @@ const SdkEgreedCloudDotjsRoute = SdkEgreedCloudDotjsRouteImport.update({
 const STokenRoute = STokenRouteImport.update({
   id: '/s/$token',
   path: '/s/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiUploadRoute = ApiUploadRouteImport.update({
+  id: '/api/upload',
+  path: '/api/upload',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiHealthRoute = ApiHealthRouteImport.update({
@@ -508,6 +514,7 @@ export interface FileRoutesByFullPath {
   '/storage-analytics': typeof AuthenticatedStorageAnalyticsRoute
   '/trash': typeof AuthenticatedTrashRoute
   '/api/health': typeof ApiHealthRoute
+  '/api/upload': typeof ApiUploadRoute
   '/s/$token': typeof STokenRoute
   '/sdk/egreed-cloud.js': typeof SdkEgreedCloudDotjsRoute
   '/sdk/egreed_cloud.py': typeof SdkEgreed_cloudDotpyRoute
@@ -583,6 +590,7 @@ export interface FileRoutesByTo {
   '/storage-analytics': typeof AuthenticatedStorageAnalyticsRoute
   '/trash': typeof AuthenticatedTrashRoute
   '/api/health': typeof ApiHealthRoute
+  '/api/upload': typeof ApiUploadRoute
   '/s/$token': typeof STokenRoute
   '/sdk/egreed-cloud.js': typeof SdkEgreedCloudDotjsRoute
   '/sdk/egreed_cloud.py': typeof SdkEgreed_cloudDotpyRoute
@@ -660,6 +668,7 @@ export interface FileRoutesById {
   '/_authenticated/storage-analytics': typeof AuthenticatedStorageAnalyticsRoute
   '/_authenticated/trash': typeof AuthenticatedTrashRoute
   '/api/health': typeof ApiHealthRoute
+  '/api/upload': typeof ApiUploadRoute
   '/s/$token': typeof STokenRoute
   '/sdk/egreed-cloud.js': typeof SdkEgreedCloudDotjsRoute
   '/sdk/egreed_cloud.py': typeof SdkEgreed_cloudDotpyRoute
@@ -737,6 +746,7 @@ export interface FileRouteTypes {
     | '/storage-analytics'
     | '/trash'
     | '/api/health'
+    | '/api/upload'
     | '/s/$token'
     | '/sdk/egreed-cloud.js'
     | '/sdk/egreed_cloud.py'
@@ -812,6 +822,7 @@ export interface FileRouteTypes {
     | '/storage-analytics'
     | '/trash'
     | '/api/health'
+    | '/api/upload'
     | '/s/$token'
     | '/sdk/egreed-cloud.js'
     | '/sdk/egreed_cloud.py'
@@ -888,6 +899,7 @@ export interface FileRouteTypes {
     | '/_authenticated/storage-analytics'
     | '/_authenticated/trash'
     | '/api/health'
+    | '/api/upload'
     | '/s/$token'
     | '/sdk/egreed-cloud.js'
     | '/sdk/egreed_cloud.py'
@@ -949,6 +961,7 @@ export interface RootRouteChildren {
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   DotwellKnownEgreedCloudDotjsonRoute: typeof DotwellKnownEgreedCloudDotjsonRoute
   ApiHealthRoute: typeof ApiHealthRoute
+  ApiUploadRoute: typeof ApiUploadRoute
   STokenRoute: typeof STokenRoute
   SdkEgreedCloudDotjsRoute: typeof SdkEgreedCloudDotjsRoute
   SdkEgreed_cloudDotpyRoute: typeof SdkEgreed_cloudDotpyRoute
@@ -1116,6 +1129,13 @@ declare module '@tanstack/react-router' {
       path: '/s/$token'
       fullPath: '/s/$token'
       preLoaderRoute: typeof STokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/upload': {
+      id: '/api/upload'
+      path: '/api/upload'
+      fullPath: '/api/upload'
+      preLoaderRoute: typeof ApiUploadRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/health': {
@@ -1623,6 +1643,7 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   DotwellKnownEgreedCloudDotjsonRoute: DotwellKnownEgreedCloudDotjsonRoute,
   ApiHealthRoute: ApiHealthRoute,
+  ApiUploadRoute: ApiUploadRoute,
   STokenRoute: STokenRoute,
   SdkEgreedCloudDotjsRoute: SdkEgreedCloudDotjsRoute,
   SdkEgreed_cloudDotpyRoute: SdkEgreed_cloudDotpyRoute,
