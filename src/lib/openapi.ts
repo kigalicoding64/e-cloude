@@ -42,11 +42,17 @@ export function buildOpenApiSpec(baseUrl = "https://cloud.egreedtech.org") {
       title: "E-Cloud API",
       version: "1.1.0",
       description:
-        "Cloud storage API for third-party apps. Authenticate with `X-API-Key: eck_live_...`. " +
+        "Cloud storage API for third-party apps. Authenticate with `X-API-Key: eck_live_...` " +
+        "or `Authorization: Bearer eck_live_...`. " +
         "Keys carry fine-grained scopes: " +
-        API_SCOPES.map((s) => `\`${s}\` — ${SCOPE_DESCRIPTIONS[s]}`).join("; ") + ".",
+        API_SCOPES.map((s) => `\`${s}\` — ${SCOPE_DESCRIPTIONS[s]}`).join("; ") + ". " +
+        "Every endpoint is reachable on three interchangeable base URLs: `/api/v1`, `/api/files`-style " +
+        "short paths, and the canonical `/api/public/v1`. All responses are JSON — HTML is never returned.",
     },
-    servers: [{ url: `${baseUrl}/api/public/v1` }],
+    servers: [
+      { url: `${baseUrl}/api/v1`, description: "Versioned base URL (recommended)" },
+      { url: `${baseUrl}/api/public/v1`, description: "Canonical always-public base URL" },
+    ],
     components: {
       schemas: { Error: err },
       securitySchemes: { ApiKeyAuth: { type: "apiKey", in: "header", name: "X-API-Key" } },
@@ -54,7 +60,13 @@ export function buildOpenApiSpec(baseUrl = "https://cloud.egreedtech.org") {
     security: [{ ApiKeyAuth: [] }],
     paths: {
       "/": { get: { summary: "Discovery document", security: [], responses: { "200": ok("Discovery") } } },
-      "/health": { get: { summary: "Liveness probe", security: [], responses: { "200": ok("Healthy"), "503": errorResponse("Degraded") } } },
+      "/health": {
+        get: {
+          summary: "Health probe — api, database, storage and authentication status",
+          security: [],
+          responses: { "200": ok("Online"), "503": errorResponse("Degraded") },
+        },
+      },
       "/me": {
         get: {
           summary: "Account info and granted key permissions",
@@ -64,12 +76,20 @@ export function buildOpenApiSpec(baseUrl = "https://cloud.egreedtech.org") {
       },
       "/files": {
         get: {
-          summary: "List files (scope: read)",
+          summary: "List files assigned to the calling client (scope: read)",
+          description:
+            "Returns `{ success, client, client_id, owner_id, permissions, files[], pagination }`. " +
+            "Each file includes file_id, owner_id, client_id, file_name, file_type, file_size and permissions. " +
+            "When the client has no files the response is still 200 with an empty array and " +
+            "`message: \"No files assigned\"`.",
           tags: ["Files"],
           parameters: [
             { name: "folder", in: "query", schema: { type: "string", format: "uuid" } },
+            { name: "search", in: "query", description: "Case-insensitive file name search", schema: { type: "string" } },
             { name: "limit", in: "query", schema: { type: "integer", maximum: 200, default: 50 } },
             { name: "offset", in: "query", schema: { type: "integer", default: 0 } },
+            { name: "page", in: "query", description: "1-based page, used when offset is omitted", schema: { type: "integer", default: 1 } },
+            { name: "include_trashed", in: "query", schema: { type: "boolean", default: false } },
           ],
           responses: { "200": ok("File list"), ...common },
         },
