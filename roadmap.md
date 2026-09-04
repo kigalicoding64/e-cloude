@@ -1,5 +1,7 @@
 # Roadmap
 
-- [x] Eliminate the production `SUPABASE_URL` / `SUPABASE_PUBLISHABLE_KEY` missing-variable failure without exposing privileged keys
-- [ ] Publish the corrected API build
-- [ ] Verify production health, readiness, CORS, and API-key authentication behavior
+- [x] Verify the Lovable preview API and hosted backend
+- [x] Verify third-party CORS and API-key error handling
+- [x] Publish the current Lovable project build
+- [ ] Connect `cloud.egreedtech.org` to this Lovable project (currently points to an unmanaged Vercel deployment)
+- [ ] Re-test the custom domain after it serves this project's published build
