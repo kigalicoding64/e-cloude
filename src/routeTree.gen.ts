@@ -79,6 +79,7 @@ import { Route as ApiPublicV1FilesUploadUrlRouteImport } from './routes/api/publ
 import { Route as ApiPublicV1FilesUploadRouteImport } from './routes/api/public/v1/files/upload'
 import { Route as ApiPublicV1FilesCommitRouteImport } from './routes/api/public/v1/files/commit'
 import { Route as ApiPublicV1FilesIdRouteImport } from './routes/api/public/v1/files/$id'
+import { Route as ApiPublicV1DiagnosticsEnvRouteImport } from './routes/api/public/v1/diagnostics/env'
 import { Route as ApiPublicV1ChatSlugRouteImport } from './routes/api/public/v1/chat.$slug'
 import { Route as ApiPublicV1AgentHeartbeatRouteImport } from './routes/api/public/v1/agent/heartbeat'
 import { Route as ApiPublicV1UploadsIdCompleteRouteImport } from './routes/api/public/v1/uploads/$id.complete'
@@ -450,6 +451,12 @@ const ApiPublicV1FilesIdRoute = ApiPublicV1FilesIdRouteImport.update({
   path: '/api/public/v1/files/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicV1DiagnosticsEnvRoute =
+  ApiPublicV1DiagnosticsEnvRouteImport.update({
+    id: '/api/public/v1/diagnostics/env',
+    path: '/api/public/v1/diagnostics/env',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicV1ChatSlugRoute = ApiPublicV1ChatSlugRouteImport.update({
   id: '/api/public/v1/chat/$slug',
   path: '/api/public/v1/chat/$slug',
@@ -566,6 +573,7 @@ export interface FileRoutesByFullPath {
   '/api/v1/folders/': typeof ApiV1FoldersIndexRoute
   '/api/public/v1/agent/heartbeat': typeof ApiPublicV1AgentHeartbeatRoute
   '/api/public/v1/chat/$slug': typeof ApiPublicV1ChatSlugRoute
+  '/api/public/v1/diagnostics/env': typeof ApiPublicV1DiagnosticsEnvRoute
   '/api/public/v1/files/$id': typeof ApiPublicV1FilesIdRouteWithChildren
   '/api/public/v1/files/commit': typeof ApiPublicV1FilesCommitRoute
   '/api/public/v1/files/upload': typeof ApiPublicV1FilesUploadRoute
@@ -646,6 +654,7 @@ export interface FileRoutesByTo {
   '/api/v1/folders': typeof ApiV1FoldersIndexRoute
   '/api/public/v1/agent/heartbeat': typeof ApiPublicV1AgentHeartbeatRoute
   '/api/public/v1/chat/$slug': typeof ApiPublicV1ChatSlugRoute
+  '/api/public/v1/diagnostics/env': typeof ApiPublicV1DiagnosticsEnvRoute
   '/api/public/v1/files/$id': typeof ApiPublicV1FilesIdRouteWithChildren
   '/api/public/v1/files/commit': typeof ApiPublicV1FilesCommitRoute
   '/api/public/v1/files/upload': typeof ApiPublicV1FilesUploadRoute
@@ -728,6 +737,7 @@ export interface FileRoutesById {
   '/api/v1/folders/': typeof ApiV1FoldersIndexRoute
   '/api/public/v1/agent/heartbeat': typeof ApiPublicV1AgentHeartbeatRoute
   '/api/public/v1/chat/$slug': typeof ApiPublicV1ChatSlugRoute
+  '/api/public/v1/diagnostics/env': typeof ApiPublicV1DiagnosticsEnvRoute
   '/api/public/v1/files/$id': typeof ApiPublicV1FilesIdRouteWithChildren
   '/api/public/v1/files/commit': typeof ApiPublicV1FilesCommitRoute
   '/api/public/v1/files/upload': typeof ApiPublicV1FilesUploadRoute
@@ -810,6 +820,7 @@ export interface FileRouteTypes {
     | '/api/v1/folders/'
     | '/api/public/v1/agent/heartbeat'
     | '/api/public/v1/chat/$slug'
+    | '/api/public/v1/diagnostics/env'
     | '/api/public/v1/files/$id'
     | '/api/public/v1/files/commit'
     | '/api/public/v1/files/upload'
@@ -890,6 +901,7 @@ export interface FileRouteTypes {
     | '/api/v1/folders'
     | '/api/public/v1/agent/heartbeat'
     | '/api/public/v1/chat/$slug'
+    | '/api/public/v1/diagnostics/env'
     | '/api/public/v1/files/$id'
     | '/api/public/v1/files/commit'
     | '/api/public/v1/files/upload'
@@ -971,6 +983,7 @@ export interface FileRouteTypes {
     | '/api/v1/folders/'
     | '/api/public/v1/agent/heartbeat'
     | '/api/public/v1/chat/$slug'
+    | '/api/public/v1/diagnostics/env'
     | '/api/public/v1/files/$id'
     | '/api/public/v1/files/commit'
     | '/api/public/v1/files/upload'
@@ -1032,6 +1045,7 @@ export interface RootRouteChildren {
   ApiV1FoldersIndexRoute: typeof ApiV1FoldersIndexRoute
   ApiPublicV1AgentHeartbeatRoute: typeof ApiPublicV1AgentHeartbeatRoute
   ApiPublicV1ChatSlugRoute: typeof ApiPublicV1ChatSlugRoute
+  ApiPublicV1DiagnosticsEnvRoute: typeof ApiPublicV1DiagnosticsEnvRoute
   ApiPublicV1FilesIdRoute: typeof ApiPublicV1FilesIdRouteWithChildren
   ApiPublicV1FilesCommitRoute: typeof ApiPublicV1FilesCommitRoute
   ApiPublicV1FilesUploadRoute: typeof ApiPublicV1FilesUploadRoute
@@ -1540,6 +1554,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicV1FilesIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/v1/diagnostics/env': {
+      id: '/api/public/v1/diagnostics/env'
+      path: '/api/public/v1/diagnostics/env'
+      fullPath: '/api/public/v1/diagnostics/env'
+      preLoaderRoute: typeof ApiPublicV1DiagnosticsEnvRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/v1/chat/$slug': {
       id: '/api/public/v1/chat/$slug'
       path: '/api/public/v1/chat/$slug'
@@ -1746,6 +1767,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiV1FoldersIndexRoute: ApiV1FoldersIndexRoute,
   ApiPublicV1AgentHeartbeatRoute: ApiPublicV1AgentHeartbeatRoute,
   ApiPublicV1ChatSlugRoute: ApiPublicV1ChatSlugRoute,
+  ApiPublicV1DiagnosticsEnvRoute: ApiPublicV1DiagnosticsEnvRoute,
   ApiPublicV1FilesIdRoute: ApiPublicV1FilesIdRouteWithChildren,
   ApiPublicV1FilesCommitRoute: ApiPublicV1FilesCommitRoute,
   ApiPublicV1FilesUploadRoute: ApiPublicV1FilesUploadRoute,
