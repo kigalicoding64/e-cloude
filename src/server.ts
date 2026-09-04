@@ -7,31 +7,6 @@ type ServerEntry = {
   fetch: (request: Request, env: unknown, ctx: unknown) => Promise<Response> | Response;
 };
 
-type RuntimeEnv = Record<string, unknown>;
-
-const SERVER_BINDINGS = [
-  "SUPABASE_URL",
-  "SUPABASE_PUBLISHABLE_KEY",
-  "SUPABASE_SERVICE_ROLE_KEY",
-] as const;
-
-/**
- * Production workers provide bindings through the fetch `env` argument.
- * The generated backend clients read `process.env`, so copy only the known
- * server bindings across before loading or invoking the application handler.
- * Nothing is returned to, serialized for, or imported by browser code.
- */
-function hydrateServerBindings(env: unknown): void {
-  if (!env || typeof env !== "object") return;
-  const runtimeEnv = env as RuntimeEnv;
-  for (const name of SERVER_BINDINGS) {
-    const value = runtimeEnv[name];
-    if (!process.env[name] && typeof value === "string" && value.length > 0) {
-      process.env[name] = value;
-    }
-  }
-}
-
 let serverEntryPromise: Promise<ServerEntry> | undefined;
 
 async function getServerEntry(): Promise<ServerEntry> {
@@ -72,7 +47,6 @@ function isH3SwallowedErrorBody(body: string): boolean {
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     try {
-      hydrateServerBindings(env);
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
       return await normalizeCatastrophicSsrResponse(response);
