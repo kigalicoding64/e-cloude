@@ -8,12 +8,17 @@ export const Route = createFileRoute("/api/public/v1/health")({
       OPTIONS: async () => corsPreflight(),
       GET: async () => {
         let database = "unknown";
+        let mode = "service_role";
         try {
           const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
           const { error } = await supabaseAdmin.from("profiles").select("id").limit(1);
           database = error ? "error" : "ok";
         } catch {
-          database = "error";
+          // Service-role binding unavailable in this runtime: fall back to a
+          // keyless reachability probe so the API still reports accurately.
+          const { checkSupabaseReachable } = await import("@/lib/api-env.server");
+          database = await checkSupabaseReachable();
+          mode = "publishable";
         }
         const ok = database === "ok";
         return new Response(
@@ -21,6 +26,7 @@ export const Route = createFileRoute("/api/public/v1/health")({
             status: ok ? "ok" : "degraded",
             api: "ok",
             database,
+            mode,
             time: new Date().toISOString(),
           }),
           {
