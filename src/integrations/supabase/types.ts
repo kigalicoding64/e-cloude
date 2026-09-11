@@ -581,6 +581,33 @@ export type Database = {
         }
         Relationships: []
       }
+      deployment_verifications: {
+        Row: {
+          created_at: string
+          id: string
+          missing_bindings: string[]
+          passed: boolean
+          results: Json
+          trigger_source: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          missing_bindings?: string[]
+          passed?: boolean
+          results?: Json
+          trigger_source?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          missing_bindings?: string[]
+          passed?: boolean
+          results?: Json
+          trigger_source?: string
+        }
+        Relationships: []
+      }
       files: {
         Row: {
           created_at: string
