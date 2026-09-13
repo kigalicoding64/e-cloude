@@ -37,6 +37,7 @@ import { Route as AuthenticatedSharedRouteImport } from './routes/_authenticated
 import { Route as AuthenticatedShareDiagnosticsRouteImport } from './routes/_authenticated/share-diagnostics'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedSecurityRouteImport } from './routes/_authenticated/security'
+import { Route as AuthenticatedPlatformHealthRouteImport } from './routes/_authenticated/platform-health'
 import { Route as AuthenticatedOrganizationsRouteImport } from './routes/_authenticated/organizations'
 import { Route as AuthenticatedNotificationsRouteImport } from './routes/_authenticated/notifications'
 import { Route as AuthenticatedFilesRouteImport } from './routes/_authenticated/files'
@@ -230,6 +231,12 @@ const AuthenticatedSecurityRoute = AuthenticatedSecurityRouteImport.update({
   path: '/security',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedPlatformHealthRoute =
+  AuthenticatedPlatformHealthRouteImport.update({
+    id: '/platform-health',
+    path: '/platform-health',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedOrganizationsRoute =
   AuthenticatedOrganizationsRouteImport.update({
     id: '/organizations',
@@ -531,6 +538,7 @@ export interface FileRoutesByFullPath {
   '/files': typeof AuthenticatedFilesRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
   '/organizations': typeof AuthenticatedOrganizationsRouteWithChildren
+  '/platform-health': typeof AuthenticatedPlatformHealthRoute
   '/security': typeof AuthenticatedSecurityRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/share-diagnostics': typeof AuthenticatedShareDiagnosticsRoute
@@ -611,6 +619,7 @@ export interface FileRoutesByTo {
   '/files': typeof AuthenticatedFilesRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
   '/organizations': typeof AuthenticatedOrganizationsRouteWithChildren
+  '/platform-health': typeof AuthenticatedPlatformHealthRoute
   '/security': typeof AuthenticatedSecurityRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/share-diagnostics': typeof AuthenticatedShareDiagnosticsRoute
@@ -693,6 +702,7 @@ export interface FileRoutesById {
   '/_authenticated/files': typeof AuthenticatedFilesRoute
   '/_authenticated/notifications': typeof AuthenticatedNotificationsRoute
   '/_authenticated/organizations': typeof AuthenticatedOrganizationsRouteWithChildren
+  '/_authenticated/platform-health': typeof AuthenticatedPlatformHealthRoute
   '/_authenticated/security': typeof AuthenticatedSecurityRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/share-diagnostics': typeof AuthenticatedShareDiagnosticsRoute
@@ -775,6 +785,7 @@ export interface FileRouteTypes {
     | '/files'
     | '/notifications'
     | '/organizations'
+    | '/platform-health'
     | '/security'
     | '/settings'
     | '/share-diagnostics'
@@ -855,6 +866,7 @@ export interface FileRouteTypes {
     | '/files'
     | '/notifications'
     | '/organizations'
+    | '/platform-health'
     | '/security'
     | '/settings'
     | '/share-diagnostics'
@@ -936,6 +948,7 @@ export interface FileRouteTypes {
     | '/_authenticated/files'
     | '/_authenticated/notifications'
     | '/_authenticated/organizations'
+    | '/_authenticated/platform-health'
     | '/_authenticated/security'
     | '/_authenticated/settings'
     | '/_authenticated/share-diagnostics'
@@ -1244,6 +1257,13 @@ declare module '@tanstack/react-router' {
       path: '/security'
       fullPath: '/security'
       preLoaderRoute: typeof AuthenticatedSecurityRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/platform-health': {
+      id: '/_authenticated/platform-health'
+      path: '/platform-health'
+      fullPath: '/platform-health'
+      preLoaderRoute: typeof AuthenticatedPlatformHealthRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/organizations': {
@@ -1644,6 +1664,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedFilesRoute: typeof AuthenticatedFilesRoute
   AuthenticatedNotificationsRoute: typeof AuthenticatedNotificationsRoute
   AuthenticatedOrganizationsRoute: typeof AuthenticatedOrganizationsRouteWithChildren
+  AuthenticatedPlatformHealthRoute: typeof AuthenticatedPlatformHealthRoute
   AuthenticatedSecurityRoute: typeof AuthenticatedSecurityRoute
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedShareDiagnosticsRoute: typeof AuthenticatedShareDiagnosticsRoute
@@ -1666,6 +1687,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedFilesRoute: AuthenticatedFilesRoute,
   AuthenticatedNotificationsRoute: AuthenticatedNotificationsRoute,
   AuthenticatedOrganizationsRoute: AuthenticatedOrganizationsRouteWithChildren,
+  AuthenticatedPlatformHealthRoute: AuthenticatedPlatformHealthRoute,
   AuthenticatedSecurityRoute: AuthenticatedSecurityRoute,
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedShareDiagnosticsRoute: AuthenticatedShareDiagnosticsRoute,

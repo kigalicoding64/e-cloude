@@ -1,10 +1,11 @@
-import { createFileRoute, redirect } from "@tanstack/react-router";
+import { createFileRoute, redirect, Link } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Users, Files as FilesIcon, HardDrive, KeyRound, Shield, ShieldOff } from "lucide-react";
+import { Activity, Users, Files as FilesIcon, HardDrive, KeyRound, Shield, ShieldOff } from "lucide-react";
+
 import { formatBytes, formatDate } from "@/lib/format";
 import { toast } from "sonner";
 
@@ -84,7 +85,17 @@ function AdminPage() {
 
   return (
     <div className="mx-auto max-w-6xl px-8 py-10">
-      <h1 className="mb-6 font-display text-3xl font-bold">Admin panel</h1>
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+        <h1 className="font-display text-3xl font-bold">Admin panel</h1>
+        <Button asChild variant="outline" size="sm">
+          <Link to="/platform-health">
+            <Activity className="mr-2 h-4 w-4" />
+            Platform health &amp; live checks
+          </Link>
+        </Button>
+      </div>
+
+
 
       <div className="grid gap-4 md:grid-cols-4">
         {[
