@@ -1,10 +1,11 @@
-import { createFileRoute, redirect } from "@tanstack/react-router";
+import { createFileRoute, redirect, Link } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Users, Files as FilesIcon, HardDrive, KeyRound, Shield, ShieldOff } from "lucide-react";
+import { Activity, Users, Files as FilesIcon, HardDrive, KeyRound, Shield, ShieldOff } from "lucide-react";
+
 import { formatBytes, formatDate } from "@/lib/format";
 import { toast } from "sonner";
 
