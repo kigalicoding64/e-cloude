@@ -251,8 +251,6 @@ export const probeLiveTargets = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
     await assertAdmin(context.userId);
-    const local = await Promise.all(PROBE_PATHS.map((p) => probe("", p).catch(() => null)));
-    void local;
     const targets = await Promise.all(LIVE_TARGETS.map(probeTarget));
     return { targets, probed_at: new Date().toISOString() };
   });
