@@ -161,6 +161,32 @@ function PlatformHealthPage() {
     onError: (e: Error) => toast.error(e.message),
   });
 
+  const filesQuery = useQuery({
+    queryKey: ["platform-own-files"],
+    queryFn: () => ownFiles({ data: undefined }),
+  });
+
+  const signedMutation = useMutation({
+    mutationFn: () =>
+      signedCheck({
+        data: { fileId: selectedFile, targetId, apiKey: apiKey.trim() || undefined },
+      }),
+    onSuccess: (res) =>
+      res.passed
+        ? toast.success("Secure link works from outside the app")
+        : toast.error("The external download check found a problem"),
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  const smokeMutation = useMutation({
+    mutationFn: () => smokeTest({ data: { apiKey: apiKey.trim(), targetId } }),
+    onSuccess: (res) =>
+      res.passed
+        ? toast.success("External app smoke test passed")
+        : toast.error("Some smoke test steps failed"),
+    onError: (e: Error) => toast.error(e.message),
+  });
+
   async function runBrowserTests() {
     setTesting(true);
     const key = apiKey.trim();
