@@ -81,6 +81,28 @@ function StatusPill({ ok, label }: { ok: boolean; label: string }) {
   );
 }
 
+function StepList({ steps }: { steps: CheckStep[] }) {
+  return (
+    <div className="space-y-2">
+      {steps.map((s, i) => (
+        <div
+          key={`${s.name}-${i}`}
+          className="flex flex-wrap items-center justify-between gap-2 rounded-md border p-3 text-sm"
+        >
+          <div>
+            <div className="font-medium">{s.name}</div>
+            <div className="text-muted-foreground text-xs">{s.detail}</div>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-muted-foreground text-xs">{s.duration_ms} ms</span>
+            <StatusPill ok={s.ok} label={s.status ? String(s.status) : s.ok ? "ok" : "failed"} />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 type BrowserCheck = {
   target: string;
   probe: { path: string; status: number | null; ok: boolean; error: string | null }[];
