@@ -32,6 +32,12 @@ import {
   probeLiveTargets,
   runDeploymentVerification,
 } from "@/lib/platform-health.functions";
+import {
+  listOwnFilesForCheck,
+  runExternalAppSmokeTest,
+  verifySignedDownload,
+  type CheckStep,
+} from "@/lib/platform-smoke.functions";
 
 export const Route = createFileRoute("/_authenticated/platform-health")({
   head: () => ({
