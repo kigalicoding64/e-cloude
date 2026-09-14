@@ -98,6 +98,12 @@ function PlatformHealthPage() {
   const history = useServerFn(listVerifications);
   const diagnose = useServerFn(diagnosePlatform);
 
+  const ownFiles = useServerFn(listOwnFilesForCheck);
+  const signedCheck = useServerFn(verifySignedDownload);
+  const smokeTest = useServerFn(runExternalAppSmokeTest);
+
+  const [selectedFile, setSelectedFile] = useState("");
+  const [targetId, setTargetId] = useState(LIVE_TARGETS[0].id);
   const [apiKey, setApiKey] = useState("");
   const [logs, setLogs] = useState("");
   const [browserResults, setBrowserResults] = useState<BrowserCheck[]>([]);
