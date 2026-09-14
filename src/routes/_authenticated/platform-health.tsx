@@ -32,6 +32,12 @@ import {
   probeLiveTargets,
   runDeploymentVerification,
 } from "@/lib/platform-health.functions";
+import {
+  listOwnFilesForCheck,
+  runExternalAppSmokeTest,
+  verifySignedDownload,
+  type CheckStep,
+} from "@/lib/platform-smoke.functions";
 
 export const Route = createFileRoute("/_authenticated/platform-health")({
   head: () => ({
@@ -75,6 +81,28 @@ function StatusPill({ ok, label }: { ok: boolean; label: string }) {
   );
 }
 
+function StepList({ steps }: { steps: CheckStep[] }) {
+  return (
+    <div className="space-y-2">
+      {steps.map((s, i) => (
+        <div
+          key={`${s.name}-${i}`}
+          className="flex flex-wrap items-center justify-between gap-2 rounded-md border p-3 text-sm"
+        >
+          <div>
+            <div className="font-medium">{s.name}</div>
+            <div className="text-muted-foreground text-xs">{s.detail}</div>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-muted-foreground text-xs">{s.duration_ms} ms</span>
+            <StatusPill ok={s.ok} label={s.status ? String(s.status) : s.ok ? "ok" : "failed"} />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 type BrowserCheck = {
   target: string;
   probe: { path: string; status: number | null; ok: boolean; error: string | null }[];
@@ -92,6 +120,12 @@ function PlatformHealthPage() {
   const history = useServerFn(listVerifications);
   const diagnose = useServerFn(diagnosePlatform);
 
+  const ownFiles = useServerFn(listOwnFilesForCheck);
+  const signedCheck = useServerFn(verifySignedDownload);
+  const smokeTest = useServerFn(runExternalAppSmokeTest);
+
+  const [selectedFile, setSelectedFile] = useState("");
+  const [targetId, setTargetId] = useState(LIVE_TARGETS[0].id);
   const [apiKey, setApiKey] = useState("");
   const [logs, setLogs] = useState("");
   const [browserResults, setBrowserResults] = useState<BrowserCheck[]>([]);
@@ -146,6 +180,32 @@ function PlatformHealthPage() {
 
   const diagnoseMutation = useMutation({
     mutationFn: () => diagnose({ data: { logs } }),
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  const filesQuery = useQuery({
+    queryKey: ["platform-own-files"],
+    queryFn: () => ownFiles({ data: undefined }),
+  });
+
+  const signedMutation = useMutation({
+    mutationFn: () =>
+      signedCheck({
+        data: { fileId: selectedFile, targetId, apiKey: apiKey.trim() || undefined },
+      }),
+    onSuccess: (res) =>
+      res.passed
+        ? toast.success("Secure link works from outside the app")
+        : toast.error("The external download check found a problem"),
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  const smokeMutation = useMutation({
+    mutationFn: () => smokeTest({ data: { apiKey: apiKey.trim(), targetId } }),
+    onSuccess: (res) =>
+      res.passed
+        ? toast.success("External app smoke test passed")
+        : toast.error("Some smoke test steps failed"),
     onError: (e: Error) => toast.error(e.message),
   });
 
