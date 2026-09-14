@@ -1,6 +1,14 @@
 // Shared (client-safe) types and constants for platform health probing,
 // endpoint testing and post-publish verification.
 
+export type JsonLike =
+  | string
+  | number
+  | boolean
+  | null
+  | JsonLike[]
+  | { [key: string]: JsonLike };
+
 export type LiveTarget = {
   id: string;
   label: string;
@@ -39,7 +47,7 @@ export type ProbeResult = {
   status: number | null;
   duration_ms: number;
   /** Parsed JSON body when the endpoint answered with JSON. */
-  body: unknown;
+  body: JsonLike;
   content_type: string | null;
   error: string | null;
 };
@@ -96,7 +104,7 @@ export type VerificationRecord = {
   trigger_source: string;
   passed: boolean;
   missing_bindings: string[];
-  results: unknown;
+  results: JsonLike;
 };
 
 /** Fingerprint of the running client bundle, used to detect a new publish. */

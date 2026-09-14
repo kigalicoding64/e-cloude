@@ -7,6 +7,7 @@ import {
   type BindingCheck,
   type BindingStatus,
   type CorsCheck,
+  type JsonLike,
   type LiveTarget,
   type ProbeResult,
   type SignedUrlCheck,
@@ -74,10 +75,10 @@ async function probe(baseUrl: string, path: string): Promise<ProbeResult> {
       signal: AbortSignal.timeout(PROBE_TIMEOUT_MS),
     });
     const contentType = res.headers.get("content-type");
-    let body: unknown = null;
+    let body: JsonLike = null;
     const text = await res.text();
     try {
-      body = JSON.parse(text);
+      body = JSON.parse(text) as JsonLike;
     } catch {
       body = text.slice(0, 300);
     }
@@ -251,8 +252,6 @@ export const probeLiveTargets = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
     await assertAdmin(context.userId);
-    const local = await Promise.all(PROBE_PATHS.map((p) => probe("", p).catch(() => null)));
-    void local;
     const targets = await Promise.all(LIVE_TARGETS.map(probeTarget));
     return { targets, probed_at: new Date().toISOString() };
   });
@@ -329,7 +328,7 @@ async function runVerification(
       trigger_source: trigger,
       passed,
       missing_bindings: bindings.missing_required,
-      results: JSON.parse(JSON.stringify(summary)),
+      results: JSON.parse(JSON.stringify(summary)) as JsonLike,
     });
   } catch {
     // Recording is best-effort; the live result still returns to the caller.
