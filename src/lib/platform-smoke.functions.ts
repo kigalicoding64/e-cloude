@@ -27,14 +27,55 @@ export type SmokeTestResult = {
   ran_at: string;
 };
 
+export type ExpiryReport = {
+  ttl_seconds: number;
+  issued_at: string;
+  expected_expiry_at: string;
+  fresh_ok: boolean;
+  fresh_status: number | null;
+  grace_probe_at: string;
+  grace_offset_ms: number;
+  grace_exercised: boolean; // link was still accepted inside the grace window
+  grace_status: number | null;
+  expired_probe_at: string;
+  expired_refused: boolean;
+  expired_status: number | null;
+  observed: "refused_at_expiry" | "refused_after_grace" | "never_expired" | "inconclusive";
+};
+
+export type IntegrityReport = {
+  expected_bytes: number;
+  received_bytes: number;
+  expected_sha256: string | null;
+  received_sha256: string | null;
+  checksum_match: boolean;
+  expected_mime: string | null;
+  content_type: string | null;
+  content_type_ok: boolean;
+  content_disposition: string | null;
+  disposition_ok: boolean;
+};
+
+export type IsolationReport = {
+  attempted: boolean;
+  other_owner: boolean;
+  other_owner_label: string | null;
+  blocked: boolean;
+  detail: string;
+};
+
 export type SignedDownloadCheck = {
   target_label: string;
   base_url: string;
   file_id: string;
   file_name: string;
   expires_at: string | null;
+  requested_expires_in: number;
   passed: boolean;
   steps: CheckStep[];
+  expiry: ExpiryReport | null;
+  integrity: IntegrityReport | null;
+  isolation: IsolationReport | null;
   ran_at: string;
 };
 
