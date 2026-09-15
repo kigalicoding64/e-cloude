@@ -452,6 +452,157 @@ function PlatformHealthPage() {
           </Card>
         </TabsContent>
 
+        <TabsContent value="signed" className="space-y-4 pt-4">
+          <Card className="space-y-4 p-4">
+            <div>
+              <div className="font-medium">Secure download link from outside the app</div>
+              <p className="text-muted-foreground text-sm">
+                Creates a time-limited link for one of your files and then downloads it as an
+                outside caller would, checking the contents arrive and that a tampered link fails.
+              </p>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <div className="space-y-2">
+                <Label htmlFor="signed-file">File</Label>
+                <select
+                  id="signed-file"
+                  className="border-input bg-background h-10 w-full rounded-md border px-3 text-sm"
+                  value={selectedFile}
+                  onChange={(e) => setSelectedFile(e.target.value)}
+                >
+                  <option value="">Choose a file…</option>
+                  {(filesQuery.data ?? []).map((f) => (
+                    <option key={f.id} value={f.id}>
+                      {f.name} {f.locked ? "(locked)" : ""}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="signed-target">Address</Label>
+                <select
+                  id="signed-target"
+                  className="border-input bg-background h-10 w-full rounded-md border px-3 text-sm"
+                  value={targetId}
+                  onChange={(e) => setTargetId(e.target.value)}
+                >
+                  {LIVE_TARGETS.map((t) => (
+                    <option key={t.id} value={t.id}>
+                      {t.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="signed-key">API key (optional — uses the public API when given)</Label>
+              <Input
+                id="signed-key"
+                type="password"
+                placeholder="eck_live_…"
+                value={apiKey}
+                onChange={(e) => setApiKey(e.target.value)}
+              />
+            </div>
+            <Button
+              onClick={() => signedMutation.mutate()}
+              disabled={!selectedFile || signedMutation.isPending}
+            >
+              {signedMutation.isPending ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                <Link2 className="mr-2 h-4 w-4" />
+              )}
+              Check external access
+            </Button>
+            {signedMutation.data && (
+              <div className="space-y-3">
+                <div className="flex flex-wrap items-center gap-2">
+                  <StatusPill
+                    ok={signedMutation.data.passed}
+                    label={signedMutation.data.passed ? "Accessible" : "Problem found"}
+                  />
+                  <span className="text-muted-foreground text-sm">
+                    {signedMutation.data.file_name} · {signedMutation.data.target_label}
+                    {signedMutation.data.expires_at
+                      ? ` · expires ${formatDate(signedMutation.data.expires_at)}`
+                      : ""}
+                  </span>
+                </div>
+                <StepList steps={signedMutation.data.steps} />
+              </div>
+            )}
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="smoke" className="space-y-4 pt-4">
+          <Card className="space-y-4 p-4">
+            <div>
+              <div className="font-medium">External app smoke test</div>
+              <p className="text-muted-foreground text-sm">
+                Acts like a third-party app: uploads a tiny text file, lists it, downloads it from
+                an outside address, deletes it again, and confirms cross-origin access and key
+                permissions. Nothing is left behind.
+              </p>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <div className="space-y-2">
+                <Label htmlFor="smoke-key">API key</Label>
+                <Input
+                  id="smoke-key"
+                  type="password"
+                  placeholder="eck_live_…"
+                  value={apiKey}
+                  onChange={(e) => setApiKey(e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="smoke-target">Address</Label>
+                <select
+                  id="smoke-target"
+                  className="border-input bg-background h-10 w-full rounded-md border px-3 text-sm"
+                  value={targetId}
+                  onChange={(e) => setTargetId(e.target.value)}
+                >
+                  {LIVE_TARGETS.map((t) => (
+                    <option key={t.id} value={t.id}>
+                      {t.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+            <p className="text-muted-foreground text-xs">
+              The key needs upload, read, download and manage permissions for every step to pass.
+            </p>
+            <Button
+              onClick={() => smokeMutation.mutate()}
+              disabled={!apiKey.trim() || smokeMutation.isPending}
+            >
+              {smokeMutation.isPending ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                <ShieldCheck className="mr-2 h-4 w-4" />
+              )}
+              Run smoke test
+            </Button>
+            {smokeMutation.data && (
+              <div className="space-y-3">
+                <div className="flex flex-wrap items-center gap-2">
+                  <StatusPill
+                    ok={smokeMutation.data.passed}
+                    label={smokeMutation.data.passed ? "All steps passed" : "Some steps failed"}
+                  />
+                  <span className="text-muted-foreground text-sm">
+                    {smokeMutation.data.target_label} · {formatDate(smokeMutation.data.ran_at)}
+                  </span>
+                </div>
+                <StepList steps={smokeMutation.data.steps} />
+              </div>
+            )}
+          </Card>
+        </TabsContent>
+
         <TabsContent value="verify" className="space-y-4 pt-4">
           <Card className="space-y-3 p-4">
             <div className="flex flex-wrap items-center justify-between gap-2">
