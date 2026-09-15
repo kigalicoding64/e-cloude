@@ -244,6 +244,91 @@ export const verifySignedDownload = createServerFn({ method: "POST" })
       });
     }
 
+    // Expiry enforcement: issue a deliberately short-lived link and prove it
+    // works now, is still tolerated inside a small clock-skew grace window,
+    // and is refused well after the timeout.
+    if (file.password_hash || file.pin_hash) {
+      steps.push({
+        name: "Link expiry check",
+        ok: false,
+        status: null,
+        detail: "Skipped — this file is locked",
+        duration_ms: 0,
+      });
+    } else {
+      const SHORT_TTL_SECONDS = 2;
+      const GRACE_MS = 1_500;
+      const shortSign = await timed(async () => {
+        const signed = await supabaseAdmin.storage
+          .from("user-files")
+          .createSignedUrl(file.storage_path, SHORT_TTL_SECONDS, { download: file.name });
+        if (signed.error || !signed.data) throw new Error(signed.error?.message ?? "Signing failed");
+        return signed.data.signedUrl;
+      });
+      const shortUrl = shortSign.value ?? null;
+      const issuedAt = Date.now();
+
+      if (!shortUrl) {
+        steps.push({
+          name: "Create a short-lived link for the expiry check",
+          ok: false,
+          status: null,
+          detail: shortSign.error ?? "Could not create a short-lived link",
+          duration_ms: shortSign.ms,
+        });
+      } else {
+        const probe = (label: string) =>
+          timed(() =>
+            fetch(shortUrl, { headers: { Origin: EXTERNAL_ORIGIN }, signal: AbortSignal.timeout(TIMEOUT_MS) }),
+          ).then((r) => ({ ...r, label }));
+
+        // a) Works straight away.
+        const fresh = await probe("fresh");
+        steps.push({
+          name: `Short-lived link (${SHORT_TTL_SECONDS}s) works immediately`,
+          ok: Boolean(fresh.value?.ok),
+          status: fresh.value?.status ?? null,
+          detail: fresh.value?.ok
+            ? "Downloaded successfully while still valid"
+            : fresh.error ?? `Refused too early with status ${fresh.value?.status ?? "none"}`,
+          duration_ms: fresh.ms,
+        });
+
+        // b) Grace-period edge case: just past the timeout.
+        const graceTarget = issuedAt + SHORT_TTL_SECONDS * 1000 + 250;
+        await new Promise((r) => setTimeout(r, Math.max(0, graceTarget - Date.now())));
+        const grace = await probe("grace");
+        const graceOk = grace.value ? !grace.value.ok : false;
+        steps.push({
+          name: "Just past the timeout (grace window)",
+          ok: Boolean(grace.value),
+          status: grace.value?.status ?? null,
+          detail: grace.value
+            ? graceOk
+              ? `Already refused with status ${grace.value.status}`
+              : "Still accepted inside the short grace window — acceptable clock tolerance"
+            : grace.error ?? "Check failed",
+          duration_ms: grace.ms,
+        });
+
+        // c) Well after the timeout it must fail.
+        const hardTarget = issuedAt + SHORT_TTL_SECONDS * 1000 + GRACE_MS + 1_500;
+        await new Promise((r) => setTimeout(r, Math.max(0, hardTarget - Date.now())));
+        const expired = await probe("expired");
+        steps.push({
+          name: "Expired link is refused after the timeout",
+          ok: expired.value ? !expired.value.ok : false,
+          status: expired.value?.status ?? null,
+          detail: expired.value
+            ? expired.value.ok
+              ? "The link still worked after expiry — this should not happen"
+              : `Correctly refused with status ${expired.value.status}`
+            : expired.error ?? "Check failed",
+          duration_ms: expired.ms,
+        });
+      }
+    }
+
     return {
       target_label: target.label,
       base_url: target.baseUrl,
