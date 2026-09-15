@@ -147,14 +147,23 @@ export const listOwnFilesForCheck = createServerFn({ method: "GET" })
  */
 export const verifySignedDownload = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: { fileId: string; targetId?: string; apiKey?: string; expiresIn?: number }) => {
-    if (!d?.fileId) throw new Error("Choose a file to verify");
-    return d;
-  })
+  .inputValidator(
+    (d: {
+      fileId: string;
+      targetId?: string;
+      apiKey?: string;
+      foreignApiKey?: string;
+      expiresIn?: number;
+    }) => {
+      if (!d?.fileId) throw new Error("Choose a file to verify");
+      return d;
+    },
+  )
   .handler(async ({ data, context }): Promise<SignedDownloadCheck> => {
     await assertAdmin(context.userId);
     const target = resolveTarget(data.targetId);
     const apiKey = data.apiKey?.trim();
+    const foreignKey = data.foreignApiKey?.trim();
     const expiresIn = Math.min(Math.max(Math.floor(data.expiresIn ?? 300), 60), 3600);
     const steps: CheckStep[] = [];
 
@@ -168,8 +177,12 @@ export const verifySignedDownload = createServerFn({ method: "POST" })
 
     if (!file || file.is_trashed) throw new Error("That file is no longer available");
 
+    const locked = Boolean(file.password_hash || file.pin_hash);
     let signedUrl: string | null = null;
     let expiresAt: string | null = null;
+    let expiry: ExpiryReport | null = null;
+    let integrity: IntegrityReport | null = null;
+    let isolation: IsolationReport | null = null;
 
     if (apiKey) {
       const r = await timed(() =>
@@ -199,38 +212,45 @@ export const verifySignedDownload = createServerFn({ method: "POST" })
           : r.error ?? "The API did not return a download link",
         duration_ms: r.ms,
       });
+    } else if (locked) {
+      steps.push({
+        name: "Create secure link",
+        ok: false,
+        status: null,
+        detail: "This file is locked — unlock it before issuing a link",
+        duration_ms: 0,
+      });
     } else {
-      if (file.password_hash || file.pin_hash) {
-        steps.push({
-          name: "Create secure link",
-          ok: false,
-          status: null,
-          detail: "This file is locked — unlock it before issuing a link",
-          duration_ms: 0,
-        });
-      } else {
-        const r = await timed(async () => {
-          const signed = await supabaseAdmin.storage
-            .from("user-files")
-            .createSignedUrl(file.storage_path, expiresIn, { download: file.name });
-          if (signed.error || !signed.data) throw new Error(signed.error?.message ?? "Signing failed");
-          return signed.data.signedUrl;
-        });
-        signedUrl = r.value ?? null;
-        expiresAt = signedUrl ? new Date(Date.now() + expiresIn * 1000).toISOString() : null;
-        steps.push({
-          name: "Create secure link",
-          ok: Boolean(signedUrl),
-          status: null,
-          detail: signedUrl
-            ? `Link created directly, valid for ${expiresIn}s`
-            : r.error ?? "Could not create a link",
-          duration_ms: r.ms,
-        });
-      }
+      const r = await timed(async () => {
+        const signed = await supabaseAdmin.storage
+          .from("user-files")
+          .createSignedUrl(file.storage_path, expiresIn, { download: file.name });
+        if (signed.error || !signed.data) throw new Error(signed.error?.message ?? "Signing failed");
+        return signed.data.signedUrl;
+      });
+      signedUrl = r.value ?? null;
+      expiresAt = signedUrl ? new Date(Date.now() + expiresIn * 1000).toISOString() : null;
+      steps.push({
+        name: "Create secure link",
+        ok: Boolean(signedUrl),
+        status: null,
+        detail: signedUrl
+          ? `Link created directly, valid for ${expiresIn}s`
+          : r.error ?? "Could not create a link",
+        duration_ms: r.ms,
+      });
     }
 
     if (signedUrl) {
+      // Original bytes straight from storage, for a checksum comparison.
+      const original = await timed(async () => {
+        const dl = await supabaseAdmin.storage.from("user-files").download(file.storage_path);
+        if (dl.error || !dl.data) throw new Error(dl.error?.message ?? "Could not read the stored file");
+        return await dl.data.arrayBuffer();
+      });
+      const expectedSha = original.value ? await sha256Bytes(original.value) : null;
+      const expectedBytes = original.value ? original.value.byteLength : Number(file.size ?? 0);
+
       // Fetch as an outside caller: no credentials, foreign Origin header.
       const r = await timed(() =>
         fetch(signedUrl!, {
@@ -240,17 +260,63 @@ export const verifySignedDownload = createServerFn({ method: "POST" })
       );
       const res = r.value;
       if (res) {
-        const bytes = new Uint8Array(await res.arrayBuffer().catch(() => new ArrayBuffer(0))).length;
-        const expected = Number(file.size ?? 0);
-        const sizeOk = expected === 0 || bytes === expected;
+        const buf = await res.arrayBuffer().catch(() => new ArrayBuffer(0));
+        const receivedSha = buf.byteLength > 0 ? await sha256Bytes(buf) : null;
+        const contentType = res.headers.get("content-type");
+        const contentDisposition = res.headers.get("content-disposition");
+        const expectedMime = file.mime_type ?? null;
+        const typeOk = expectedMime
+          ? Boolean(contentType && contentType.split(";")[0]!.trim().toLowerCase() === expectedMime.toLowerCase())
+          : Boolean(contentType);
+        const dispositionOk = Boolean(
+          contentDisposition &&
+            /attachment/i.test(contentDisposition) &&
+            contentDisposition.includes(file.name),
+        );
+        const checksumMatch = Boolean(expectedSha && receivedSha && expectedSha === receivedSha);
+        const sizeOk = expectedBytes === 0 || buf.byteLength === expectedBytes;
+
+        integrity = {
+          expected_bytes: expectedBytes,
+          received_bytes: buf.byteLength,
+          expected_sha256: expectedSha,
+          received_sha256: receivedSha,
+          checksum_match: checksumMatch,
+          expected_mime: expectedMime,
+          content_type: contentType,
+          content_type_ok: typeOk,
+          content_disposition: contentDisposition,
+          disposition_ok: dispositionOk,
+        };
+
         steps.push({
           name: "Download from an external origin",
-          ok: res.ok && bytes > 0 && sizeOk,
+          ok: res.ok && buf.byteLength > 0 && sizeOk,
           status: res.status,
           detail: res.ok
-            ? `Received ${bytes} bytes${expected ? ` of ${expected} expected` : ""}${sizeOk ? "" : " — size mismatch"}`
+            ? `Received ${buf.byteLength} bytes${expectedBytes ? ` of ${expectedBytes} expected` : ""}${sizeOk ? "" : " — size mismatch"}`
             : `The link was refused with status ${res.status}`,
           duration_ms: r.ms,
+        });
+        steps.push({
+          name: "Downloaded contents match the original (SHA-256)",
+          ok: checksumMatch,
+          status: res.status,
+          detail: checksumMatch
+            ? `Checksum matches: ${expectedSha!.slice(0, 16)}…`
+            : expectedSha && receivedSha
+              ? "Checksums differ — the delivered file is not identical"
+              : original.error ?? "Could not compare checksums",
+          duration_ms: 0,
+        });
+        steps.push({
+          name: "File type and download headers are correct",
+          ok: typeOk && dispositionOk,
+          status: res.status,
+          detail: `Type: ${contentType ?? "missing"}${expectedMime ? ` (expected ${expectedMime})` : ""} · Filename header: ${
+            contentDisposition ?? "missing"
+          }`,
+          duration_ms: 0,
         });
         steps.push({
           name: "Link is readable without a session",
@@ -292,10 +358,97 @@ export const verifySignedDownload = createServerFn({ method: "POST" })
       });
     }
 
+    // Cross-tenant isolation: a key belonging to another organization must not
+    // be able to read this file or mint a link for it.
+    if (foreignKey) {
+      let ownerLabel: string | null = null;
+      let otherOwner = false;
+      const me = await timed(() => req(`${target.baseUrl}/api/public/v1/me`, { headers: { "X-API-Key": foreignKey } }));
+      const meBody = me.value ? ((await me.value.json().catch(() => null)) as Record<string, unknown> | null) : null;
+      const meData = (meBody?.["data"] as Record<string, unknown> | undefined) ?? meBody ?? undefined;
+      const foreignOwnerId =
+        (meData?.["owner_id"] as string | undefined) ??
+        (meData?.["user_id"] as string | undefined) ??
+        (meData?.["id"] as string | undefined) ??
+        null;
+      const foreignOrg =
+        (meData?.["organization"] as string | undefined) ??
+        (meData?.["org_name"] as string | undefined) ??
+        (meData?.["email"] as string | undefined) ??
+        null;
+      otherOwner = Boolean(foreignOwnerId && foreignOwnerId !== context.userId);
+      ownerLabel = foreignOrg ?? (foreignOwnerId ? `account ${foreignOwnerId.slice(0, 8)}…` : null);
+      steps.push({
+        name: "Second key belongs to a different organization",
+        ok: otherOwner,
+        status: me.value?.status ?? null,
+        detail: otherOwner
+          ? `Key belongs to ${ownerLabel ?? "another account"}`
+          : foreignOwnerId
+            ? "That key belongs to the same account — use a key from another organization"
+            : me.error ?? "Could not identify the key's owner",
+        duration_ms: me.ms,
+      });
+
+      const readAttempt = await timed(() =>
+        req(`${target.baseUrl}/api/public/v1/files/${file.id}`, { headers: { "X-API-Key": foreignKey } }),
+      );
+      const readBlocked = readAttempt.value ? !readAttempt.value.ok : false;
+      steps.push({
+        name: "Other organization cannot read the file",
+        ok: readBlocked,
+        status: readAttempt.value?.status ?? null,
+        detail: readAttempt.value
+          ? readBlocked
+            ? `Correctly refused with status ${readAttempt.value.status}`
+            : "The other organization could read this file — this should not happen"
+          : readAttempt.error ?? "Check failed",
+        duration_ms: readAttempt.ms,
+      });
+
+      const signAttempt = await timed(() =>
+        req(`${target.baseUrl}/api/public/v1/files/${file.id}/signed-url`, {
+          method: "POST",
+          headers: { "X-API-Key": foreignKey, "Content-Type": "application/json" },
+          body: JSON.stringify({ expires_in: 120 }),
+        }),
+      );
+      const signBody = signAttempt.value
+        ? ((await signAttempt.value.json().catch(() => null)) as Record<string, unknown> | null)
+        : null;
+      const leaked =
+        ((signBody?.["data"] as Record<string, unknown> | undefined)?.["download_url"] as string | undefined) ??
+        (signBody?.["download_url"] as string | undefined) ??
+        null;
+      const signBlocked = Boolean(signAttempt.value && !signAttempt.value.ok && !leaked);
+      steps.push({
+        name: "Other organization cannot mint a secure link",
+        ok: signBlocked,
+        status: signAttempt.value?.status ?? null,
+        detail: signAttempt.value
+          ? signBlocked
+            ? `Correctly refused with status ${signAttempt.value.status}`
+            : "A link was issued to the other organization — this should not happen"
+          : signAttempt.error ?? "Check failed",
+        duration_ms: signAttempt.ms,
+      });
+
+      isolation = {
+        attempted: true,
+        other_owner: otherOwner,
+        other_owner_label: ownerLabel,
+        blocked: readBlocked && signBlocked,
+        detail:
+          readBlocked && signBlocked
+            ? "The other organization was blocked from both reading and signing"
+            : "Cross-organization access was not fully blocked",
+      };
+    }
+
     // Expiry enforcement: issue a deliberately short-lived link and prove it
     // works now, is still tolerated inside a small clock-skew grace window,
     // and is refused well after the timeout.
-    if (file.password_hash || file.pin_hash) {
+    if (locked) {
       steps.push({
         name: "Link expiry check",
         ok: false,
@@ -306,6 +459,7 @@ export const verifySignedDownload = createServerFn({ method: "POST" })
     } else {
       const SHORT_TTL_SECONDS = 2;
       const GRACE_MS = 1_500;
+      const GRACE_OFFSET_MS = 250;
       const shortSign = await timed(async () => {
         const signed = await supabaseAdmin.storage
           .from("user-files")
@@ -325,13 +479,13 @@ export const verifySignedDownload = createServerFn({ method: "POST" })
           duration_ms: shortSign.ms,
         });
       } else {
-        const probe = (label: string) =>
+        const probe = () =>
           timed(() =>
             fetch(shortUrl, { headers: { Origin: EXTERNAL_ORIGIN }, signal: AbortSignal.timeout(TIMEOUT_MS) }),
-          ).then((r) => ({ ...r, label }));
+          );
 
         // a) Works straight away.
-        const fresh = await probe("fresh");
+        const fresh = await probe();
         steps.push({
           name: `Short-lived link (${SHORT_TTL_SECONDS}s) works immediately`,
           ok: Boolean(fresh.value?.ok),
@@ -343,16 +497,18 @@ export const verifySignedDownload = createServerFn({ method: "POST" })
         });
 
         // b) Grace-period edge case: just past the timeout.
-        const graceTarget = issuedAt + SHORT_TTL_SECONDS * 1000 + 250;
+        const graceTarget = issuedAt + SHORT_TTL_SECONDS * 1000 + GRACE_OFFSET_MS;
         await new Promise((r) => setTimeout(r, Math.max(0, graceTarget - Date.now())));
-        const grace = await probe("grace");
-        const graceOk = grace.value ? !grace.value.ok : false;
+        const graceAt = new Date().toISOString();
+        const grace = await probe();
+        const graceRefused = grace.value ? !grace.value.ok : false;
+        const graceExercised = Boolean(grace.value?.ok);
         steps.push({
           name: "Just past the timeout (grace window)",
           ok: Boolean(grace.value),
           status: grace.value?.status ?? null,
           detail: grace.value
-            ? graceOk
+            ? graceRefused
               ? `Already refused with status ${grace.value.status}`
               : "Still accepted inside the short grace window — acceptable clock tolerance"
             : grace.error ?? "Check failed",
@@ -362,10 +518,12 @@ export const verifySignedDownload = createServerFn({ method: "POST" })
         // c) Well after the timeout it must fail.
         const hardTarget = issuedAt + SHORT_TTL_SECONDS * 1000 + GRACE_MS + 1_500;
         await new Promise((r) => setTimeout(r, Math.max(0, hardTarget - Date.now())));
-        const expired = await probe("expired");
+        const expiredAt = new Date().toISOString();
+        const expired = await probe();
+        const expiredRefused = expired.value ? !expired.value.ok : false;
         steps.push({
           name: "Expired link is refused after the timeout",
-          ok: expired.value ? !expired.value.ok : false,
+          ok: expiredRefused,
           status: expired.value?.status ?? null,
           detail: expired.value
             ? expired.value.ok
@@ -374,6 +532,28 @@ export const verifySignedDownload = createServerFn({ method: "POST" })
             : expired.error ?? "Check failed",
           duration_ms: expired.ms,
         });
+
+        expiry = {
+          ttl_seconds: SHORT_TTL_SECONDS,
+          issued_at: new Date(issuedAt).toISOString(),
+          expected_expiry_at: new Date(issuedAt + SHORT_TTL_SECONDS * 1000).toISOString(),
+          fresh_ok: Boolean(fresh.value?.ok),
+          fresh_status: fresh.value?.status ?? null,
+          grace_probe_at: graceAt,
+          grace_offset_ms: GRACE_OFFSET_MS,
+          grace_exercised: graceExercised,
+          grace_status: grace.value?.status ?? null,
+          expired_probe_at: expiredAt,
+          expired_refused: expiredRefused,
+          expired_status: expired.value?.status ?? null,
+          observed: !expired.value
+            ? "inconclusive"
+            : !expiredRefused
+              ? "never_expired"
+              : graceExercised
+                ? "refused_after_grace"
+                : "refused_at_expiry",
+        };
       }
     }
 
@@ -383,8 +563,12 @@ export const verifySignedDownload = createServerFn({ method: "POST" })
       file_id: file.id,
       file_name: file.name,
       expires_at: expiresAt,
+      requested_expires_in: expiresIn,
       passed: steps.length > 0 && steps.every((s) => s.ok),
       steps,
+      expiry,
+      integrity,
+      isolation,
       ran_at: new Date().toISOString(),
     };
   });
