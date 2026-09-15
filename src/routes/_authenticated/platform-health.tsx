@@ -316,6 +316,8 @@ function PlatformHealthPage() {
           <TabsTrigger value="probes">Live probes</TabsTrigger>
           <TabsTrigger value="config">Configuration</TabsTrigger>
           <TabsTrigger value="tester">Endpoint tester</TabsTrigger>
+          <TabsTrigger value="signed">Secure link check</TabsTrigger>
+          <TabsTrigger value="smoke">External app test</TabsTrigger>
           <TabsTrigger value="verify">Verification</TabsTrigger>
           <TabsTrigger value="assistant">AI assistant</TabsTrigger>
         </TabsList>
