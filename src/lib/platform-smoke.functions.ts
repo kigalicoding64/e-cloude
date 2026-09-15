@@ -104,6 +104,13 @@ async function timed<T>(fn: () => Promise<T>): Promise<{ value?: T; error?: stri
   }
 }
 
+async function sha256Bytes(bytes: ArrayBuffer): Promise<string> {
+  const digest = await crypto.subtle.digest("SHA-256", bytes);
+  return Array.from(new Uint8Array(digest))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+}
+
 function req(url: string, init: RequestInit = {}) {
   return fetch(url, {
     ...init,
