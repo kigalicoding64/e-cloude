@@ -12,4 +12,17 @@ export default defineConfig({
     // nitro/vite builds from this
     server: { entry: "server" },
   },
+  vite: {
+    resolve: {
+      alias: [
+        // ES5-compiled dependencies (asn1js / @peculiar/* pulled in by WebAuthn)
+        // do `require("tslib").__extends`. In the Worker build tslib resolves to
+        // its ESM entry, whose interop `default` is undefined, which crashed the
+        // whole worker with:
+        //   TypeError: Cannot destructure property '__extends' of '__toESM(...).default'
+        // Pointing tslib at its CommonJS entry restores a real default export.
+        { find: /^tslib$/, replacement: "tslib/tslib.js" },
+      ],
+    },
+  },
 });
