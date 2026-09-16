@@ -127,6 +127,7 @@ function PlatformHealthPage() {
   const [selectedFile, setSelectedFile] = useState("");
   const [targetId, setTargetId] = useState(LIVE_TARGETS[0].id);
   const [apiKey, setApiKey] = useState("");
+  const [foreignApiKey, setForeignApiKey] = useState("");
   const [logs, setLogs] = useState("");
   const [browserResults, setBrowserResults] = useState<BrowserCheck[]>([]);
   const [testing, setTesting] = useState(false);
@@ -191,7 +192,12 @@ function PlatformHealthPage() {
   const signedMutation = useMutation({
     mutationFn: () =>
       signedCheck({
-        data: { fileId: selectedFile, targetId, apiKey: apiKey.trim() || undefined },
+        data: {
+          fileId: selectedFile,
+          targetId,
+          apiKey: apiKey.trim() || undefined,
+          foreignApiKey: foreignApiKey.trim() || undefined,
+        },
       }),
     onSuccess: (res) =>
       res.passed
@@ -494,15 +500,29 @@ function PlatformHealthPage() {
                 </select>
               </div>
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="signed-key">API key (optional — uses the public API when given)</Label>
-              <Input
-                id="signed-key"
-                type="password"
-                placeholder="eck_live_…"
-                value={apiKey}
-                onChange={(e) => setApiKey(e.target.value)}
-              />
+            <div className="grid gap-3 sm:grid-cols-2">
+              <div className="space-y-2">
+                <Label htmlFor="signed-key">API key (optional — uses the public API when given)</Label>
+                <Input
+                  id="signed-key"
+                  type="password"
+                  placeholder="eck_live_…"
+                  value={apiKey}
+                  onChange={(e) => setApiKey(e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="signed-foreign-key">
+                  Key from another organization (optional — isolation check)
+                </Label>
+                <Input
+                  id="signed-foreign-key"
+                  type="password"
+                  placeholder="eck_live_…"
+                  value={foreignApiKey}
+                  onChange={(e) => setForeignApiKey(e.target.value)}
+                />
+              </div>
             </div>
             <Button
               onClick={() => signedMutation.mutate()}
@@ -529,6 +549,112 @@ function PlatformHealthPage() {
                       : ""}
                   </span>
                 </div>
+
+                {signedMutation.data.expiry && (
+                  <Card className="bg-muted/30 space-y-2 p-3 text-sm">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="font-medium">Expiry behaviour</span>
+                      <StatusPill
+                        ok={signedMutation.data.expiry.expired_refused}
+                        label={
+                          {
+                            refused_at_expiry: "expired exactly on time",
+                            refused_after_grace: "expired after a short grace",
+                            never_expired: "never expired",
+                            inconclusive: "inconclusive",
+                          }[signedMutation.data.expiry.observed]
+                        }
+                      />
+                      {signedMutation.data.expiry.grace_exercised && (
+                        <span className="text-muted-foreground text-xs">grace path exercised</span>
+                      )}
+                    </div>
+                    <dl className="text-muted-foreground grid gap-1 sm:grid-cols-2">
+                      <div>
+                        Test link lifetime: {signedMutation.data.expiry.ttl_seconds}s (issued{" "}
+                        {formatDate(signedMutation.data.expiry.issued_at)})
+                      </div>
+                      <div>
+                        Expected to expire at:{" "}
+                        {formatDate(signedMutation.data.expiry.expected_expiry_at)}
+                      </div>
+                      <div>
+                        Immediately after issuing:{" "}
+                        {signedMutation.data.expiry.fresh_ok ? "worked" : "refused"} (status{" "}
+                        {signedMutation.data.expiry.fresh_status ?? "none"})
+                      </div>
+                      <div>
+                        Grace probe (+{signedMutation.data.expiry.grace_offset_ms}ms):{" "}
+                        {signedMutation.data.expiry.grace_exercised
+                          ? "still accepted — within clock tolerance"
+                          : "already refused"}{" "}
+                        (status {signedMutation.data.expiry.grace_status ?? "none"})
+                      </div>
+                      <div>
+                        After the timeout ({formatDate(signedMutation.data.expiry.expired_probe_at)}
+                        ): {signedMutation.data.expiry.expired_refused ? "refused" : "still worked"}{" "}
+                        (status {signedMutation.data.expiry.expired_status ?? "none"})
+                      </div>
+                      <div>Requested link lifetime: {signedMutation.data.requested_expires_in}s</div>
+                    </dl>
+                  </Card>
+                )}
+
+                {signedMutation.data.integrity && (
+                  <Card className="bg-muted/30 space-y-2 p-3 text-sm">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="font-medium">Contents &amp; headers</span>
+                      <StatusPill
+                        ok={signedMutation.data.integrity.checksum_match}
+                        label={signedMutation.data.integrity.checksum_match ? "identical" : "differs"}
+                      />
+                      <StatusPill
+                        ok={
+                          signedMutation.data.integrity.content_type_ok &&
+                          signedMutation.data.integrity.disposition_ok
+                        }
+                        label="headers"
+                      />
+                    </div>
+                    <dl className="text-muted-foreground grid gap-1 sm:grid-cols-2">
+                      <div>
+                        Size: {signedMutation.data.integrity.received_bytes} of{" "}
+                        {signedMutation.data.integrity.expected_bytes} bytes
+                      </div>
+                      <div className="break-all">
+                        Checksum: {signedMutation.data.integrity.received_sha256?.slice(0, 24) ?? "—"}…
+                      </div>
+                      <div>
+                        Type: {signedMutation.data.integrity.content_type ?? "missing"}
+                        {signedMutation.data.integrity.expected_mime
+                          ? ` (expected ${signedMutation.data.integrity.expected_mime})`
+                          : ""}
+                      </div>
+                      <div className="break-all">
+                        Filename header: {signedMutation.data.integrity.content_disposition ?? "missing"}
+                      </div>
+                    </dl>
+                  </Card>
+                )}
+
+                {signedMutation.data.isolation && (
+                  <Card className="bg-muted/30 space-y-1 p-3 text-sm">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="font-medium">Organization isolation</span>
+                      <StatusPill
+                        ok={signedMutation.data.isolation.blocked}
+                        label={signedMutation.data.isolation.blocked ? "blocked" : "not blocked"}
+                      />
+                    </div>
+                    <p className="text-muted-foreground">
+                      {signedMutation.data.isolation.other_owner_label
+                        ? `Second key: ${signedMutation.data.isolation.other_owner_label}. `
+                        : ""}
+                      {signedMutation.data.isolation.detail}
+                    </p>
+                  </Card>
+                )}
+
                 <StepList steps={signedMutation.data.steps} />
               </div>
             )}
