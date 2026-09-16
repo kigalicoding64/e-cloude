@@ -127,6 +127,7 @@ function PlatformHealthPage() {
   const [selectedFile, setSelectedFile] = useState("");
   const [targetId, setTargetId] = useState(LIVE_TARGETS[0].id);
   const [apiKey, setApiKey] = useState("");
+  const [foreignApiKey, setForeignApiKey] = useState("");
   const [logs, setLogs] = useState("");
   const [browserResults, setBrowserResults] = useState<BrowserCheck[]>([]);
   const [testing, setTesting] = useState(false);
