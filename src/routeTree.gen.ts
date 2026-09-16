@@ -25,6 +25,8 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AiRouteImport } from './routes/ai'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as V1IndexRouteImport } from './routes/v1/index'
+import { Route as V1SplatRouteImport } from './routes/v1/$'
 import { Route as SdkEgreed_cloudDotpyRouteImport } from './routes/sdk/egreed_cloud[.]py'
 import { Route as SdkEgreedCloudDotjsRouteImport } from './routes/sdk/egreed-cloud[.]js'
 import { Route as STokenRouteImport } from './routes/s.$token'
@@ -167,6 +169,16 @@ const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const V1IndexRoute = V1IndexRouteImport.update({
+  id: '/v1/',
+  path: '/v1/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const V1SplatRoute = V1SplatRouteImport.update({
+  id: '/v1/$',
+  path: '/v1/$',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SdkEgreed_cloudDotpyRoute = SdkEgreed_cloudDotpyRouteImport.update({
@@ -551,6 +563,8 @@ export interface FileRoutesByFullPath {
   '/s/$token': typeof STokenRoute
   '/sdk/egreed-cloud.js': typeof SdkEgreedCloudDotjsRoute
   '/sdk/egreed_cloud.py': typeof SdkEgreed_cloudDotpyRoute
+  '/v1/$': typeof V1SplatRoute
+  '/v1/': typeof V1IndexRoute
   '/ai/deployments': typeof AuthenticatedAiDeploymentsRoute
   '/ai/models': typeof AuthenticatedAiModelsRouteWithChildren
   '/ai/orchestrators': typeof AuthenticatedAiOrchestratorsRoute
@@ -632,6 +646,8 @@ export interface FileRoutesByTo {
   '/s/$token': typeof STokenRoute
   '/sdk/egreed-cloud.js': typeof SdkEgreedCloudDotjsRoute
   '/sdk/egreed_cloud.py': typeof SdkEgreed_cloudDotpyRoute
+  '/v1/$': typeof V1SplatRoute
+  '/v1': typeof V1IndexRoute
   '/ai/deployments': typeof AuthenticatedAiDeploymentsRoute
   '/ai/models': typeof AuthenticatedAiModelsRouteWithChildren
   '/ai/orchestrators': typeof AuthenticatedAiOrchestratorsRoute
@@ -715,6 +731,8 @@ export interface FileRoutesById {
   '/s/$token': typeof STokenRoute
   '/sdk/egreed-cloud.js': typeof SdkEgreedCloudDotjsRoute
   '/sdk/egreed_cloud.py': typeof SdkEgreed_cloudDotpyRoute
+  '/v1/$': typeof V1SplatRoute
+  '/v1/': typeof V1IndexRoute
   '/_authenticated/ai/deployments': typeof AuthenticatedAiDeploymentsRoute
   '/_authenticated/ai/models': typeof AuthenticatedAiModelsRouteWithChildren
   '/_authenticated/ai/orchestrators': typeof AuthenticatedAiOrchestratorsRoute
@@ -798,6 +816,8 @@ export interface FileRouteTypes {
     | '/s/$token'
     | '/sdk/egreed-cloud.js'
     | '/sdk/egreed_cloud.py'
+    | '/v1/$'
+    | '/v1/'
     | '/ai/deployments'
     | '/ai/models'
     | '/ai/orchestrators'
@@ -879,6 +899,8 @@ export interface FileRouteTypes {
     | '/s/$token'
     | '/sdk/egreed-cloud.js'
     | '/sdk/egreed_cloud.py'
+    | '/v1/$'
+    | '/v1'
     | '/ai/deployments'
     | '/ai/models'
     | '/ai/orchestrators'
@@ -961,6 +983,8 @@ export interface FileRouteTypes {
     | '/s/$token'
     | '/sdk/egreed-cloud.js'
     | '/sdk/egreed_cloud.py'
+    | '/v1/$'
+    | '/v1/'
     | '/_authenticated/ai/deployments'
     | '/_authenticated/ai/models'
     | '/_authenticated/ai/orchestrators'
@@ -1027,6 +1051,8 @@ export interface RootRouteChildren {
   STokenRoute: typeof STokenRoute
   SdkEgreedCloudDotjsRoute: typeof SdkEgreedCloudDotjsRoute
   SdkEgreed_cloudDotpyRoute: typeof SdkEgreed_cloudDotpyRoute
+  V1SplatRoute: typeof V1SplatRoute
+  V1IndexRoute: typeof V1IndexRoute
   ApiFilesIdRoute: typeof ApiFilesIdRoute
   ApiV1HealthRoute: typeof ApiV1HealthRoute
   ApiV1MeRoute: typeof ApiV1MeRoute
@@ -1173,6 +1199,20 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/v1/': {
+      id: '/v1/'
+      path: '/v1'
+      fullPath: '/v1/'
+      preLoaderRoute: typeof V1IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/v1/$': {
+      id: '/v1/$'
+      path: '/v1/$'
+      fullPath: '/v1/$'
+      preLoaderRoute: typeof V1SplatRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/sdk/egreed_cloud.py': {
@@ -1750,6 +1790,8 @@ const rootRouteChildren: RootRouteChildren = {
   STokenRoute: STokenRoute,
   SdkEgreedCloudDotjsRoute: SdkEgreedCloudDotjsRoute,
   SdkEgreed_cloudDotpyRoute: SdkEgreed_cloudDotpyRoute,
+  V1SplatRoute: V1SplatRoute,
+  V1IndexRoute: V1IndexRoute,
   ApiFilesIdRoute: ApiFilesIdRoute,
   ApiV1HealthRoute: ApiV1HealthRoute,
   ApiV1MeRoute: ApiV1MeRoute,
