@@ -192,7 +192,12 @@ function PlatformHealthPage() {
   const signedMutation = useMutation({
     mutationFn: () =>
       signedCheck({
-        data: { fileId: selectedFile, targetId, apiKey: apiKey.trim() || undefined },
+        data: {
+          fileId: selectedFile,
+          targetId,
+          apiKey: apiKey.trim() || undefined,
+          foreignApiKey: foreignApiKey.trim() || undefined,
+        },
       }),
     onSuccess: (res) =>
       res.passed
