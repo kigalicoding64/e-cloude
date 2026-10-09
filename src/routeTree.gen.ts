@@ -9,152 +9,96 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
-import { Route as PostmanDotjsonRouteImport } from './routes/postman[.]json'
-import { Route as PlaygroundRouteImport } from './routes/playground'
-import { Route as OpenapiDotyamlRouteImport } from './routes/openapi[.]yaml'
-import { Route as OpenapiDotjsonRouteImport } from './routes/openapi[.]json'
-import { Route as LlmsDottxtRouteImport } from './routes/llms[.]txt'
-import { Route as InsomniaDotjsonRouteImport } from './routes/insomnia[.]json'
-import { Route as HealthRouteImport } from './routes/health'
-import { Route as DocsRouteImport } from './routes/docs'
-import { Route as DevelopersRouteImport } from './routes/developers'
-import { Route as DeveloperDocsRouteImport } from './routes/developer-docs'
-import { Route as BrunoDotjsonRouteImport } from './routes/bruno[.]json'
-import { Route as AuthRouteImport } from './routes/auth'
-import { Route as AiRouteImport } from './routes/ai'
-import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AiRouteImport } from './routes/ai'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as BrunoDotjsonRouteImport } from './routes/bruno[.]json'
+import { Route as DeveloperDocsRouteImport } from './routes/developer-docs'
+import { Route as DevelopersRouteImport } from './routes/developers'
+import { Route as DocsRouteImport } from './routes/docs'
+import { Route as HealthRouteImport } from './routes/health'
+import { Route as InsomniaDotjsonRouteImport } from './routes/insomnia[.]json'
+import { Route as LlmsDottxtRouteImport } from './routes/llms[.]txt'
+import { Route as OpenapiDotjsonRouteImport } from './routes/openapi[.]json'
+import { Route as OpenapiDotyamlRouteImport } from './routes/openapi[.]yaml'
+import { Route as PlaygroundRouteImport } from './routes/playground'
+import { Route as PostmanDotjsonRouteImport } from './routes/postman[.]json'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as DotwellKnownEgreedCloudDotjsonRouteImport } from './routes/[.]well-known/egreed-cloud[.]json'
+import { Route as AuthenticatedActivityRouteImport } from './routes/_authenticated/activity'
+import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as AuthenticatedApiKeysRouteImport } from './routes/_authenticated/api-keys'
+import { Route as AuthenticatedBackupRouteImport } from './routes/_authenticated/backup'
+import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedDeveloperRouteImport } from './routes/_authenticated/developer'
+import { Route as AuthenticatedFavoritesRouteImport } from './routes/_authenticated/favorites'
+import { Route as AuthenticatedFilesRouteImport } from './routes/_authenticated/files'
+import { Route as AuthenticatedNotificationsRouteImport } from './routes/_authenticated/notifications'
+import { Route as AuthenticatedOrganizationsRouteImport } from './routes/_authenticated/organizations'
+import { Route as AuthenticatedPlatformHealthRouteImport } from './routes/_authenticated/platform-health'
+import { Route as AuthenticatedSecurityRouteImport } from './routes/_authenticated/security'
+import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
+import { Route as AuthenticatedShareDiagnosticsRouteImport } from './routes/_authenticated/share-diagnostics'
+import { Route as AuthenticatedSharedRouteImport } from './routes/_authenticated/shared'
+import { Route as AuthenticatedStorageAnalyticsRouteImport } from './routes/_authenticated/storage-analytics'
+import { Route as AuthenticatedTrashRouteImport } from './routes/_authenticated/trash'
+import { Route as ApiSplatRouteImport } from './routes/api/$'
+import { Route as ApiHealthRouteImport } from './routes/api/health'
+import { Route as ApiUploadRouteImport } from './routes/api/upload'
+import { Route as STokenRouteImport } from './routes/s.$token'
+import { Route as SdkEgreedCloudDotjsRouteImport } from './routes/sdk/egreed-cloud[.]js'
+import { Route as SdkEgreed_cloudDotpyRouteImport } from './routes/sdk/egreed_cloud[.]py'
 import { Route as V1IndexRouteImport } from './routes/v1/index'
 import { Route as V1SplatRouteImport } from './routes/v1/$'
-import { Route as SdkEgreed_cloudDotpyRouteImport } from './routes/sdk/egreed_cloud[.]py'
-import { Route as SdkEgreedCloudDotjsRouteImport } from './routes/sdk/egreed-cloud[.]js'
-import { Route as STokenRouteImport } from './routes/s.$token'
-import { Route as ApiUploadRouteImport } from './routes/api/upload'
-import { Route as ApiHealthRouteImport } from './routes/api/health'
-import { Route as ApiSplatRouteImport } from './routes/api/$'
-import { Route as AuthenticatedTrashRouteImport } from './routes/_authenticated/trash'
-import { Route as AuthenticatedStorageAnalyticsRouteImport } from './routes/_authenticated/storage-analytics'
-import { Route as AuthenticatedSharedRouteImport } from './routes/_authenticated/shared'
-import { Route as AuthenticatedShareDiagnosticsRouteImport } from './routes/_authenticated/share-diagnostics'
-import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
-import { Route as AuthenticatedSecurityRouteImport } from './routes/_authenticated/security'
-import { Route as AuthenticatedPlatformHealthRouteImport } from './routes/_authenticated/platform-health'
-import { Route as AuthenticatedOrganizationsRouteImport } from './routes/_authenticated/organizations'
-import { Route as AuthenticatedNotificationsRouteImport } from './routes/_authenticated/notifications'
-import { Route as AuthenticatedFilesRouteImport } from './routes/_authenticated/files'
-import { Route as AuthenticatedFavoritesRouteImport } from './routes/_authenticated/favorites'
-import { Route as AuthenticatedDeveloperRouteImport } from './routes/_authenticated/developer'
-import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
-import { Route as AuthenticatedBackupRouteImport } from './routes/_authenticated/backup'
-import { Route as AuthenticatedApiKeysRouteImport } from './routes/_authenticated/api-keys'
-import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
-import { Route as AuthenticatedActivityRouteImport } from './routes/_authenticated/activity'
-import { Route as DotwellKnownEgreedCloudDotjsonRouteImport } from './routes/[.]well-known/egreed-cloud[.]json'
-import { Route as ApiFilesIndexRouteImport } from './routes/api/files/index'
-import { Route as ApiV1UploadRouteImport } from './routes/api/v1/upload'
-import { Route as ApiV1MeRouteImport } from './routes/api/v1/me'
-import { Route as ApiV1HealthRouteImport } from './routes/api/v1/health'
-import { Route as ApiFilesIdRouteImport } from './routes/api/files/$id'
-import { Route as AuthenticatedOrganizationsIdRouteImport } from './routes/_authenticated/organizations.$id'
-import { Route as AuthenticatedAiOrchestratorsRouteImport } from './routes/_authenticated/ai.orchestrators'
-import { Route as AuthenticatedAiModelsRouteImport } from './routes/_authenticated/ai.models'
 import { Route as AuthenticatedAiDeploymentsRouteImport } from './routes/_authenticated/ai.deployments'
-import { Route as ApiV1FoldersIndexRouteImport } from './routes/api/v1/folders/index'
-import { Route as ApiV1FilesIndexRouteImport } from './routes/api/v1/files/index'
-import { Route as ApiPublicV1IndexRouteImport } from './routes/api/public/v1/index'
-import { Route as ApiV1FilesIdRouteImport } from './routes/api/v1/files/$id'
-import { Route as ApiPublicV1ReadyRouteImport } from './routes/api/public/v1/ready'
-import { Route as ApiPublicV1OpenapiDotyamlRouteImport } from './routes/api/public/v1/openapi[.]yaml'
-import { Route as ApiPublicV1OpenapiDotjsonRouteImport } from './routes/api/public/v1/openapi[.]json'
-import { Route as ApiPublicV1MetricsRouteImport } from './routes/api/public/v1/metrics'
-import { Route as ApiPublicV1MeRouteImport } from './routes/api/public/v1/me'
-import { Route as ApiPublicV1LiveRouteImport } from './routes/api/public/v1/live'
-import { Route as ApiPublicV1HealthRouteImport } from './routes/api/public/v1/health'
+import { Route as AuthenticatedAiModelsRouteImport } from './routes/_authenticated/ai.models'
+import { Route as AuthenticatedAiOrchestratorsRouteImport } from './routes/_authenticated/ai.orchestrators'
+import { Route as AuthenticatedOrganizationsIdRouteImport } from './routes/_authenticated/organizations.$id'
+import { Route as ApiFilesIndexRouteImport } from './routes/api/files/index'
+import { Route as ApiFilesIdRouteImport } from './routes/api/files/$id'
+import { Route as ApiV1HealthRouteImport } from './routes/api/v1/health'
+import { Route as ApiV1MeRouteImport } from './routes/api/v1/me'
+import { Route as ApiV1UploadRouteImport } from './routes/api/v1/upload'
 import { Route as AuthenticatedAiModelsSlugRouteImport } from './routes/_authenticated/ai.models.$slug'
-import { Route as ApiPublicV1FoldersIndexRouteImport } from './routes/api/public/v1/folders/index'
-import { Route as ApiPublicV1FilesIndexRouteImport } from './routes/api/public/v1/files/index'
-import { Route as ApiPublicV1UploadsInitRouteImport } from './routes/api/public/v1/uploads/init'
-import { Route as ApiPublicV1UploadsIdRouteImport } from './routes/api/public/v1/uploads/$id'
-import { Route as ApiPublicV1SharesTokenRouteImport } from './routes/api/public/v1/shares/$token'
-import { Route as ApiPublicV1FoldersIdRouteImport } from './routes/api/public/v1/folders/$id'
-import { Route as ApiPublicV1FilesUploadUrlRouteImport } from './routes/api/public/v1/files/upload-url'
-import { Route as ApiPublicV1FilesUploadRouteImport } from './routes/api/public/v1/files/upload'
-import { Route as ApiPublicV1FilesCommitRouteImport } from './routes/api/public/v1/files/commit'
-import { Route as ApiPublicV1FilesIdRouteImport } from './routes/api/public/v1/files/$id'
-import { Route as ApiPublicV1ChatSlugRouteImport } from './routes/api/public/v1/chat.$slug'
+import { Route as ApiPublicV1IndexRouteImport } from './routes/api/public/v1/index'
+import { Route as ApiPublicV1HealthRouteImport } from './routes/api/public/v1/health'
+import { Route as ApiPublicV1LiveRouteImport } from './routes/api/public/v1/live'
+import { Route as ApiPublicV1MeRouteImport } from './routes/api/public/v1/me'
+import { Route as ApiPublicV1MetricsRouteImport } from './routes/api/public/v1/metrics'
+import { Route as ApiPublicV1OpenapiDotjsonRouteImport } from './routes/api/public/v1/openapi[.]json'
+import { Route as ApiPublicV1OpenapiDotyamlRouteImport } from './routes/api/public/v1/openapi[.]yaml'
+import { Route as ApiPublicV1ReadyRouteImport } from './routes/api/public/v1/ready'
+import { Route as ApiV1FilesIndexRouteImport } from './routes/api/v1/files/index'
+import { Route as ApiV1FilesIdRouteImport } from './routes/api/v1/files/$id'
+import { Route as ApiV1FoldersIndexRouteImport } from './routes/api/v1/folders/index'
 import { Route as ApiPublicV1AgentHeartbeatRouteImport } from './routes/api/public/v1/agent/heartbeat'
-import { Route as ApiPublicV1UploadsIdCompleteRouteImport } from './routes/api/public/v1/uploads/$id.complete'
-import { Route as ApiPublicV1FilesIdSignedUrlRouteImport } from './routes/api/public/v1/files/$id.signed-url'
+import { Route as ApiPublicV1ChatSlugRouteImport } from './routes/api/public/v1/chat.$slug'
+import { Route as ApiPublicV1FilesIndexRouteImport } from './routes/api/public/v1/files/index'
+import { Route as ApiPublicV1FilesIdRouteImport } from './routes/api/public/v1/files/$id'
+import { Route as ApiPublicV1FilesCommitRouteImport } from './routes/api/public/v1/files/commit'
+import { Route as ApiPublicV1FilesUploadRouteImport } from './routes/api/public/v1/files/upload'
+import { Route as ApiPublicV1FilesUploadUrlRouteImport } from './routes/api/public/v1/files/upload-url'
+import { Route as ApiPublicV1FoldersIndexRouteImport } from './routes/api/public/v1/folders/index'
+import { Route as ApiPublicV1FoldersIdRouteImport } from './routes/api/public/v1/folders/$id'
+import { Route as ApiPublicV1SharesTokenRouteImport } from './routes/api/public/v1/shares/$token'
+import { Route as ApiPublicV1UploadsIdRouteImport } from './routes/api/public/v1/uploads/$id'
+import { Route as ApiPublicV1UploadsInitRouteImport } from './routes/api/public/v1/uploads/init'
 import { Route as ApiPublicV1AgentJobsNextRouteImport } from './routes/api/public/v1/agent/jobs.next'
-import { Route as ApiPublicV1UploadsIdChunksIndexRouteImport } from './routes/api/public/v1/uploads/$id.chunks.$index'
-import { Route as ApiPublicV1AgentDeploymentsIdStatusRouteImport } from './routes/api/public/v1/agent/deployments.$id.status'
-import { Route as ApiPublicV1AgentDeploymentsIdMetricsRouteImport } from './routes/api/public/v1/agent/deployments.$id.metrics'
+import { Route as ApiPublicV1FilesIdSignedUrlRouteImport } from './routes/api/public/v1/files/$id.signed-url'
+import { Route as ApiPublicV1UploadsIdCompleteRouteImport } from './routes/api/public/v1/uploads/$id.complete'
 import { Route as ApiPublicV1AgentDeploymentsIdLogsRouteImport } from './routes/api/public/v1/agent/deployments.$id.logs'
+import { Route as ApiPublicV1AgentDeploymentsIdMetricsRouteImport } from './routes/api/public/v1/agent/deployments.$id.metrics'
+import { Route as ApiPublicV1AgentDeploymentsIdStatusRouteImport } from './routes/api/public/v1/agent/deployments.$id.status'
+import { Route as ApiPublicV1UploadsIdChunksIndexRouteImport } from './routes/api/public/v1/uploads/$id.chunks.$index'
 
-const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
-  id: '/sitemap.xml',
-  path: '/sitemap.xml',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PostmanDotjsonRoute = PostmanDotjsonRouteImport.update({
-  id: '/postman.json',
-  path: '/postman.json',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PlaygroundRoute = PlaygroundRouteImport.update({
-  id: '/playground',
-  path: '/playground',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const OpenapiDotyamlRoute = OpenapiDotyamlRouteImport.update({
-  id: '/openapi.yaml',
-  path: '/openapi.yaml',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const OpenapiDotjsonRoute = OpenapiDotjsonRouteImport.update({
-  id: '/openapi.json',
-  path: '/openapi.json',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LlmsDottxtRoute = LlmsDottxtRouteImport.update({
-  id: '/llms.txt',
-  path: '/llms.txt',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const InsomniaDotjsonRoute = InsomniaDotjsonRouteImport.update({
-  id: '/insomnia.json',
-  path: '/insomnia.json',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const HealthRoute = HealthRouteImport.update({
-  id: '/health',
-  path: '/health',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DocsRoute = DocsRouteImport.update({
-  id: '/docs',
-  path: '/docs',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DevelopersRoute = DevelopersRouteImport.update({
-  id: '/developers',
-  path: '/developers',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DeveloperDocsRoute = DeveloperDocsRouteImport.update({
-  id: '/developer-docs',
-  path: '/developer-docs',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BrunoDotjsonRoute = BrunoDotjsonRouteImport.update({
-  id: '/bruno.json',
-  path: '/bruno.json',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthRoute = AuthRouteImport.update({
-  id: '/auth',
-  path: '/auth',
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AiRoute = AiRouteImport.update({
@@ -162,13 +106,195 @@ const AiRoute = AiRouteImport.update({
   path: '/ai',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
-  id: '/_authenticated',
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const BrunoDotjsonRoute = BrunoDotjsonRouteImport.update({
+  id: '/bruno.json',
+  path: '/bruno.json',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DeveloperDocsRoute = DeveloperDocsRouteImport.update({
+  id: '/developer-docs',
+  path: '/developer-docs',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DevelopersRoute = DevelopersRouteImport.update({
+  id: '/developers',
+  path: '/developers',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DocsRoute = DocsRouteImport.update({
+  id: '/docs',
+  path: '/docs',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HealthRoute = HealthRouteImport.update({
+  id: '/health',
+  path: '/health',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InsomniaDotjsonRoute = InsomniaDotjsonRouteImport.update({
+  id: '/insomnia.json',
+  path: '/insomnia.json',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LlmsDottxtRoute = LlmsDottxtRouteImport.update({
+  id: '/llms.txt',
+  path: '/llms.txt',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OpenapiDotjsonRoute = OpenapiDotjsonRouteImport.update({
+  id: '/openapi.json',
+  path: '/openapi.json',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OpenapiDotyamlRoute = OpenapiDotyamlRouteImport.update({
+  id: '/openapi.yaml',
+  path: '/openapi.yaml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PlaygroundRoute = PlaygroundRouteImport.update({
+  id: '/playground',
+  path: '/playground',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PostmanDotjsonRoute = PostmanDotjsonRouteImport.update({
+  id: '/postman.json',
+  path: '/postman.json',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DotwellKnownEgreedCloudDotjsonRoute =
+  DotwellKnownEgreedCloudDotjsonRouteImport.update({
+    id: '/.well-known/egreed-cloud.json',
+    path: '/.well-known/egreed-cloud.json',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const AuthenticatedActivityRoute = AuthenticatedActivityRouteImport.update({
+  id: '/activity',
+  path: '/activity',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedApiKeysRoute = AuthenticatedApiKeysRouteImport.update({
+  id: '/api-keys',
+  path: '/api-keys',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedBackupRoute = AuthenticatedBackupRouteImport.update({
+  id: '/backup',
+  path: '/backup',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedDeveloperRoute = AuthenticatedDeveloperRouteImport.update({
+  id: '/developer',
+  path: '/developer',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedFavoritesRoute = AuthenticatedFavoritesRouteImport.update({
+  id: '/favorites',
+  path: '/favorites',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedFilesRoute = AuthenticatedFilesRouteImport.update({
+  id: '/files',
+  path: '/files',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedNotificationsRoute =
+  AuthenticatedNotificationsRouteImport.update({
+    id: '/notifications',
+    path: '/notifications',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedOrganizationsRoute =
+  AuthenticatedOrganizationsRouteImport.update({
+    id: '/organizations',
+    path: '/organizations',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedPlatformHealthRoute =
+  AuthenticatedPlatformHealthRouteImport.update({
+    id: '/platform-health',
+    path: '/platform-health',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedSecurityRoute = AuthenticatedSecurityRouteImport.update({
+  id: '/security',
+  path: '/security',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedShareDiagnosticsRoute =
+  AuthenticatedShareDiagnosticsRouteImport.update({
+    id: '/share-diagnostics',
+    path: '/share-diagnostics',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedSharedRoute = AuthenticatedSharedRouteImport.update({
+  id: '/shared',
+  path: '/shared',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedStorageAnalyticsRoute =
+  AuthenticatedStorageAnalyticsRouteImport.update({
+    id: '/storage-analytics',
+    path: '/storage-analytics',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedTrashRoute = AuthenticatedTrashRouteImport.update({
+  id: '/trash',
+  path: '/trash',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const ApiSplatRoute = ApiSplatRouteImport.update({
+  id: '/api/$',
+  path: '/api/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiHealthRoute = ApiHealthRouteImport.update({
+  id: '/api/health',
+  path: '/api/health',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiUploadRoute = ApiUploadRouteImport.update({
+  id: '/api/upload',
+  path: '/api/upload',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const STokenRoute = STokenRouteImport.update({
+  id: '/s/$token',
+  path: '/s/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SdkEgreedCloudDotjsRoute = SdkEgreedCloudDotjsRouteImport.update({
+  id: '/sdk/egreed-cloud.js',
+  path: '/sdk/egreed-cloud.js',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SdkEgreed_cloudDotpyRoute = SdkEgreed_cloudDotpyRouteImport.update({
+  id: '/sdk/egreed_cloud.py',
+  path: '/sdk/egreed_cloud.py',
   getParentRoute: () => rootRouteImport,
 } as any)
 const V1IndexRoute = V1IndexRouteImport.update({
@@ -181,167 +307,10 @@ const V1SplatRoute = V1SplatRouteImport.update({
   path: '/v1/$',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SdkEgreed_cloudDotpyRoute = SdkEgreed_cloudDotpyRouteImport.update({
-  id: '/sdk/egreed_cloud.py',
-  path: '/sdk/egreed_cloud.py',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SdkEgreedCloudDotjsRoute = SdkEgreedCloudDotjsRouteImport.update({
-  id: '/sdk/egreed-cloud.js',
-  path: '/sdk/egreed-cloud.js',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const STokenRoute = STokenRouteImport.update({
-  id: '/s/$token',
-  path: '/s/$token',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiUploadRoute = ApiUploadRouteImport.update({
-  id: '/api/upload',
-  path: '/api/upload',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiHealthRoute = ApiHealthRouteImport.update({
-  id: '/api/health',
-  path: '/api/health',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiSplatRoute = ApiSplatRouteImport.update({
-  id: '/api/$',
-  path: '/api/$',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthenticatedTrashRoute = AuthenticatedTrashRouteImport.update({
-  id: '/trash',
-  path: '/trash',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedStorageAnalyticsRoute =
-  AuthenticatedStorageAnalyticsRouteImport.update({
-    id: '/storage-analytics',
-    path: '/storage-analytics',
-    getParentRoute: () => AuthenticatedRouteRoute,
-  } as any)
-const AuthenticatedSharedRoute = AuthenticatedSharedRouteImport.update({
-  id: '/shared',
-  path: '/shared',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedShareDiagnosticsRoute =
-  AuthenticatedShareDiagnosticsRouteImport.update({
-    id: '/share-diagnostics',
-    path: '/share-diagnostics',
-    getParentRoute: () => AuthenticatedRouteRoute,
-  } as any)
-const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
-  id: '/settings',
-  path: '/settings',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedSecurityRoute = AuthenticatedSecurityRouteImport.update({
-  id: '/security',
-  path: '/security',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedPlatformHealthRoute =
-  AuthenticatedPlatformHealthRouteImport.update({
-    id: '/platform-health',
-    path: '/platform-health',
-    getParentRoute: () => AuthenticatedRouteRoute,
-  } as any)
-const AuthenticatedOrganizationsRoute =
-  AuthenticatedOrganizationsRouteImport.update({
-    id: '/organizations',
-    path: '/organizations',
-    getParentRoute: () => AuthenticatedRouteRoute,
-  } as any)
-const AuthenticatedNotificationsRoute =
-  AuthenticatedNotificationsRouteImport.update({
-    id: '/notifications',
-    path: '/notifications',
-    getParentRoute: () => AuthenticatedRouteRoute,
-  } as any)
-const AuthenticatedFilesRoute = AuthenticatedFilesRouteImport.update({
-  id: '/files',
-  path: '/files',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedFavoritesRoute = AuthenticatedFavoritesRouteImport.update({
-  id: '/favorites',
-  path: '/favorites',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedDeveloperRoute = AuthenticatedDeveloperRouteImport.update({
-  id: '/developer',
-  path: '/developer',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedBackupRoute = AuthenticatedBackupRouteImport.update({
-  id: '/backup',
-  path: '/backup',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedApiKeysRoute = AuthenticatedApiKeysRouteImport.update({
-  id: '/api-keys',
-  path: '/api-keys',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
-  id: '/admin',
-  path: '/admin',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedActivityRoute = AuthenticatedActivityRouteImport.update({
-  id: '/activity',
-  path: '/activity',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const DotwellKnownEgreedCloudDotjsonRoute =
-  DotwellKnownEgreedCloudDotjsonRouteImport.update({
-    id: '/.well-known/egreed-cloud.json',
-    path: '/.well-known/egreed-cloud.json',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const ApiFilesIndexRoute = ApiFilesIndexRouteImport.update({
-  id: '/api/files/',
-  path: '/api/files/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiV1UploadRoute = ApiV1UploadRouteImport.update({
-  id: '/api/v1/upload',
-  path: '/api/v1/upload',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiV1MeRoute = ApiV1MeRouteImport.update({
-  id: '/api/v1/me',
-  path: '/api/v1/me',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiV1HealthRoute = ApiV1HealthRouteImport.update({
-  id: '/api/v1/health',
-  path: '/api/v1/health',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiFilesIdRoute = ApiFilesIdRouteImport.update({
-  id: '/api/files/$id',
-  path: '/api/files/$id',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthenticatedOrganizationsIdRoute =
-  AuthenticatedOrganizationsIdRouteImport.update({
-    id: '/$id',
-    path: '/$id',
-    getParentRoute: () => AuthenticatedOrganizationsRoute,
-  } as any)
-const AuthenticatedAiOrchestratorsRoute =
-  AuthenticatedAiOrchestratorsRouteImport.update({
-    id: '/ai/orchestrators',
-    path: '/ai/orchestrators',
+const AuthenticatedAiDeploymentsRoute =
+  AuthenticatedAiDeploymentsRouteImport.update({
+    id: '/ai/deployments',
+    path: '/ai/deployments',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedAiModelsRoute = AuthenticatedAiModelsRouteImport.update({
@@ -349,67 +318,41 @@ const AuthenticatedAiModelsRoute = AuthenticatedAiModelsRouteImport.update({
   path: '/ai/models',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const AuthenticatedAiDeploymentsRoute =
-  AuthenticatedAiDeploymentsRouteImport.update({
-    id: '/ai/deployments',
-    path: '/ai/deployments',
+const AuthenticatedAiOrchestratorsRoute =
+  AuthenticatedAiOrchestratorsRouteImport.update({
+    id: '/ai/orchestrators',
+    path: '/ai/orchestrators',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
-const ApiV1FoldersIndexRoute = ApiV1FoldersIndexRouteImport.update({
-  id: '/api/v1/folders/',
-  path: '/api/v1/folders/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiV1FilesIndexRoute = ApiV1FilesIndexRouteImport.update({
-  id: '/api/v1/files/',
-  path: '/api/v1/files/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiPublicV1IndexRoute = ApiPublicV1IndexRouteImport.update({
-  id: '/api/public/v1/',
-  path: '/api/public/v1/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiV1FilesIdRoute = ApiV1FilesIdRouteImport.update({
-  id: '/api/v1/files/$id',
-  path: '/api/v1/files/$id',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiPublicV1ReadyRoute = ApiPublicV1ReadyRouteImport.update({
-  id: '/api/public/v1/ready',
-  path: '/api/public/v1/ready',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiPublicV1OpenapiDotyamlRoute =
-  ApiPublicV1OpenapiDotyamlRouteImport.update({
-    id: '/api/public/v1/openapi.yaml',
-    path: '/api/public/v1/openapi.yaml',
-    getParentRoute: () => rootRouteImport,
+const AuthenticatedOrganizationsIdRoute =
+  AuthenticatedOrganizationsIdRouteImport.update({
+    id: '/$id',
+    path: '/$id',
+    getParentRoute: () => AuthenticatedOrganizationsRoute,
   } as any)
-const ApiPublicV1OpenapiDotjsonRoute =
-  ApiPublicV1OpenapiDotjsonRouteImport.update({
-    id: '/api/public/v1/openapi.json',
-    path: '/api/public/v1/openapi.json',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const ApiPublicV1MetricsRoute = ApiPublicV1MetricsRouteImport.update({
-  id: '/api/public/v1/metrics',
-  path: '/api/public/v1/metrics',
+const ApiFilesIndexRoute = ApiFilesIndexRouteImport.update({
+  id: '/api/files/',
+  path: '/api/files/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiPublicV1MeRoute = ApiPublicV1MeRouteImport.update({
-  id: '/api/public/v1/me',
-  path: '/api/public/v1/me',
+const ApiFilesIdRoute = ApiFilesIdRouteImport.update({
+  id: '/api/files/$id',
+  path: '/api/files/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiPublicV1LiveRoute = ApiPublicV1LiveRouteImport.update({
-  id: '/api/public/v1/live',
-  path: '/api/public/v1/live',
+const ApiV1HealthRoute = ApiV1HealthRouteImport.update({
+  id: '/api/v1/health',
+  path: '/api/v1/health',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiPublicV1HealthRoute = ApiPublicV1HealthRouteImport.update({
-  id: '/api/public/v1/health',
-  path: '/api/public/v1/health',
+const ApiV1MeRoute = ApiV1MeRouteImport.update({
+  id: '/api/v1/me',
+  path: '/api/v1/me',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiV1UploadRoute = ApiV1UploadRouteImport.update({
+  id: '/api/v1/upload',
+  path: '/api/v1/upload',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedAiModelsSlugRoute =
@@ -418,60 +361,61 @@ const AuthenticatedAiModelsSlugRoute =
     path: '/$slug',
     getParentRoute: () => AuthenticatedAiModelsRoute,
   } as any)
-const ApiPublicV1FoldersIndexRoute = ApiPublicV1FoldersIndexRouteImport.update({
-  id: '/api/public/v1/folders/',
-  path: '/api/public/v1/folders/',
+const ApiPublicV1IndexRoute = ApiPublicV1IndexRouteImport.update({
+  id: '/api/public/v1/',
+  path: '/api/public/v1/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiPublicV1FilesIndexRoute = ApiPublicV1FilesIndexRouteImport.update({
-  id: '/api/public/v1/files/',
-  path: '/api/public/v1/files/',
+const ApiPublicV1HealthRoute = ApiPublicV1HealthRouteImport.update({
+  id: '/api/public/v1/health',
+  path: '/api/public/v1/health',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiPublicV1UploadsInitRoute = ApiPublicV1UploadsInitRouteImport.update({
-  id: '/api/public/v1/uploads/init',
-  path: '/api/public/v1/uploads/init',
+const ApiPublicV1LiveRoute = ApiPublicV1LiveRouteImport.update({
+  id: '/api/public/v1/live',
+  path: '/api/public/v1/live',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiPublicV1UploadsIdRoute = ApiPublicV1UploadsIdRouteImport.update({
-  id: '/api/public/v1/uploads/$id',
-  path: '/api/public/v1/uploads/$id',
+const ApiPublicV1MeRoute = ApiPublicV1MeRouteImport.update({
+  id: '/api/public/v1/me',
+  path: '/api/public/v1/me',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiPublicV1SharesTokenRoute = ApiPublicV1SharesTokenRouteImport.update({
-  id: '/api/public/v1/shares/$token',
-  path: '/api/public/v1/shares/$token',
+const ApiPublicV1MetricsRoute = ApiPublicV1MetricsRouteImport.update({
+  id: '/api/public/v1/metrics',
+  path: '/api/public/v1/metrics',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiPublicV1FoldersIdRoute = ApiPublicV1FoldersIdRouteImport.update({
-  id: '/api/public/v1/folders/$id',
-  path: '/api/public/v1/folders/$id',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiPublicV1FilesUploadUrlRoute =
-  ApiPublicV1FilesUploadUrlRouteImport.update({
-    id: '/api/public/v1/files/upload-url',
-    path: '/api/public/v1/files/upload-url',
+const ApiPublicV1OpenapiDotjsonRoute =
+  ApiPublicV1OpenapiDotjsonRouteImport.update({
+    id: '/api/public/v1/openapi.json',
+    path: '/api/public/v1/openapi.json',
     getParentRoute: () => rootRouteImport,
   } as any)
-const ApiPublicV1FilesUploadRoute = ApiPublicV1FilesUploadRouteImport.update({
-  id: '/api/public/v1/files/upload',
-  path: '/api/public/v1/files/upload',
+const ApiPublicV1OpenapiDotyamlRoute =
+  ApiPublicV1OpenapiDotyamlRouteImport.update({
+    id: '/api/public/v1/openapi.yaml',
+    path: '/api/public/v1/openapi.yaml',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicV1ReadyRoute = ApiPublicV1ReadyRouteImport.update({
+  id: '/api/public/v1/ready',
+  path: '/api/public/v1/ready',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiPublicV1FilesCommitRoute = ApiPublicV1FilesCommitRouteImport.update({
-  id: '/api/public/v1/files/commit',
-  path: '/api/public/v1/files/commit',
+const ApiV1FilesIndexRoute = ApiV1FilesIndexRouteImport.update({
+  id: '/api/v1/files/',
+  path: '/api/v1/files/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiPublicV1FilesIdRoute = ApiPublicV1FilesIdRouteImport.update({
-  id: '/api/public/v1/files/$id',
-  path: '/api/public/v1/files/$id',
+const ApiV1FilesIdRoute = ApiV1FilesIdRouteImport.update({
+  id: '/api/v1/files/$id',
+  path: '/api/v1/files/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiPublicV1ChatSlugRoute = ApiPublicV1ChatSlugRouteImport.update({
-  id: '/api/public/v1/chat/$slug',
-  path: '/api/public/v1/chat/$slug',
+const ApiV1FoldersIndexRoute = ApiV1FoldersIndexRouteImport.update({
+  id: '/api/v1/folders/',
+  path: '/api/v1/folders/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicV1AgentHeartbeatRoute =
@@ -480,11 +424,67 @@ const ApiPublicV1AgentHeartbeatRoute =
     path: '/api/public/v1/agent/heartbeat',
     getParentRoute: () => rootRouteImport,
   } as any)
-const ApiPublicV1UploadsIdCompleteRoute =
-  ApiPublicV1UploadsIdCompleteRouteImport.update({
-    id: '/complete',
-    path: '/complete',
-    getParentRoute: () => ApiPublicV1UploadsIdRoute,
+const ApiPublicV1ChatSlugRoute = ApiPublicV1ChatSlugRouteImport.update({
+  id: '/api/public/v1/chat/$slug',
+  path: '/api/public/v1/chat/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicV1FilesIndexRoute = ApiPublicV1FilesIndexRouteImport.update({
+  id: '/api/public/v1/files/',
+  path: '/api/public/v1/files/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicV1FilesIdRoute = ApiPublicV1FilesIdRouteImport.update({
+  id: '/api/public/v1/files/$id',
+  path: '/api/public/v1/files/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicV1FilesCommitRoute = ApiPublicV1FilesCommitRouteImport.update({
+  id: '/api/public/v1/files/commit',
+  path: '/api/public/v1/files/commit',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicV1FilesUploadRoute = ApiPublicV1FilesUploadRouteImport.update({
+  id: '/api/public/v1/files/upload',
+  path: '/api/public/v1/files/upload',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicV1FilesUploadUrlRoute =
+  ApiPublicV1FilesUploadUrlRouteImport.update({
+    id: '/api/public/v1/files/upload-url',
+    path: '/api/public/v1/files/upload-url',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicV1FoldersIndexRoute = ApiPublicV1FoldersIndexRouteImport.update({
+  id: '/api/public/v1/folders/',
+  path: '/api/public/v1/folders/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicV1FoldersIdRoute = ApiPublicV1FoldersIdRouteImport.update({
+  id: '/api/public/v1/folders/$id',
+  path: '/api/public/v1/folders/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicV1SharesTokenRoute = ApiPublicV1SharesTokenRouteImport.update({
+  id: '/api/public/v1/shares/$token',
+  path: '/api/public/v1/shares/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicV1UploadsIdRoute = ApiPublicV1UploadsIdRouteImport.update({
+  id: '/api/public/v1/uploads/$id',
+  path: '/api/public/v1/uploads/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicV1UploadsInitRoute = ApiPublicV1UploadsInitRouteImport.update({
+  id: '/api/public/v1/uploads/init',
+  path: '/api/public/v1/uploads/init',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicV1AgentJobsNextRoute =
+  ApiPublicV1AgentJobsNextRouteImport.update({
+    id: '/api/public/v1/agent/jobs/next',
+    path: '/api/public/v1/agent/jobs/next',
+    getParentRoute: () => rootRouteImport,
   } as any)
 const ApiPublicV1FilesIdSignedUrlRoute =
   ApiPublicV1FilesIdSignedUrlRouteImport.update({
@@ -492,22 +492,16 @@ const ApiPublicV1FilesIdSignedUrlRoute =
     path: '/signed-url',
     getParentRoute: () => ApiPublicV1FilesIdRoute,
   } as any)
-const ApiPublicV1AgentJobsNextRoute =
-  ApiPublicV1AgentJobsNextRouteImport.update({
-    id: '/api/public/v1/agent/jobs/next',
-    path: '/api/public/v1/agent/jobs/next',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const ApiPublicV1UploadsIdChunksIndexRoute =
-  ApiPublicV1UploadsIdChunksIndexRouteImport.update({
-    id: '/chunks/$index',
-    path: '/chunks/$index',
+const ApiPublicV1UploadsIdCompleteRoute =
+  ApiPublicV1UploadsIdCompleteRouteImport.update({
+    id: '/complete',
+    path: '/complete',
     getParentRoute: () => ApiPublicV1UploadsIdRoute,
   } as any)
-const ApiPublicV1AgentDeploymentsIdStatusRoute =
-  ApiPublicV1AgentDeploymentsIdStatusRouteImport.update({
-    id: '/api/public/v1/agent/deployments/$id/status',
-    path: '/api/public/v1/agent/deployments/$id/status',
+const ApiPublicV1AgentDeploymentsIdLogsRoute =
+  ApiPublicV1AgentDeploymentsIdLogsRouteImport.update({
+    id: '/api/public/v1/agent/deployments/$id/logs',
+    path: '/api/public/v1/agent/deployments/$id/logs',
     getParentRoute: () => rootRouteImport,
   } as any)
 const ApiPublicV1AgentDeploymentsIdMetricsRoute =
@@ -516,11 +510,17 @@ const ApiPublicV1AgentDeploymentsIdMetricsRoute =
     path: '/api/public/v1/agent/deployments/$id/metrics',
     getParentRoute: () => rootRouteImport,
   } as any)
-const ApiPublicV1AgentDeploymentsIdLogsRoute =
-  ApiPublicV1AgentDeploymentsIdLogsRouteImport.update({
-    id: '/api/public/v1/agent/deployments/$id/logs',
-    path: '/api/public/v1/agent/deployments/$id/logs',
+const ApiPublicV1AgentDeploymentsIdStatusRoute =
+  ApiPublicV1AgentDeploymentsIdStatusRouteImport.update({
+    id: '/api/public/v1/agent/deployments/$id/status',
+    path: '/api/public/v1/agent/deployments/$id/status',
     getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicV1UploadsIdChunksIndexRoute =
+  ApiPublicV1UploadsIdChunksIndexRouteImport.update({
+    id: '/chunks/$index',
+    path: '/chunks/$index',
+    getParentRoute: () => ApiPublicV1UploadsIdRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
@@ -1089,102 +1089,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/sitemap.xml': {
-      id: '/sitemap.xml'
-      path: '/sitemap.xml'
-      fullPath: '/sitemap.xml'
-      preLoaderRoute: typeof SitemapDotxmlRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/postman.json': {
-      id: '/postman.json'
-      path: '/postman.json'
-      fullPath: '/postman.json'
-      preLoaderRoute: typeof PostmanDotjsonRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/playground': {
-      id: '/playground'
-      path: '/playground'
-      fullPath: '/playground'
-      preLoaderRoute: typeof PlaygroundRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/openapi.yaml': {
-      id: '/openapi.yaml'
-      path: '/openapi.yaml'
-      fullPath: '/openapi.yaml'
-      preLoaderRoute: typeof OpenapiDotyamlRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/openapi.json': {
-      id: '/openapi.json'
-      path: '/openapi.json'
-      fullPath: '/openapi.json'
-      preLoaderRoute: typeof OpenapiDotjsonRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/llms.txt': {
-      id: '/llms.txt'
-      path: '/llms.txt'
-      fullPath: '/llms.txt'
-      preLoaderRoute: typeof LlmsDottxtRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/insomnia.json': {
-      id: '/insomnia.json'
-      path: '/insomnia.json'
-      fullPath: '/insomnia.json'
-      preLoaderRoute: typeof InsomniaDotjsonRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/health': {
-      id: '/health'
-      path: '/health'
-      fullPath: '/health'
-      preLoaderRoute: typeof HealthRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/docs': {
-      id: '/docs'
-      path: '/docs'
-      fullPath: '/docs'
-      preLoaderRoute: typeof DocsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/developers': {
-      id: '/developers'
-      path: '/developers'
-      fullPath: '/developers'
-      preLoaderRoute: typeof DevelopersRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/developer-docs': {
-      id: '/developer-docs'
-      path: '/developer-docs'
-      fullPath: '/developer-docs'
-      preLoaderRoute: typeof DeveloperDocsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/bruno.json': {
-      id: '/bruno.json'
-      path: '/bruno.json'
-      fullPath: '/bruno.json'
-      preLoaderRoute: typeof BrunoDotjsonRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/auth': {
-      id: '/auth'
-      path: '/auth'
-      fullPath: '/auth'
-      preLoaderRoute: typeof AuthRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/ai': {
-      id: '/ai'
-      path: '/ai'
-      fullPath: '/ai'
-      preLoaderRoute: typeof AiRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated': {
@@ -1194,11 +1103,270 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/ai': {
+      id: '/ai'
+      path: '/ai'
+      fullPath: '/ai'
+      preLoaderRoute: typeof AiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/bruno.json': {
+      id: '/bruno.json'
+      path: '/bruno.json'
+      fullPath: '/bruno.json'
+      preLoaderRoute: typeof BrunoDotjsonRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/developer-docs': {
+      id: '/developer-docs'
+      path: '/developer-docs'
+      fullPath: '/developer-docs'
+      preLoaderRoute: typeof DeveloperDocsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/developers': {
+      id: '/developers'
+      path: '/developers'
+      fullPath: '/developers'
+      preLoaderRoute: typeof DevelopersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/docs': {
+      id: '/docs'
+      path: '/docs'
+      fullPath: '/docs'
+      preLoaderRoute: typeof DocsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/health': {
+      id: '/health'
+      path: '/health'
+      fullPath: '/health'
+      preLoaderRoute: typeof HealthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/insomnia.json': {
+      id: '/insomnia.json'
+      path: '/insomnia.json'
+      fullPath: '/insomnia.json'
+      preLoaderRoute: typeof InsomniaDotjsonRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/llms.txt': {
+      id: '/llms.txt'
+      path: '/llms.txt'
+      fullPath: '/llms.txt'
+      preLoaderRoute: typeof LlmsDottxtRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/openapi.json': {
+      id: '/openapi.json'
+      path: '/openapi.json'
+      fullPath: '/openapi.json'
+      preLoaderRoute: typeof OpenapiDotjsonRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/openapi.yaml': {
+      id: '/openapi.yaml'
+      path: '/openapi.yaml'
+      fullPath: '/openapi.yaml'
+      preLoaderRoute: typeof OpenapiDotyamlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/playground': {
+      id: '/playground'
+      path: '/playground'
+      fullPath: '/playground'
+      preLoaderRoute: typeof PlaygroundRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/postman.json': {
+      id: '/postman.json'
+      path: '/postman.json'
+      fullPath: '/postman.json'
+      preLoaderRoute: typeof PostmanDotjsonRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/.well-known/egreed-cloud.json': {
+      id: '/.well-known/egreed-cloud.json'
+      path: '/.well-known/egreed-cloud.json'
+      fullPath: '/.well-known/egreed-cloud.json'
+      preLoaderRoute: typeof DotwellKnownEgreedCloudDotjsonRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/activity': {
+      id: '/_authenticated/activity'
+      path: '/activity'
+      fullPath: '/activity'
+      preLoaderRoute: typeof AuthenticatedActivityRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/admin': {
+      id: '/_authenticated/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthenticatedAdminRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/api-keys': {
+      id: '/_authenticated/api-keys'
+      path: '/api-keys'
+      fullPath: '/api-keys'
+      preLoaderRoute: typeof AuthenticatedApiKeysRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/backup': {
+      id: '/_authenticated/backup'
+      path: '/backup'
+      fullPath: '/backup'
+      preLoaderRoute: typeof AuthenticatedBackupRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/dashboard': {
+      id: '/_authenticated/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/developer': {
+      id: '/_authenticated/developer'
+      path: '/developer'
+      fullPath: '/developer'
+      preLoaderRoute: typeof AuthenticatedDeveloperRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/favorites': {
+      id: '/_authenticated/favorites'
+      path: '/favorites'
+      fullPath: '/favorites'
+      preLoaderRoute: typeof AuthenticatedFavoritesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/files': {
+      id: '/_authenticated/files'
+      path: '/files'
+      fullPath: '/files'
+      preLoaderRoute: typeof AuthenticatedFilesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/notifications': {
+      id: '/_authenticated/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof AuthenticatedNotificationsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/organizations': {
+      id: '/_authenticated/organizations'
+      path: '/organizations'
+      fullPath: '/organizations'
+      preLoaderRoute: typeof AuthenticatedOrganizationsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/platform-health': {
+      id: '/_authenticated/platform-health'
+      path: '/platform-health'
+      fullPath: '/platform-health'
+      preLoaderRoute: typeof AuthenticatedPlatformHealthRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/security': {
+      id: '/_authenticated/security'
+      path: '/security'
+      fullPath: '/security'
+      preLoaderRoute: typeof AuthenticatedSecurityRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/settings': {
+      id: '/_authenticated/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AuthenticatedSettingsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/share-diagnostics': {
+      id: '/_authenticated/share-diagnostics'
+      path: '/share-diagnostics'
+      fullPath: '/share-diagnostics'
+      preLoaderRoute: typeof AuthenticatedShareDiagnosticsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/shared': {
+      id: '/_authenticated/shared'
+      path: '/shared'
+      fullPath: '/shared'
+      preLoaderRoute: typeof AuthenticatedSharedRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/storage-analytics': {
+      id: '/_authenticated/storage-analytics'
+      path: '/storage-analytics'
+      fullPath: '/storage-analytics'
+      preLoaderRoute: typeof AuthenticatedStorageAnalyticsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/trash': {
+      id: '/_authenticated/trash'
+      path: '/trash'
+      fullPath: '/trash'
+      preLoaderRoute: typeof AuthenticatedTrashRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/api/$': {
+      id: '/api/$'
+      path: '/api/$'
+      fullPath: '/api/$'
+      preLoaderRoute: typeof ApiSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/health': {
+      id: '/api/health'
+      path: '/api/health'
+      fullPath: '/api/health'
+      preLoaderRoute: typeof ApiHealthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/upload': {
+      id: '/api/upload'
+      path: '/api/upload'
+      fullPath: '/api/upload'
+      preLoaderRoute: typeof ApiUploadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/s/$token': {
+      id: '/s/$token'
+      path: '/s/$token'
+      fullPath: '/s/$token'
+      preLoaderRoute: typeof STokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sdk/egreed-cloud.js': {
+      id: '/sdk/egreed-cloud.js'
+      path: '/sdk/egreed-cloud.js'
+      fullPath: '/sdk/egreed-cloud.js'
+      preLoaderRoute: typeof SdkEgreedCloudDotjsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sdk/egreed_cloud.py': {
+      id: '/sdk/egreed_cloud.py'
+      path: '/sdk/egreed_cloud.py'
+      fullPath: '/sdk/egreed_cloud.py'
+      preLoaderRoute: typeof SdkEgreed_cloudDotpyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/v1/': {
@@ -1215,221 +1383,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof V1SplatRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/sdk/egreed_cloud.py': {
-      id: '/sdk/egreed_cloud.py'
-      path: '/sdk/egreed_cloud.py'
-      fullPath: '/sdk/egreed_cloud.py'
-      preLoaderRoute: typeof SdkEgreed_cloudDotpyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/sdk/egreed-cloud.js': {
-      id: '/sdk/egreed-cloud.js'
-      path: '/sdk/egreed-cloud.js'
-      fullPath: '/sdk/egreed-cloud.js'
-      preLoaderRoute: typeof SdkEgreedCloudDotjsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/s/$token': {
-      id: '/s/$token'
-      path: '/s/$token'
-      fullPath: '/s/$token'
-      preLoaderRoute: typeof STokenRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/upload': {
-      id: '/api/upload'
-      path: '/api/upload'
-      fullPath: '/api/upload'
-      preLoaderRoute: typeof ApiUploadRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/health': {
-      id: '/api/health'
-      path: '/api/health'
-      fullPath: '/api/health'
-      preLoaderRoute: typeof ApiHealthRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/$': {
-      id: '/api/$'
-      path: '/api/$'
-      fullPath: '/api/$'
-      preLoaderRoute: typeof ApiSplatRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_authenticated/trash': {
-      id: '/_authenticated/trash'
-      path: '/trash'
-      fullPath: '/trash'
-      preLoaderRoute: typeof AuthenticatedTrashRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/storage-analytics': {
-      id: '/_authenticated/storage-analytics'
-      path: '/storage-analytics'
-      fullPath: '/storage-analytics'
-      preLoaderRoute: typeof AuthenticatedStorageAnalyticsRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/shared': {
-      id: '/_authenticated/shared'
-      path: '/shared'
-      fullPath: '/shared'
-      preLoaderRoute: typeof AuthenticatedSharedRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/share-diagnostics': {
-      id: '/_authenticated/share-diagnostics'
-      path: '/share-diagnostics'
-      fullPath: '/share-diagnostics'
-      preLoaderRoute: typeof AuthenticatedShareDiagnosticsRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/settings': {
-      id: '/_authenticated/settings'
-      path: '/settings'
-      fullPath: '/settings'
-      preLoaderRoute: typeof AuthenticatedSettingsRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/security': {
-      id: '/_authenticated/security'
-      path: '/security'
-      fullPath: '/security'
-      preLoaderRoute: typeof AuthenticatedSecurityRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/platform-health': {
-      id: '/_authenticated/platform-health'
-      path: '/platform-health'
-      fullPath: '/platform-health'
-      preLoaderRoute: typeof AuthenticatedPlatformHealthRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/organizations': {
-      id: '/_authenticated/organizations'
-      path: '/organizations'
-      fullPath: '/organizations'
-      preLoaderRoute: typeof AuthenticatedOrganizationsRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/notifications': {
-      id: '/_authenticated/notifications'
-      path: '/notifications'
-      fullPath: '/notifications'
-      preLoaderRoute: typeof AuthenticatedNotificationsRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/files': {
-      id: '/_authenticated/files'
-      path: '/files'
-      fullPath: '/files'
-      preLoaderRoute: typeof AuthenticatedFilesRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/favorites': {
-      id: '/_authenticated/favorites'
-      path: '/favorites'
-      fullPath: '/favorites'
-      preLoaderRoute: typeof AuthenticatedFavoritesRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/developer': {
-      id: '/_authenticated/developer'
-      path: '/developer'
-      fullPath: '/developer'
-      preLoaderRoute: typeof AuthenticatedDeveloperRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/dashboard': {
-      id: '/_authenticated/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/backup': {
-      id: '/_authenticated/backup'
-      path: '/backup'
-      fullPath: '/backup'
-      preLoaderRoute: typeof AuthenticatedBackupRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/api-keys': {
-      id: '/_authenticated/api-keys'
-      path: '/api-keys'
-      fullPath: '/api-keys'
-      preLoaderRoute: typeof AuthenticatedApiKeysRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/admin': {
-      id: '/_authenticated/admin'
-      path: '/admin'
-      fullPath: '/admin'
-      preLoaderRoute: typeof AuthenticatedAdminRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/activity': {
-      id: '/_authenticated/activity'
-      path: '/activity'
-      fullPath: '/activity'
-      preLoaderRoute: typeof AuthenticatedActivityRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/.well-known/egreed-cloud.json': {
-      id: '/.well-known/egreed-cloud.json'
-      path: '/.well-known/egreed-cloud.json'
-      fullPath: '/.well-known/egreed-cloud.json'
-      preLoaderRoute: typeof DotwellKnownEgreedCloudDotjsonRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/files/': {
-      id: '/api/files/'
-      path: '/api/files'
-      fullPath: '/api/files/'
-      preLoaderRoute: typeof ApiFilesIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/v1/upload': {
-      id: '/api/v1/upload'
-      path: '/api/v1/upload'
-      fullPath: '/api/v1/upload'
-      preLoaderRoute: typeof ApiV1UploadRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/v1/me': {
-      id: '/api/v1/me'
-      path: '/api/v1/me'
-      fullPath: '/api/v1/me'
-      preLoaderRoute: typeof ApiV1MeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/v1/health': {
-      id: '/api/v1/health'
-      path: '/api/v1/health'
-      fullPath: '/api/v1/health'
-      preLoaderRoute: typeof ApiV1HealthRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/files/$id': {
-      id: '/api/files/$id'
-      path: '/api/files/$id'
-      fullPath: '/api/files/$id'
-      preLoaderRoute: typeof ApiFilesIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_authenticated/organizations/$id': {
-      id: '/_authenticated/organizations/$id'
-      path: '/$id'
-      fullPath: '/organizations/$id'
-      preLoaderRoute: typeof AuthenticatedOrganizationsIdRouteImport
-      parentRoute: typeof AuthenticatedOrganizationsRoute
-    }
-    '/_authenticated/ai/orchestrators': {
-      id: '/_authenticated/ai/orchestrators'
-      path: '/ai/orchestrators'
-      fullPath: '/ai/orchestrators'
-      preLoaderRoute: typeof AuthenticatedAiOrchestratorsRouteImport
+    '/_authenticated/ai/deployments': {
+      id: '/_authenticated/ai/deployments'
+      path: '/ai/deployments'
+      fullPath: '/ai/deployments'
+      preLoaderRoute: typeof AuthenticatedAiDeploymentsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/ai/models': {
@@ -1439,88 +1397,53 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAiModelsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/ai/deployments': {
-      id: '/_authenticated/ai/deployments'
-      path: '/ai/deployments'
-      fullPath: '/ai/deployments'
-      preLoaderRoute: typeof AuthenticatedAiDeploymentsRouteImport
+    '/_authenticated/ai/orchestrators': {
+      id: '/_authenticated/ai/orchestrators'
+      path: '/ai/orchestrators'
+      fullPath: '/ai/orchestrators'
+      preLoaderRoute: typeof AuthenticatedAiOrchestratorsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/api/v1/folders/': {
-      id: '/api/v1/folders/'
-      path: '/api/v1/folders'
-      fullPath: '/api/v1/folders/'
-      preLoaderRoute: typeof ApiV1FoldersIndexRouteImport
+    '/_authenticated/organizations/$id': {
+      id: '/_authenticated/organizations/$id'
+      path: '/$id'
+      fullPath: '/organizations/$id'
+      preLoaderRoute: typeof AuthenticatedOrganizationsIdRouteImport
+      parentRoute: typeof AuthenticatedOrganizationsRoute
+    }
+    '/api/files/': {
+      id: '/api/files/'
+      path: '/api/files'
+      fullPath: '/api/files/'
+      preLoaderRoute: typeof ApiFilesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/v1/files/': {
-      id: '/api/v1/files/'
-      path: '/api/v1/files'
-      fullPath: '/api/v1/files/'
-      preLoaderRoute: typeof ApiV1FilesIndexRouteImport
+    '/api/files/$id': {
+      id: '/api/files/$id'
+      path: '/api/files/$id'
+      fullPath: '/api/files/$id'
+      preLoaderRoute: typeof ApiFilesIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/v1/': {
-      id: '/api/public/v1/'
-      path: '/api/public/v1'
-      fullPath: '/api/public/v1/'
-      preLoaderRoute: typeof ApiPublicV1IndexRouteImport
+    '/api/v1/health': {
+      id: '/api/v1/health'
+      path: '/api/v1/health'
+      fullPath: '/api/v1/health'
+      preLoaderRoute: typeof ApiV1HealthRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/v1/files/$id': {
-      id: '/api/v1/files/$id'
-      path: '/api/v1/files/$id'
-      fullPath: '/api/v1/files/$id'
-      preLoaderRoute: typeof ApiV1FilesIdRouteImport
+    '/api/v1/me': {
+      id: '/api/v1/me'
+      path: '/api/v1/me'
+      fullPath: '/api/v1/me'
+      preLoaderRoute: typeof ApiV1MeRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/v1/ready': {
-      id: '/api/public/v1/ready'
-      path: '/api/public/v1/ready'
-      fullPath: '/api/public/v1/ready'
-      preLoaderRoute: typeof ApiPublicV1ReadyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/public/v1/openapi.yaml': {
-      id: '/api/public/v1/openapi.yaml'
-      path: '/api/public/v1/openapi.yaml'
-      fullPath: '/api/public/v1/openapi.yaml'
-      preLoaderRoute: typeof ApiPublicV1OpenapiDotyamlRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/public/v1/openapi.json': {
-      id: '/api/public/v1/openapi.json'
-      path: '/api/public/v1/openapi.json'
-      fullPath: '/api/public/v1/openapi.json'
-      preLoaderRoute: typeof ApiPublicV1OpenapiDotjsonRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/public/v1/metrics': {
-      id: '/api/public/v1/metrics'
-      path: '/api/public/v1/metrics'
-      fullPath: '/api/public/v1/metrics'
-      preLoaderRoute: typeof ApiPublicV1MetricsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/public/v1/me': {
-      id: '/api/public/v1/me'
-      path: '/api/public/v1/me'
-      fullPath: '/api/public/v1/me'
-      preLoaderRoute: typeof ApiPublicV1MeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/public/v1/live': {
-      id: '/api/public/v1/live'
-      path: '/api/public/v1/live'
-      fullPath: '/api/public/v1/live'
-      preLoaderRoute: typeof ApiPublicV1LiveRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/public/v1/health': {
-      id: '/api/public/v1/health'
-      path: '/api/public/v1/health'
-      fullPath: '/api/public/v1/health'
-      preLoaderRoute: typeof ApiPublicV1HealthRouteImport
+    '/api/v1/upload': {
+      id: '/api/v1/upload'
+      path: '/api/v1/upload'
+      fullPath: '/api/v1/upload'
+      preLoaderRoute: typeof ApiV1UploadRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/ai/models/$slug': {
@@ -1530,81 +1453,81 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAiModelsSlugRouteImport
       parentRoute: typeof AuthenticatedAiModelsRoute
     }
-    '/api/public/v1/folders/': {
-      id: '/api/public/v1/folders/'
-      path: '/api/public/v1/folders'
-      fullPath: '/api/public/v1/folders/'
-      preLoaderRoute: typeof ApiPublicV1FoldersIndexRouteImport
+    '/api/public/v1/': {
+      id: '/api/public/v1/'
+      path: '/api/public/v1'
+      fullPath: '/api/public/v1/'
+      preLoaderRoute: typeof ApiPublicV1IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/v1/files/': {
-      id: '/api/public/v1/files/'
-      path: '/api/public/v1/files'
-      fullPath: '/api/public/v1/files/'
-      preLoaderRoute: typeof ApiPublicV1FilesIndexRouteImport
+    '/api/public/v1/health': {
+      id: '/api/public/v1/health'
+      path: '/api/public/v1/health'
+      fullPath: '/api/public/v1/health'
+      preLoaderRoute: typeof ApiPublicV1HealthRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/v1/uploads/init': {
-      id: '/api/public/v1/uploads/init'
-      path: '/api/public/v1/uploads/init'
-      fullPath: '/api/public/v1/uploads/init'
-      preLoaderRoute: typeof ApiPublicV1UploadsInitRouteImport
+    '/api/public/v1/live': {
+      id: '/api/public/v1/live'
+      path: '/api/public/v1/live'
+      fullPath: '/api/public/v1/live'
+      preLoaderRoute: typeof ApiPublicV1LiveRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/v1/uploads/$id': {
-      id: '/api/public/v1/uploads/$id'
-      path: '/api/public/v1/uploads/$id'
-      fullPath: '/api/public/v1/uploads/$id'
-      preLoaderRoute: typeof ApiPublicV1UploadsIdRouteImport
+    '/api/public/v1/me': {
+      id: '/api/public/v1/me'
+      path: '/api/public/v1/me'
+      fullPath: '/api/public/v1/me'
+      preLoaderRoute: typeof ApiPublicV1MeRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/v1/shares/$token': {
-      id: '/api/public/v1/shares/$token'
-      path: '/api/public/v1/shares/$token'
-      fullPath: '/api/public/v1/shares/$token'
-      preLoaderRoute: typeof ApiPublicV1SharesTokenRouteImport
+    '/api/public/v1/metrics': {
+      id: '/api/public/v1/metrics'
+      path: '/api/public/v1/metrics'
+      fullPath: '/api/public/v1/metrics'
+      preLoaderRoute: typeof ApiPublicV1MetricsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/v1/folders/$id': {
-      id: '/api/public/v1/folders/$id'
-      path: '/api/public/v1/folders/$id'
-      fullPath: '/api/public/v1/folders/$id'
-      preLoaderRoute: typeof ApiPublicV1FoldersIdRouteImport
+    '/api/public/v1/openapi.json': {
+      id: '/api/public/v1/openapi.json'
+      path: '/api/public/v1/openapi.json'
+      fullPath: '/api/public/v1/openapi.json'
+      preLoaderRoute: typeof ApiPublicV1OpenapiDotjsonRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/v1/files/upload-url': {
-      id: '/api/public/v1/files/upload-url'
-      path: '/api/public/v1/files/upload-url'
-      fullPath: '/api/public/v1/files/upload-url'
-      preLoaderRoute: typeof ApiPublicV1FilesUploadUrlRouteImport
+    '/api/public/v1/openapi.yaml': {
+      id: '/api/public/v1/openapi.yaml'
+      path: '/api/public/v1/openapi.yaml'
+      fullPath: '/api/public/v1/openapi.yaml'
+      preLoaderRoute: typeof ApiPublicV1OpenapiDotyamlRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/v1/files/upload': {
-      id: '/api/public/v1/files/upload'
-      path: '/api/public/v1/files/upload'
-      fullPath: '/api/public/v1/files/upload'
-      preLoaderRoute: typeof ApiPublicV1FilesUploadRouteImport
+    '/api/public/v1/ready': {
+      id: '/api/public/v1/ready'
+      path: '/api/public/v1/ready'
+      fullPath: '/api/public/v1/ready'
+      preLoaderRoute: typeof ApiPublicV1ReadyRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/v1/files/commit': {
-      id: '/api/public/v1/files/commit'
-      path: '/api/public/v1/files/commit'
-      fullPath: '/api/public/v1/files/commit'
-      preLoaderRoute: typeof ApiPublicV1FilesCommitRouteImport
+    '/api/v1/files/': {
+      id: '/api/v1/files/'
+      path: '/api/v1/files'
+      fullPath: '/api/v1/files/'
+      preLoaderRoute: typeof ApiV1FilesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/v1/files/$id': {
-      id: '/api/public/v1/files/$id'
-      path: '/api/public/v1/files/$id'
-      fullPath: '/api/public/v1/files/$id'
-      preLoaderRoute: typeof ApiPublicV1FilesIdRouteImport
+    '/api/v1/files/$id': {
+      id: '/api/v1/files/$id'
+      path: '/api/v1/files/$id'
+      fullPath: '/api/v1/files/$id'
+      preLoaderRoute: typeof ApiV1FilesIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/v1/chat/$slug': {
-      id: '/api/public/v1/chat/$slug'
-      path: '/api/public/v1/chat/$slug'
-      fullPath: '/api/public/v1/chat/$slug'
-      preLoaderRoute: typeof ApiPublicV1ChatSlugRouteImport
+    '/api/v1/folders/': {
+      id: '/api/v1/folders/'
+      path: '/api/v1/folders'
+      fullPath: '/api/v1/folders/'
+      preLoaderRoute: typeof ApiV1FoldersIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/v1/agent/heartbeat': {
@@ -1614,19 +1537,82 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicV1AgentHeartbeatRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/v1/uploads/$id/complete': {
-      id: '/api/public/v1/uploads/$id/complete'
-      path: '/complete'
-      fullPath: '/api/public/v1/uploads/$id/complete'
-      preLoaderRoute: typeof ApiPublicV1UploadsIdCompleteRouteImport
-      parentRoute: typeof ApiPublicV1UploadsIdRoute
+    '/api/public/v1/chat/$slug': {
+      id: '/api/public/v1/chat/$slug'
+      path: '/api/public/v1/chat/$slug'
+      fullPath: '/api/public/v1/chat/$slug'
+      preLoaderRoute: typeof ApiPublicV1ChatSlugRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/api/public/v1/files/$id/signed-url': {
-      id: '/api/public/v1/files/$id/signed-url'
-      path: '/signed-url'
-      fullPath: '/api/public/v1/files/$id/signed-url'
-      preLoaderRoute: typeof ApiPublicV1FilesIdSignedUrlRouteImport
-      parentRoute: typeof ApiPublicV1FilesIdRoute
+    '/api/public/v1/files/': {
+      id: '/api/public/v1/files/'
+      path: '/api/public/v1/files'
+      fullPath: '/api/public/v1/files/'
+      preLoaderRoute: typeof ApiPublicV1FilesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/files/$id': {
+      id: '/api/public/v1/files/$id'
+      path: '/api/public/v1/files/$id'
+      fullPath: '/api/public/v1/files/$id'
+      preLoaderRoute: typeof ApiPublicV1FilesIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/files/commit': {
+      id: '/api/public/v1/files/commit'
+      path: '/api/public/v1/files/commit'
+      fullPath: '/api/public/v1/files/commit'
+      preLoaderRoute: typeof ApiPublicV1FilesCommitRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/files/upload': {
+      id: '/api/public/v1/files/upload'
+      path: '/api/public/v1/files/upload'
+      fullPath: '/api/public/v1/files/upload'
+      preLoaderRoute: typeof ApiPublicV1FilesUploadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/files/upload-url': {
+      id: '/api/public/v1/files/upload-url'
+      path: '/api/public/v1/files/upload-url'
+      fullPath: '/api/public/v1/files/upload-url'
+      preLoaderRoute: typeof ApiPublicV1FilesUploadUrlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/folders/': {
+      id: '/api/public/v1/folders/'
+      path: '/api/public/v1/folders'
+      fullPath: '/api/public/v1/folders/'
+      preLoaderRoute: typeof ApiPublicV1FoldersIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/folders/$id': {
+      id: '/api/public/v1/folders/$id'
+      path: '/api/public/v1/folders/$id'
+      fullPath: '/api/public/v1/folders/$id'
+      preLoaderRoute: typeof ApiPublicV1FoldersIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/shares/$token': {
+      id: '/api/public/v1/shares/$token'
+      path: '/api/public/v1/shares/$token'
+      fullPath: '/api/public/v1/shares/$token'
+      preLoaderRoute: typeof ApiPublicV1SharesTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/uploads/$id': {
+      id: '/api/public/v1/uploads/$id'
+      path: '/api/public/v1/uploads/$id'
+      fullPath: '/api/public/v1/uploads/$id'
+      preLoaderRoute: typeof ApiPublicV1UploadsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/uploads/init': {
+      id: '/api/public/v1/uploads/init'
+      path: '/api/public/v1/uploads/init'
+      fullPath: '/api/public/v1/uploads/init'
+      preLoaderRoute: typeof ApiPublicV1UploadsInitRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/api/public/v1/agent/jobs/next': {
       id: '/api/public/v1/agent/jobs/next'
@@ -1635,18 +1621,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicV1AgentJobsNextRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/v1/uploads/$id/chunks/$index': {
-      id: '/api/public/v1/uploads/$id/chunks/$index'
-      path: '/chunks/$index'
-      fullPath: '/api/public/v1/uploads/$id/chunks/$index'
-      preLoaderRoute: typeof ApiPublicV1UploadsIdChunksIndexRouteImport
+    '/api/public/v1/files/$id/signed-url': {
+      id: '/api/public/v1/files/$id/signed-url'
+      path: '/signed-url'
+      fullPath: '/api/public/v1/files/$id/signed-url'
+      preLoaderRoute: typeof ApiPublicV1FilesIdSignedUrlRouteImport
+      parentRoute: typeof ApiPublicV1FilesIdRoute
+    }
+    '/api/public/v1/uploads/$id/complete': {
+      id: '/api/public/v1/uploads/$id/complete'
+      path: '/complete'
+      fullPath: '/api/public/v1/uploads/$id/complete'
+      preLoaderRoute: typeof ApiPublicV1UploadsIdCompleteRouteImport
       parentRoute: typeof ApiPublicV1UploadsIdRoute
     }
-    '/api/public/v1/agent/deployments/$id/status': {
-      id: '/api/public/v1/agent/deployments/$id/status'
-      path: '/api/public/v1/agent/deployments/$id/status'
-      fullPath: '/api/public/v1/agent/deployments/$id/status'
-      preLoaderRoute: typeof ApiPublicV1AgentDeploymentsIdStatusRouteImport
+    '/api/public/v1/agent/deployments/$id/logs': {
+      id: '/api/public/v1/agent/deployments/$id/logs'
+      path: '/api/public/v1/agent/deployments/$id/logs'
+      fullPath: '/api/public/v1/agent/deployments/$id/logs'
+      preLoaderRoute: typeof ApiPublicV1AgentDeploymentsIdLogsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/v1/agent/deployments/$id/metrics': {
@@ -1656,12 +1649,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicV1AgentDeploymentsIdMetricsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/v1/agent/deployments/$id/logs': {
-      id: '/api/public/v1/agent/deployments/$id/logs'
-      path: '/api/public/v1/agent/deployments/$id/logs'
-      fullPath: '/api/public/v1/agent/deployments/$id/logs'
-      preLoaderRoute: typeof ApiPublicV1AgentDeploymentsIdLogsRouteImport
+    '/api/public/v1/agent/deployments/$id/status': {
+      id: '/api/public/v1/agent/deployments/$id/status'
+      path: '/api/public/v1/agent/deployments/$id/status'
+      fullPath: '/api/public/v1/agent/deployments/$id/status'
+      preLoaderRoute: typeof ApiPublicV1AgentDeploymentsIdStatusRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/uploads/$id/chunks/$index': {
+      id: '/api/public/v1/uploads/$id/chunks/$index'
+      path: '/chunks/$index'
+      fullPath: '/api/public/v1/uploads/$id/chunks/$index'
+      preLoaderRoute: typeof ApiPublicV1UploadsIdChunksIndexRouteImport
+      parentRoute: typeof ApiPublicV1UploadsIdRoute
     }
   }
 }
