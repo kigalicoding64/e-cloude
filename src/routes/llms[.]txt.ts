@@ -1,3 +1,4 @@
+import { PUBLIC_BASE_URL } from "@/lib/site";
 import { createFileRoute } from "@tanstack/react-router";
 import { CORS_HEADERS, corsPreflight } from "@/lib/cors";
 import { API_SCOPES, SCOPE_DESCRIPTIONS, API_ERROR_CODES } from "@/lib/api-errors";
@@ -9,7 +10,7 @@ export const Route = createFileRoute("/llms.txt")({
     handlers: {
       OPTIONS: async () => corsPreflight(),
       GET: async ({ request }) => {
-        const base = new URL(request.url).origin;
+        void request; const base = PUBLIC_BASE_URL;
         const api = `${base}/api/public/v1`;
         const body = `# EGREED Cloud (E-Cloud)
 

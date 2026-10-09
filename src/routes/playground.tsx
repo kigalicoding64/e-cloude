@@ -1,3 +1,4 @@
+import { PUBLIC_BASE_URL } from "@/lib/site";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 
@@ -69,7 +70,7 @@ function PlaygroundPage() {
   const [lang, setLang] = useState<"curl" | "js" | "python">("curl");
 
   const op = useMemo(() => OPS.find((o) => o.id === opId) ?? OPS[0]!, [opId]);
-  const base = typeof window === "undefined" ? "" : `${window.location.origin}/api/public/v1`;
+  const base = `${PUBLIC_BASE_URL}/api/public/v1`;
   const resolvedPath = op.path.replace("{id}", fileId || "FILE_ID");
   const url = `${base}${resolvedPath}`;
 

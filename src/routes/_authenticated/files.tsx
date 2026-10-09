@@ -1,3 +1,4 @@
+import { PUBLIC_BASE_URL } from "@/lib/site";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState, useRef, useEffect, type ChangeEvent } from "react";
@@ -584,7 +585,7 @@ function ShareDialog({ fileId, onClose }: { fileId: string | null; onClose: () =
     },
     onSuccess: (data) => {
       if (!data) return;
-      const url = `${window.location.origin}/s/${data.token}`;
+      const url = `${PUBLIC_BASE_URL}/s/${data.token}`;
       navigator.clipboard.writeText(url).catch(() => {});
       toast.success("Share link copied to clipboard");
       qc.invalidateQueries({ queryKey: ["shares"] });

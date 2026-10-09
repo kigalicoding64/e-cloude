@@ -1,3 +1,4 @@
+import { PUBLIC_BASE_URL } from "@/lib/site";
 import { createFileRoute } from "@tanstack/react-router";
 import { CORS_HEADERS, corsPreflight } from "@/lib/cors";
 import { API_SCOPES, SCOPE_DESCRIPTIONS } from "@/lib/api-errors";
@@ -8,7 +9,7 @@ export const Route = createFileRoute("/.well-known/egreed-cloud.json")({
     handlers: {
       OPTIONS: async () => corsPreflight(),
       GET: async ({ request }) => {
-        const base = new URL(request.url).origin;
+        void request; const base = PUBLIC_BASE_URL;
         return new Response(
           JSON.stringify(
             {
