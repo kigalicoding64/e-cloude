@@ -19,16 +19,16 @@ export type LiveTarget = {
 /** The addresses that must serve this project's build. */
 export const LIVE_TARGETS: LiveTarget[] = [
   {
-    id: "lovable",
-    label: "e-cloude.lovable.app",
-    baseUrl: "https://e-cloude.lovable.app",
-    official: true,
-  },
-  {
     id: "custom",
     label: "cloud.egreedtech.org",
     baseUrl: "https://cloud.egreedtech.org",
     official: true,
+  },
+  {
+    id: "lovable",
+    label: "e-cloude.lovable.app",
+    baseUrl: "https://e-cloude.lovable.app",
+    official: false,
   },
 ];
 

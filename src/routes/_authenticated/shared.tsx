@@ -1,3 +1,4 @@
+import { PUBLIC_BASE_URL } from "@/lib/site";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -66,7 +67,7 @@ function SharedPage() {
                   <td className="px-4 py-3 text-muted-foreground">{s.expires_at ? formatDate(s.expires_at) : "Never"}</td>
                   <td className="px-4 py-3 text-right">
                     <Button variant="ghost" size="sm" className="gap-1" onClick={() => {
-                      navigator.clipboard.writeText(`${window.location.origin}/s/${s.token}`);
+                      navigator.clipboard.writeText(`${PUBLIC_BASE_URL}/s/${s.token}`);
                       toast.success("Copied");
                     }}><Copy className="h-3.5 w-3.5" /> Copy</Button>
                     <Button variant="ghost" size="sm" className="gap-1 text-destructive" onClick={() => del.mutate(s.id)}>

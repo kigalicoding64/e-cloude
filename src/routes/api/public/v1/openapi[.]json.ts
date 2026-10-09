@@ -1,3 +1,4 @@
+import { PUBLIC_BASE_URL } from "@/lib/site";
 import { createFileRoute } from "@tanstack/react-router";
 import { corsPreflight, CORS_HEADERS } from "@/lib/cors";
 import { buildOpenApiSpec } from "@/lib/openapi";
@@ -8,7 +9,7 @@ export const Route = createFileRoute("/api/public/v1/openapi.json")({
     handlers: {
       OPTIONS: async () => corsPreflight(),
       GET: async ({ request }) => {
-        const base = new URL(request.url).origin;
+        void request; const base = PUBLIC_BASE_URL;
         return new Response(JSON.stringify(buildOpenApiSpec(base), null, 2), {
           status: 200,
           headers: { "Content-Type": "application/json", ...CORS_HEADERS },
