@@ -26,7 +26,7 @@ import {
 export const Route = createFileRoute("/_authenticated/ai/models/$slug")({
   head: () => ({ meta: [{ title: "Model — E-Cloud" }] }),
   component: ModelDetailPage,
-  errorComponent: ({ error }) => <div className="p-10 text-destructive">Error: {error.message}</div>,
+  errorComponent: ({ error }) => <div className="p-10 text-destructive">Error: {error instanceof Error ? error.message : String(error)}</div>,
   notFoundComponent: () => <div className="p-10 text-muted-foreground">Model not found.</div>,
 });
 
