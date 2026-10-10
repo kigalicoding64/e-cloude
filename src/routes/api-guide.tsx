@@ -27,7 +27,7 @@ export const Route = createFileRoute("/api-guide")({
 
 /** Render the shared Markdown guide as simple, readable HTML sections. */
 function renderMarkdown(md: string) {
-  const blocks: JSX.Element[] = [];
+  const blocks: ReactNode[] = [];
   const lines = md.split("\n");
   let i = 0;
   let key = 0;
@@ -100,7 +100,7 @@ function renderMarkdown(md: string) {
   return blocks;
 }
 
-function renderInline(text: string): (string | JSX.Element)[] {
+function renderInline(text: string): (string | ReactNode)[] {
   // Render `code` spans; keep the rest as plain text.
   return text.split(/(`[^`]+`)/g).map((part, i) =>
     part.startsWith("`") && part.endsWith("`") ? (
