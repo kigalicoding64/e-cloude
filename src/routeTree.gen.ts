@@ -22,12 +22,14 @@ import { Route as DocsRouteImport } from './routes/docs'
 import { Route as HealthRouteImport } from './routes/health'
 import { Route as InsomniaDotjsonRouteImport } from './routes/insomnia[.]json'
 import { Route as LlmsDottxtRouteImport } from './routes/llms[.]txt'
+import { Route as McpRouteImport } from './routes/mcp'
 import { Route as OpenapiDotjsonRouteImport } from './routes/openapi[.]json'
 import { Route as OpenapiDotyamlRouteImport } from './routes/openapi[.]yaml'
 import { Route as PlaygroundRouteImport } from './routes/playground'
 import { Route as PostmanDotjsonRouteImport } from './routes/postman[.]json'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as DotwellKnownEgreedCloudDotjsonRouteImport } from './routes/[.]well-known/egreed-cloud[.]json'
+import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as AuthenticatedActivityRouteImport } from './routes/_authenticated/activity'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedApiKeysRouteImport } from './routes/_authenticated/api-keys'
@@ -158,6 +160,11 @@ const LlmsDottxtRoute = LlmsDottxtRouteImport.update({
   path: '/llms.txt',
   getParentRoute: () => rootRouteImport,
 } as any)
+const McpRoute = McpRouteImport.update({
+  id: '/mcp',
+  path: '/mcp',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const OpenapiDotjsonRoute = OpenapiDotjsonRouteImport.update({
   id: '/openapi.json',
   path: '/openapi.json',
@@ -187,6 +194,12 @@ const DotwellKnownEgreedCloudDotjsonRoute =
   DotwellKnownEgreedCloudDotjsonRouteImport.update({
     id: '/.well-known/egreed-cloud.json',
     path: '/.well-known/egreed-cloud.json',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const Char91DotwellKnownChar93OauthProtectedResourceRoute =
+  Char91DotwellKnownChar93OauthProtectedResourceRouteImport.update({
+    id: '/.well-known/oauth-protected-resource',
+    path: '/.well-known/oauth-protected-resource',
     getParentRoute: () => rootRouteImport,
   } as any)
 const AuthenticatedActivityRoute = AuthenticatedActivityRouteImport.update({
@@ -548,12 +561,14 @@ export interface FileRoutesByFullPath {
   '/health': typeof HealthRoute
   '/insomnia.json': typeof InsomniaDotjsonRoute
   '/llms.txt': typeof LlmsDottxtRoute
+  '/mcp': typeof McpRoute
   '/openapi.json': typeof OpenapiDotjsonRoute
   '/openapi.yaml': typeof OpenapiDotyamlRoute
   '/playground': typeof PlaygroundRoute
   '/postman.json': typeof PostmanDotjsonRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/.well-known/egreed-cloud.json': typeof DotwellKnownEgreedCloudDotjsonRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/activity': typeof AuthenticatedActivityRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/api-keys': typeof AuthenticatedApiKeysRoute
@@ -633,12 +648,14 @@ export interface FileRoutesByTo {
   '/health': typeof HealthRoute
   '/insomnia.json': typeof InsomniaDotjsonRoute
   '/llms.txt': typeof LlmsDottxtRoute
+  '/mcp': typeof McpRoute
   '/openapi.json': typeof OpenapiDotjsonRoute
   '/openapi.yaml': typeof OpenapiDotyamlRoute
   '/playground': typeof PlaygroundRoute
   '/postman.json': typeof PostmanDotjsonRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/.well-known/egreed-cloud.json': typeof DotwellKnownEgreedCloudDotjsonRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/activity': typeof AuthenticatedActivityRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/api-keys': typeof AuthenticatedApiKeysRoute
@@ -720,12 +737,14 @@ export interface FileRoutesById {
   '/health': typeof HealthRoute
   '/insomnia.json': typeof InsomniaDotjsonRoute
   '/llms.txt': typeof LlmsDottxtRoute
+  '/mcp': typeof McpRoute
   '/openapi.json': typeof OpenapiDotjsonRoute
   '/openapi.yaml': typeof OpenapiDotyamlRoute
   '/playground': typeof PlaygroundRoute
   '/postman.json': typeof PostmanDotjsonRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/.well-known/egreed-cloud.json': typeof DotwellKnownEgreedCloudDotjsonRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/_authenticated/activity': typeof AuthenticatedActivityRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/api-keys': typeof AuthenticatedApiKeysRoute
@@ -807,12 +826,14 @@ export interface FileRouteTypes {
     | '/health'
     | '/insomnia.json'
     | '/llms.txt'
+    | '/mcp'
     | '/openapi.json'
     | '/openapi.yaml'
     | '/playground'
     | '/postman.json'
     | '/sitemap.xml'
     | '/.well-known/egreed-cloud.json'
+    | '/.well-known/oauth-protected-resource'
     | '/activity'
     | '/admin'
     | '/api-keys'
@@ -892,12 +913,14 @@ export interface FileRouteTypes {
     | '/health'
     | '/insomnia.json'
     | '/llms.txt'
+    | '/mcp'
     | '/openapi.json'
     | '/openapi.yaml'
     | '/playground'
     | '/postman.json'
     | '/sitemap.xml'
     | '/.well-known/egreed-cloud.json'
+    | '/.well-known/oauth-protected-resource'
     | '/activity'
     | '/admin'
     | '/api-keys'
@@ -978,12 +1001,14 @@ export interface FileRouteTypes {
     | '/health'
     | '/insomnia.json'
     | '/llms.txt'
+    | '/mcp'
     | '/openapi.json'
     | '/openapi.yaml'
     | '/playground'
     | '/postman.json'
     | '/sitemap.xml'
     | '/.well-known/egreed-cloud.json'
+    | '/.well-known/oauth-protected-resource'
     | '/_authenticated/activity'
     | '/_authenticated/admin'
     | '/_authenticated/api-keys'
@@ -1065,12 +1090,14 @@ export interface RootRouteChildren {
   HealthRoute: typeof HealthRoute
   InsomniaDotjsonRoute: typeof InsomniaDotjsonRoute
   LlmsDottxtRoute: typeof LlmsDottxtRoute
+  McpRoute: typeof McpRoute
   OpenapiDotjsonRoute: typeof OpenapiDotjsonRoute
   OpenapiDotyamlRoute: typeof OpenapiDotyamlRoute
   PlaygroundRoute: typeof PlaygroundRoute
   PostmanDotjsonRoute: typeof PostmanDotjsonRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   DotwellKnownEgreedCloudDotjsonRoute: typeof DotwellKnownEgreedCloudDotjsonRoute
+  Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   ApiSplatRoute: typeof ApiSplatRoute
   ApiHealthRoute: typeof ApiHealthRoute
   ApiUploadRoute: typeof ApiUploadRoute
@@ -1206,6 +1233,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LlmsDottxtRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/mcp': {
+      id: '/mcp'
+      path: '/mcp'
+      fullPath: '/mcp'
+      preLoaderRoute: typeof McpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/openapi.json': {
       id: '/openapi.json'
       path: '/openapi.json'
@@ -1246,6 +1280,13 @@ declare module '@tanstack/react-router' {
       path: '/.well-known/egreed-cloud.json'
       fullPath: '/.well-known/egreed-cloud.json'
       preLoaderRoute: typeof DotwellKnownEgreedCloudDotjsonRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/.well-known/oauth-protected-resource': {
+      id: '/.well-known/oauth-protected-resource'
+      path: '/.well-known/oauth-protected-resource'
+      fullPath: '/.well-known/oauth-protected-resource'
+      preLoaderRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/activity': {
@@ -1820,12 +1861,15 @@ const rootRouteChildren: RootRouteChildren = {
   HealthRoute: HealthRoute,
   InsomniaDotjsonRoute: InsomniaDotjsonRoute,
   LlmsDottxtRoute: LlmsDottxtRoute,
+  McpRoute: McpRoute,
   OpenapiDotjsonRoute: OpenapiDotjsonRoute,
   OpenapiDotyamlRoute: OpenapiDotyamlRoute,
   PlaygroundRoute: PlaygroundRoute,
   PostmanDotjsonRoute: PostmanDotjsonRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   DotwellKnownEgreedCloudDotjsonRoute: DotwellKnownEgreedCloudDotjsonRoute,
+  Char91DotwellKnownChar93OauthProtectedResourceRoute:
+    Char91DotwellKnownChar93OauthProtectedResourceRoute,
   ApiSplatRoute: ApiSplatRoute,
   ApiHealthRoute: ApiHealthRoute,
   ApiUploadRoute: ApiUploadRoute,

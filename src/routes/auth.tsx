@@ -16,7 +16,7 @@ import { oauthReturnPath } from "@/lib/oauth-return-path";
 export const Route = createFileRoute("/auth")({
   head: () => ({ meta: [{ title: "Sign in — E-Cloud" }, { name: "description", content: "Sign in or create an E-Cloud account." }] }),
   ssr: false,
-  validateSearch: (s: Record<string, unknown>) => ({ next: typeof s.next === "string" ? oauthReturnPath(s.next) : undefined }),
+  validateSearch: (s: Record<string, unknown>): { next?: string } => ({ next: typeof s.next === "string" ? oauthReturnPath(s.next) : undefined }),
   beforeLoad: async ({ search }) => {
     const { data } = await supabase.auth.getSession();
     if (data.session) {
