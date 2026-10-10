@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import type { ReactNode } from "react";
 import { buildApiGuideMarkdown } from "@/lib/api-guide";
 import { PUBLIC_BASE_URL } from "@/lib/site";
 
