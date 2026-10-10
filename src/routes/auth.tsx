@@ -11,13 +11,18 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Logo } from "@/components/Logo";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Link } from "@tanstack/react-router";
+import { oauthReturnPath } from "@/lib/oauth-return-path";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({ meta: [{ title: "Sign in — E-Cloud" }, { name: "description", content: "Sign in or create an E-Cloud account." }] }),
   ssr: false,
-  beforeLoad: async () => {
+  validateSearch: (s: Record<string, unknown>): { next?: string } => ({ next: typeof s.next === "string" ? oauthReturnPath(s.next) : undefined }),
+  beforeLoad: async ({ search }) => {
     const { data } = await supabase.auth.getSession();
-    if (data.session) throw redirect({ to: "/dashboard" });
+    if (data.session) {
+      if (search.next && search.next !== "/") throw redirect({ href: search.next });
+      throw redirect({ to: "/dashboard" });
+    }
   },
   component: AuthPage,
 });
@@ -28,6 +33,8 @@ const nameSchema = z.string().trim().min(1, "Name required").max(80);
 
 function AuthPage() {
   const navigate = useNavigate();
+  const { next } = Route.useSearch();
+  const go = () => (next && next !== "/" ? (window.location.href = next) : navigate({ to: "/dashboard" }));
   const [loading, setLoading] = useState(false);
   const [tab, setTab] = useState<"signin" | "signup">("signin");
 
@@ -46,7 +53,7 @@ function AuthPage() {
     setLoading(false);
     if (error) return toast.error(error.message);
     toast.success("Welcome back");
-    navigate({ to: "/dashboard" });
+    go();
   }
 
   async function handleSignUp(e: React.FormEvent) {
@@ -62,14 +69,14 @@ function AuthPage() {
       email: em.data,
       password: pw.data,
       options: {
-        emailRedirectTo: window.location.origin,
+        emailRedirectTo: next && next !== "/" ? new URL(next, window.location.origin).href : window.location.origin,
         data: { display_name: nm.data },
       },
     });
     setLoading(false);
     if (error) return toast.error(error.message);
     toast.success("Account created — welcome to E-Cloud");
-    navigate({ to: "/dashboard" });
+    go();
   }
 
   return (

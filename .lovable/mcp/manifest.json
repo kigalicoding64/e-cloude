@@ -1,0 +1,159 @@
+{
+  "version": 1,
+  "sdk_version": "3.0.5",
+  "path": "/mcp",
+  "auth": {
+    "type": "oauth",
+    "issuer": "https://veektwajjekzdztadvvk.supabase.co/auth/v1",
+    "accepted_audiences": [
+      "authenticated"
+    ]
+  },
+  "mcp": {
+    "server": {
+      "name": "cloud-canvas",
+      "version": "0.1.0",
+      "title": "Cloud Canvas"
+    },
+    "tools": [
+      {
+        "name": "list_files",
+        "title": "List files",
+        "description": "List the signed-in user's files, optionally filtered by folder or name search.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "folder_id": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Only files in this folder."
+            },
+            "search": {
+              "type": "string",
+              "maxLength": 200,
+              "description": "Case-insensitive name filter."
+            },
+            "limit": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 25
+            }
+          },
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_folders",
+        "title": "List folders",
+        "description": "List the signed-in user's folders, optionally inside a parent folder.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "parent_id": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Parent folder id; omit for all folders."
+            }
+          },
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "create_folder",
+        "title": "Create folder",
+        "description": "Create a new folder for the signed-in user.",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 255
+            },
+            "parent_id": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Optional parent folder id."
+            }
+          },
+          "required": [
+            "name"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_download_link",
+        "title": "Get download link",
+        "description": "Create a temporary (5 minute) download link for one of the user's unlocked files.",
+        "annotations": {
+          "readOnlyHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "file_id": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          "required": [
+            "file_id"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "trash_file",
+        "title": "Move file to trash",
+        "description": "Move one of the user's files to the trash (recoverable from the Trash page).",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "file_id": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          "required": [
+            "file_id"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}
