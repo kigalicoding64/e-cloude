@@ -21,6 +21,7 @@ Base URL: ${api}
 OpenAPI JSON: ${base}/openapi.json
 OpenAPI YAML: ${base}/openapi.yaml
 Interactive docs: ${base}/docs
+Usage guide (Markdown, AI-friendly): ${base}/api-guide.md
 Playground: ${base}/playground
 Postman: ${base}/postman.json  Insomnia: ${base}/insomnia.json  Bruno: ${base}/bruno.json
 

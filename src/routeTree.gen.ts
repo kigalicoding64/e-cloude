@@ -12,6 +12,8 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AiRouteImport } from './routes/ai'
+import { Route as ApiGuideRouteImport } from './routes/api-guide'
+import { Route as ApiGuideDotmdRouteImport } from './routes/api-guide[.]md'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as BrunoDotjsonRouteImport } from './routes/bruno[.]json'
 import { Route as DeveloperDocsRouteImport } from './routes/developer-docs'
@@ -104,6 +106,16 @@ const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
 const AiRoute = AiRouteImport.update({
   id: '/ai',
   path: '/ai',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiGuideRoute = ApiGuideRouteImport.update({
+  id: '/api-guide',
+  path: '/api-guide',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiGuideDotmdRoute = ApiGuideDotmdRouteImport.update({
+  id: '/api-guide.md',
+  path: '/api-guide.md',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -526,6 +538,8 @@ const ApiPublicV1UploadsIdChunksIndexRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/ai': typeof AiRoute
+  '/api-guide': typeof ApiGuideRoute
+  '/api-guide.md': typeof ApiGuideDotmdRoute
   '/auth': typeof AuthRoute
   '/bruno.json': typeof BrunoDotjsonRoute
   '/developer-docs': typeof DeveloperDocsRoute
@@ -609,6 +623,8 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/ai': typeof AiRoute
+  '/api-guide': typeof ApiGuideRoute
+  '/api-guide.md': typeof ApiGuideDotmdRoute
   '/auth': typeof AuthRoute
   '/bruno.json': typeof BrunoDotjsonRoute
   '/developer-docs': typeof DeveloperDocsRoute
@@ -694,6 +710,8 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/ai': typeof AiRoute
+  '/api-guide': typeof ApiGuideRoute
+  '/api-guide.md': typeof ApiGuideDotmdRoute
   '/auth': typeof AuthRoute
   '/bruno.json': typeof BrunoDotjsonRoute
   '/developer-docs': typeof DeveloperDocsRoute
@@ -779,6 +797,8 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/ai'
+    | '/api-guide'
+    | '/api-guide.md'
     | '/auth'
     | '/bruno.json'
     | '/developer-docs'
@@ -862,6 +882,8 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/ai'
+    | '/api-guide'
+    | '/api-guide.md'
     | '/auth'
     | '/bruno.json'
     | '/developer-docs'
@@ -946,6 +968,8 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/ai'
+    | '/api-guide'
+    | '/api-guide.md'
     | '/auth'
     | '/bruno.json'
     | '/developer-docs'
@@ -1031,6 +1055,8 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AiRoute: typeof AiRoute
+  ApiGuideRoute: typeof ApiGuideRoute
+  ApiGuideDotmdRoute: typeof ApiGuideDotmdRoute
   AuthRoute: typeof AuthRoute
   BrunoDotjsonRoute: typeof BrunoDotjsonRoute
   DeveloperDocsRoute: typeof DeveloperDocsRoute
@@ -1108,6 +1134,20 @@ declare module '@tanstack/react-router' {
       path: '/ai'
       fullPath: '/ai'
       preLoaderRoute: typeof AiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api-guide': {
+      id: '/api-guide'
+      path: '/api-guide'
+      fullPath: '/api-guide'
+      preLoaderRoute: typeof ApiGuideRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api-guide.md': {
+      id: '/api-guide.md'
+      path: '/api-guide.md'
+      fullPath: '/api-guide.md'
+      preLoaderRoute: typeof ApiGuideDotmdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -1770,6 +1810,8 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AiRoute: AiRoute,
+  ApiGuideRoute: ApiGuideRoute,
+  ApiGuideDotmdRoute: ApiGuideDotmdRoute,
   AuthRoute: AuthRoute,
   BrunoDotjsonRoute: BrunoDotjsonRoute,
   DeveloperDocsRoute: DeveloperDocsRoute,

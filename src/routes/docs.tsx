@@ -48,6 +48,9 @@ function DocsPage() {
             </p>
           </div>
           <nav className="flex flex-wrap items-center gap-2 text-sm">
+            <Link to="/api-guide" className="rounded-md border border-border px-3 py-1.5 hover:bg-muted">
+              Usage guide
+            </Link>
             <Link to="/playground" className="rounded-md border border-border px-3 py-1.5 hover:bg-muted">
               Playground
             </Link>
