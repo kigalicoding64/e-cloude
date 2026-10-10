@@ -55,6 +55,7 @@ import { Route as SdkEgreedCloudDotjsRouteImport } from './routes/sdk/egreed-clo
 import { Route as SdkEgreed_cloudDotpyRouteImport } from './routes/sdk/egreed_cloud[.]py'
 import { Route as V1IndexRouteImport } from './routes/v1/index'
 import { Route as V1SplatRouteImport } from './routes/v1/$'
+import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 import { Route as AuthenticatedAiDeploymentsRouteImport } from './routes/_authenticated/ai.deployments'
 import { Route as AuthenticatedAiModelsRouteImport } from './routes/_authenticated/ai.models'
 import { Route as AuthenticatedAiOrchestratorsRouteImport } from './routes/_authenticated/ai.orchestrators'
@@ -332,6 +333,11 @@ const V1SplatRoute = V1SplatRouteImport.update({
   path: '/v1/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
+  id: '/.lovable/oauth/consent',
+  path: '/.lovable/oauth/consent',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedAiDeploymentsRoute =
   AuthenticatedAiDeploymentsRouteImport.update({
     id: '/ai/deployments',
@@ -594,6 +600,7 @@ export interface FileRoutesByFullPath {
   '/sdk/egreed_cloud.py': typeof SdkEgreed_cloudDotpyRoute
   '/v1/$': typeof V1SplatRoute
   '/v1/': typeof V1IndexRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/ai/deployments': typeof AuthenticatedAiDeploymentsRoute
   '/ai/models': typeof AuthenticatedAiModelsRouteWithChildren
   '/ai/orchestrators': typeof AuthenticatedAiOrchestratorsRoute
@@ -681,6 +688,7 @@ export interface FileRoutesByTo {
   '/sdk/egreed_cloud.py': typeof SdkEgreed_cloudDotpyRoute
   '/v1/$': typeof V1SplatRoute
   '/v1': typeof V1IndexRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/ai/deployments': typeof AuthenticatedAiDeploymentsRoute
   '/ai/models': typeof AuthenticatedAiModelsRouteWithChildren
   '/ai/orchestrators': typeof AuthenticatedAiOrchestratorsRoute
@@ -770,6 +778,7 @@ export interface FileRoutesById {
   '/sdk/egreed_cloud.py': typeof SdkEgreed_cloudDotpyRoute
   '/v1/$': typeof V1SplatRoute
   '/v1/': typeof V1IndexRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/_authenticated/ai/deployments': typeof AuthenticatedAiDeploymentsRoute
   '/_authenticated/ai/models': typeof AuthenticatedAiModelsRouteWithChildren
   '/_authenticated/ai/orchestrators': typeof AuthenticatedAiOrchestratorsRoute
@@ -859,6 +868,7 @@ export interface FileRouteTypes {
     | '/sdk/egreed_cloud.py'
     | '/v1/$'
     | '/v1/'
+    | '/.lovable/oauth/consent'
     | '/ai/deployments'
     | '/ai/models'
     | '/ai/orchestrators'
@@ -946,6 +956,7 @@ export interface FileRouteTypes {
     | '/sdk/egreed_cloud.py'
     | '/v1/$'
     | '/v1'
+    | '/.lovable/oauth/consent'
     | '/ai/deployments'
     | '/ai/models'
     | '/ai/orchestrators'
@@ -1034,6 +1045,7 @@ export interface FileRouteTypes {
     | '/sdk/egreed_cloud.py'
     | '/v1/$'
     | '/v1/'
+    | '/.lovable/oauth/consent'
     | '/_authenticated/ai/deployments'
     | '/_authenticated/ai/models'
     | '/_authenticated/ai/orchestrators'
@@ -1106,6 +1118,7 @@ export interface RootRouteChildren {
   SdkEgreed_cloudDotpyRoute: typeof SdkEgreed_cloudDotpyRoute
   V1SplatRoute: typeof V1SplatRoute
   V1IndexRoute: typeof V1IndexRoute
+  DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   ApiFilesIdRoute: typeof ApiFilesIdRoute
   ApiV1HealthRoute: typeof ApiV1HealthRoute
   ApiV1MeRoute: typeof ApiV1MeRoute
@@ -1462,6 +1475,13 @@ declare module '@tanstack/react-router' {
       path: '/v1/$'
       fullPath: '/v1/$'
       preLoaderRoute: typeof V1SplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/.lovable/oauth/consent': {
+      id: '/.lovable/oauth/consent'
+      path: '/.lovable/oauth/consent'
+      fullPath: '/.lovable/oauth/consent'
+      preLoaderRoute: typeof DotlovableOauthConsentRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/ai/deployments': {
@@ -1878,6 +1898,7 @@ const rootRouteChildren: RootRouteChildren = {
   SdkEgreed_cloudDotpyRoute: SdkEgreed_cloudDotpyRoute,
   V1SplatRoute: V1SplatRoute,
   V1IndexRoute: V1IndexRoute,
+  DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   ApiFilesIdRoute: ApiFilesIdRoute,
   ApiV1HealthRoute: ApiV1HealthRoute,
   ApiV1MeRoute: ApiV1MeRoute,
