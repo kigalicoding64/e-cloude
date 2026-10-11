@@ -27,7 +27,7 @@ import {
   setOAuthClientActive,
 } from "@/lib/identity.functions";
 
-export const Route = createFileRoute("/_authenticated/developer/applications")({
+export const Route = createFileRoute("/_authenticated/oauth-apps")({
   head: () => ({
     meta: [
       { title: "OAuth applications — EGREED Identity" },

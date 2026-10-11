@@ -30,6 +30,7 @@ import { Route as PostmanDotjsonRouteImport } from './routes/postman[.]json'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as DotwellKnownEgreedCloudDotjsonRouteImport } from './routes/[.]well-known/egreed-cloud[.]json'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
+import { Route as DotwellKnownOpenidConfigurationRouteImport } from './routes/[.]well-known.openid-configuration'
 import { Route as AuthenticatedActivityRouteImport } from './routes/_authenticated/activity'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedApiKeysRouteImport } from './routes/_authenticated/api-keys'
@@ -39,6 +40,7 @@ import { Route as AuthenticatedDeveloperRouteImport } from './routes/_authentica
 import { Route as AuthenticatedFavoritesRouteImport } from './routes/_authenticated/favorites'
 import { Route as AuthenticatedFilesRouteImport } from './routes/_authenticated/files'
 import { Route as AuthenticatedNotificationsRouteImport } from './routes/_authenticated/notifications'
+import { Route as AuthenticatedOauthAppsRouteImport } from './routes/_authenticated/oauth-apps'
 import { Route as AuthenticatedOrganizationsRouteImport } from './routes/_authenticated/organizations'
 import { Route as AuthenticatedPlatformHealthRouteImport } from './routes/_authenticated/platform-health'
 import { Route as AuthenticatedSecurityRouteImport } from './routes/_authenticated/security'
@@ -50,6 +52,7 @@ import { Route as AuthenticatedTrashRouteImport } from './routes/_authenticated/
 import { Route as ApiSplatRouteImport } from './routes/api/$'
 import { Route as ApiHealthRouteImport } from './routes/api/health'
 import { Route as ApiUploadRouteImport } from './routes/api/upload'
+import { Route as OauthAuthorizeRouteImport } from './routes/oauth.authorize'
 import { Route as STokenRouteImport } from './routes/s.$token'
 import { Route as SdkEgreedCloudDotjsRouteImport } from './routes/sdk/egreed-cloud[.]js'
 import { Route as SdkEgreed_cloudDotpyRouteImport } from './routes/sdk/egreed_cloud[.]py'
@@ -66,6 +69,12 @@ import { Route as ApiV1HealthRouteImport } from './routes/api/v1/health'
 import { Route as ApiV1MeRouteImport } from './routes/api/v1/me'
 import { Route as ApiV1UploadRouteImport } from './routes/api/v1/upload'
 import { Route as AuthenticatedAiModelsSlugRouteImport } from './routes/_authenticated/ai.models.$slug'
+import { Route as ApiPublicOauthIntrospectRouteImport } from './routes/api/public/oauth/introspect'
+import { Route as ApiPublicOauthJwksRouteImport } from './routes/api/public/oauth/jwks'
+import { Route as ApiPublicOauthOpenidConfigurationRouteImport } from './routes/api/public/oauth/openid-configuration'
+import { Route as ApiPublicOauthRevokeRouteImport } from './routes/api/public/oauth/revoke'
+import { Route as ApiPublicOauthTokenRouteImport } from './routes/api/public/oauth/token'
+import { Route as ApiPublicOauthUserinfoRouteImport } from './routes/api/public/oauth/userinfo'
 import { Route as ApiPublicV1IndexRouteImport } from './routes/api/public/v1/index'
 import { Route as ApiPublicV1HealthRouteImport } from './routes/api/public/v1/health'
 import { Route as ApiPublicV1LiveRouteImport } from './routes/api/public/v1/live'
@@ -203,6 +212,12 @@ const Char91DotwellKnownChar93OauthProtectedResourceRoute =
     path: '/.well-known/oauth-protected-resource',
     getParentRoute: () => rootRouteImport,
   } as any)
+const DotwellKnownOpenidConfigurationRoute =
+  DotwellKnownOpenidConfigurationRouteImport.update({
+    id: '/.well-known/openid-configuration',
+    path: '/.well-known/openid-configuration',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const AuthenticatedActivityRoute = AuthenticatedActivityRouteImport.update({
   id: '/activity',
   path: '/activity',
@@ -249,6 +264,11 @@ const AuthenticatedNotificationsRoute =
     path: '/notifications',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedOauthAppsRoute = AuthenticatedOauthAppsRouteImport.update({
+  id: '/oauth-apps',
+  path: '/oauth-apps',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedOrganizationsRoute =
   AuthenticatedOrganizationsRouteImport.update({
     id: '/organizations',
@@ -306,6 +326,11 @@ const ApiHealthRoute = ApiHealthRouteImport.update({
 const ApiUploadRoute = ApiUploadRouteImport.update({
   id: '/api/upload',
   path: '/api/upload',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OauthAuthorizeRoute = OauthAuthorizeRouteImport.update({
+  id: '/oauth/authorize',
+  path: '/oauth/authorize',
   getParentRoute: () => rootRouteImport,
 } as any)
 const STokenRoute = STokenRouteImport.update({
@@ -392,6 +417,38 @@ const AuthenticatedAiModelsSlugRoute =
     path: '/$slug',
     getParentRoute: () => AuthenticatedAiModelsRoute,
   } as any)
+const ApiPublicOauthIntrospectRoute =
+  ApiPublicOauthIntrospectRouteImport.update({
+    id: '/api/public/oauth/introspect',
+    path: '/api/public/oauth/introspect',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicOauthJwksRoute = ApiPublicOauthJwksRouteImport.update({
+  id: '/api/public/oauth/jwks',
+  path: '/api/public/oauth/jwks',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicOauthOpenidConfigurationRoute =
+  ApiPublicOauthOpenidConfigurationRouteImport.update({
+    id: '/api/public/oauth/openid-configuration',
+    path: '/api/public/oauth/openid-configuration',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicOauthRevokeRoute = ApiPublicOauthRevokeRouteImport.update({
+  id: '/api/public/oauth/revoke',
+  path: '/api/public/oauth/revoke',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicOauthTokenRoute = ApiPublicOauthTokenRouteImport.update({
+  id: '/api/public/oauth/token',
+  path: '/api/public/oauth/token',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicOauthUserinfoRoute = ApiPublicOauthUserinfoRouteImport.update({
+  id: '/api/public/oauth/userinfo',
+  path: '/api/public/oauth/userinfo',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicV1IndexRoute = ApiPublicV1IndexRouteImport.update({
   id: '/api/public/v1/',
   path: '/api/public/v1/',
@@ -575,6 +632,7 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/.well-known/egreed-cloud.json': typeof DotwellKnownEgreedCloudDotjsonRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  '/.well-known/openid-configuration': typeof DotwellKnownOpenidConfigurationRoute
   '/activity': typeof AuthenticatedActivityRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/api-keys': typeof AuthenticatedApiKeysRoute
@@ -584,6 +642,7 @@ export interface FileRoutesByFullPath {
   '/favorites': typeof AuthenticatedFavoritesRoute
   '/files': typeof AuthenticatedFilesRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
+  '/oauth-apps': typeof AuthenticatedOauthAppsRoute
   '/organizations': typeof AuthenticatedOrganizationsRouteWithChildren
   '/platform-health': typeof AuthenticatedPlatformHealthRoute
   '/security': typeof AuthenticatedSecurityRoute
@@ -595,6 +654,7 @@ export interface FileRoutesByFullPath {
   '/api/$': typeof ApiSplatRoute
   '/api/health': typeof ApiHealthRoute
   '/api/upload': typeof ApiUploadRoute
+  '/oauth/authorize': typeof OauthAuthorizeRoute
   '/s/$token': typeof STokenRoute
   '/sdk/egreed-cloud.js': typeof SdkEgreedCloudDotjsRoute
   '/sdk/egreed_cloud.py': typeof SdkEgreed_cloudDotpyRoute
@@ -611,6 +671,12 @@ export interface FileRoutesByFullPath {
   '/api/v1/upload': typeof ApiV1UploadRoute
   '/api/files/': typeof ApiFilesIndexRoute
   '/ai/models/$slug': typeof AuthenticatedAiModelsSlugRoute
+  '/api/public/oauth/introspect': typeof ApiPublicOauthIntrospectRoute
+  '/api/public/oauth/jwks': typeof ApiPublicOauthJwksRoute
+  '/api/public/oauth/openid-configuration': typeof ApiPublicOauthOpenidConfigurationRoute
+  '/api/public/oauth/revoke': typeof ApiPublicOauthRevokeRoute
+  '/api/public/oauth/token': typeof ApiPublicOauthTokenRoute
+  '/api/public/oauth/userinfo': typeof ApiPublicOauthUserinfoRoute
   '/api/public/v1/health': typeof ApiPublicV1HealthRoute
   '/api/public/v1/live': typeof ApiPublicV1LiveRoute
   '/api/public/v1/me': typeof ApiPublicV1MeRoute
@@ -663,6 +729,7 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/.well-known/egreed-cloud.json': typeof DotwellKnownEgreedCloudDotjsonRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  '/.well-known/openid-configuration': typeof DotwellKnownOpenidConfigurationRoute
   '/activity': typeof AuthenticatedActivityRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/api-keys': typeof AuthenticatedApiKeysRoute
@@ -672,6 +739,7 @@ export interface FileRoutesByTo {
   '/favorites': typeof AuthenticatedFavoritesRoute
   '/files': typeof AuthenticatedFilesRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
+  '/oauth-apps': typeof AuthenticatedOauthAppsRoute
   '/organizations': typeof AuthenticatedOrganizationsRouteWithChildren
   '/platform-health': typeof AuthenticatedPlatformHealthRoute
   '/security': typeof AuthenticatedSecurityRoute
@@ -683,6 +751,7 @@ export interface FileRoutesByTo {
   '/api/$': typeof ApiSplatRoute
   '/api/health': typeof ApiHealthRoute
   '/api/upload': typeof ApiUploadRoute
+  '/oauth/authorize': typeof OauthAuthorizeRoute
   '/s/$token': typeof STokenRoute
   '/sdk/egreed-cloud.js': typeof SdkEgreedCloudDotjsRoute
   '/sdk/egreed_cloud.py': typeof SdkEgreed_cloudDotpyRoute
@@ -699,6 +768,12 @@ export interface FileRoutesByTo {
   '/api/v1/upload': typeof ApiV1UploadRoute
   '/api/files': typeof ApiFilesIndexRoute
   '/ai/models/$slug': typeof AuthenticatedAiModelsSlugRoute
+  '/api/public/oauth/introspect': typeof ApiPublicOauthIntrospectRoute
+  '/api/public/oauth/jwks': typeof ApiPublicOauthJwksRoute
+  '/api/public/oauth/openid-configuration': typeof ApiPublicOauthOpenidConfigurationRoute
+  '/api/public/oauth/revoke': typeof ApiPublicOauthRevokeRoute
+  '/api/public/oauth/token': typeof ApiPublicOauthTokenRoute
+  '/api/public/oauth/userinfo': typeof ApiPublicOauthUserinfoRoute
   '/api/public/v1/health': typeof ApiPublicV1HealthRoute
   '/api/public/v1/live': typeof ApiPublicV1LiveRoute
   '/api/public/v1/me': typeof ApiPublicV1MeRoute
@@ -753,6 +828,7 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/.well-known/egreed-cloud.json': typeof DotwellKnownEgreedCloudDotjsonRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  '/.well-known/openid-configuration': typeof DotwellKnownOpenidConfigurationRoute
   '/_authenticated/activity': typeof AuthenticatedActivityRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/api-keys': typeof AuthenticatedApiKeysRoute
@@ -762,6 +838,7 @@ export interface FileRoutesById {
   '/_authenticated/favorites': typeof AuthenticatedFavoritesRoute
   '/_authenticated/files': typeof AuthenticatedFilesRoute
   '/_authenticated/notifications': typeof AuthenticatedNotificationsRoute
+  '/_authenticated/oauth-apps': typeof AuthenticatedOauthAppsRoute
   '/_authenticated/organizations': typeof AuthenticatedOrganizationsRouteWithChildren
   '/_authenticated/platform-health': typeof AuthenticatedPlatformHealthRoute
   '/_authenticated/security': typeof AuthenticatedSecurityRoute
@@ -773,6 +850,7 @@ export interface FileRoutesById {
   '/api/$': typeof ApiSplatRoute
   '/api/health': typeof ApiHealthRoute
   '/api/upload': typeof ApiUploadRoute
+  '/oauth/authorize': typeof OauthAuthorizeRoute
   '/s/$token': typeof STokenRoute
   '/sdk/egreed-cloud.js': typeof SdkEgreedCloudDotjsRoute
   '/sdk/egreed_cloud.py': typeof SdkEgreed_cloudDotpyRoute
@@ -789,6 +867,12 @@ export interface FileRoutesById {
   '/api/v1/upload': typeof ApiV1UploadRoute
   '/api/files/': typeof ApiFilesIndexRoute
   '/_authenticated/ai/models/$slug': typeof AuthenticatedAiModelsSlugRoute
+  '/api/public/oauth/introspect': typeof ApiPublicOauthIntrospectRoute
+  '/api/public/oauth/jwks': typeof ApiPublicOauthJwksRoute
+  '/api/public/oauth/openid-configuration': typeof ApiPublicOauthOpenidConfigurationRoute
+  '/api/public/oauth/revoke': typeof ApiPublicOauthRevokeRoute
+  '/api/public/oauth/token': typeof ApiPublicOauthTokenRoute
+  '/api/public/oauth/userinfo': typeof ApiPublicOauthUserinfoRoute
   '/api/public/v1/health': typeof ApiPublicV1HealthRoute
   '/api/public/v1/live': typeof ApiPublicV1LiveRoute
   '/api/public/v1/me': typeof ApiPublicV1MeRoute
@@ -843,6 +927,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/.well-known/egreed-cloud.json'
     | '/.well-known/oauth-protected-resource'
+    | '/.well-known/openid-configuration'
     | '/activity'
     | '/admin'
     | '/api-keys'
@@ -852,6 +937,7 @@ export interface FileRouteTypes {
     | '/favorites'
     | '/files'
     | '/notifications'
+    | '/oauth-apps'
     | '/organizations'
     | '/platform-health'
     | '/security'
@@ -863,6 +949,7 @@ export interface FileRouteTypes {
     | '/api/$'
     | '/api/health'
     | '/api/upload'
+    | '/oauth/authorize'
     | '/s/$token'
     | '/sdk/egreed-cloud.js'
     | '/sdk/egreed_cloud.py'
@@ -879,6 +966,12 @@ export interface FileRouteTypes {
     | '/api/v1/upload'
     | '/api/files/'
     | '/ai/models/$slug'
+    | '/api/public/oauth/introspect'
+    | '/api/public/oauth/jwks'
+    | '/api/public/oauth/openid-configuration'
+    | '/api/public/oauth/revoke'
+    | '/api/public/oauth/token'
+    | '/api/public/oauth/userinfo'
     | '/api/public/v1/health'
     | '/api/public/v1/live'
     | '/api/public/v1/me'
@@ -931,6 +1024,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/.well-known/egreed-cloud.json'
     | '/.well-known/oauth-protected-resource'
+    | '/.well-known/openid-configuration'
     | '/activity'
     | '/admin'
     | '/api-keys'
@@ -940,6 +1034,7 @@ export interface FileRouteTypes {
     | '/favorites'
     | '/files'
     | '/notifications'
+    | '/oauth-apps'
     | '/organizations'
     | '/platform-health'
     | '/security'
@@ -951,6 +1046,7 @@ export interface FileRouteTypes {
     | '/api/$'
     | '/api/health'
     | '/api/upload'
+    | '/oauth/authorize'
     | '/s/$token'
     | '/sdk/egreed-cloud.js'
     | '/sdk/egreed_cloud.py'
@@ -967,6 +1063,12 @@ export interface FileRouteTypes {
     | '/api/v1/upload'
     | '/api/files'
     | '/ai/models/$slug'
+    | '/api/public/oauth/introspect'
+    | '/api/public/oauth/jwks'
+    | '/api/public/oauth/openid-configuration'
+    | '/api/public/oauth/revoke'
+    | '/api/public/oauth/token'
+    | '/api/public/oauth/userinfo'
     | '/api/public/v1/health'
     | '/api/public/v1/live'
     | '/api/public/v1/me'
@@ -1020,6 +1122,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/.well-known/egreed-cloud.json'
     | '/.well-known/oauth-protected-resource'
+    | '/.well-known/openid-configuration'
     | '/_authenticated/activity'
     | '/_authenticated/admin'
     | '/_authenticated/api-keys'
@@ -1029,6 +1132,7 @@ export interface FileRouteTypes {
     | '/_authenticated/favorites'
     | '/_authenticated/files'
     | '/_authenticated/notifications'
+    | '/_authenticated/oauth-apps'
     | '/_authenticated/organizations'
     | '/_authenticated/platform-health'
     | '/_authenticated/security'
@@ -1040,6 +1144,7 @@ export interface FileRouteTypes {
     | '/api/$'
     | '/api/health'
     | '/api/upload'
+    | '/oauth/authorize'
     | '/s/$token'
     | '/sdk/egreed-cloud.js'
     | '/sdk/egreed_cloud.py'
@@ -1056,6 +1161,12 @@ export interface FileRouteTypes {
     | '/api/v1/upload'
     | '/api/files/'
     | '/_authenticated/ai/models/$slug'
+    | '/api/public/oauth/introspect'
+    | '/api/public/oauth/jwks'
+    | '/api/public/oauth/openid-configuration'
+    | '/api/public/oauth/revoke'
+    | '/api/public/oauth/token'
+    | '/api/public/oauth/userinfo'
     | '/api/public/v1/health'
     | '/api/public/v1/live'
     | '/api/public/v1/me'
@@ -1110,9 +1221,11 @@ export interface RootRouteChildren {
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   DotwellKnownEgreedCloudDotjsonRoute: typeof DotwellKnownEgreedCloudDotjsonRoute
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  DotwellKnownOpenidConfigurationRoute: typeof DotwellKnownOpenidConfigurationRoute
   ApiSplatRoute: typeof ApiSplatRoute
   ApiHealthRoute: typeof ApiHealthRoute
   ApiUploadRoute: typeof ApiUploadRoute
+  OauthAuthorizeRoute: typeof OauthAuthorizeRoute
   STokenRoute: typeof STokenRoute
   SdkEgreedCloudDotjsRoute: typeof SdkEgreedCloudDotjsRoute
   SdkEgreed_cloudDotpyRoute: typeof SdkEgreed_cloudDotpyRoute
@@ -1124,6 +1237,12 @@ export interface RootRouteChildren {
   ApiV1MeRoute: typeof ApiV1MeRoute
   ApiV1UploadRoute: typeof ApiV1UploadRoute
   ApiFilesIndexRoute: typeof ApiFilesIndexRoute
+  ApiPublicOauthIntrospectRoute: typeof ApiPublicOauthIntrospectRoute
+  ApiPublicOauthJwksRoute: typeof ApiPublicOauthJwksRoute
+  ApiPublicOauthOpenidConfigurationRoute: typeof ApiPublicOauthOpenidConfigurationRoute
+  ApiPublicOauthRevokeRoute: typeof ApiPublicOauthRevokeRoute
+  ApiPublicOauthTokenRoute: typeof ApiPublicOauthTokenRoute
+  ApiPublicOauthUserinfoRoute: typeof ApiPublicOauthUserinfoRoute
   ApiPublicV1HealthRoute: typeof ApiPublicV1HealthRoute
   ApiPublicV1LiveRoute: typeof ApiPublicV1LiveRoute
   ApiPublicV1MeRoute: typeof ApiPublicV1MeRoute
@@ -1302,6 +1421,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/.well-known/openid-configuration': {
+      id: '/.well-known/openid-configuration'
+      path: '/.well-known/openid-configuration'
+      fullPath: '/.well-known/openid-configuration'
+      preLoaderRoute: typeof DotwellKnownOpenidConfigurationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/activity': {
       id: '/_authenticated/activity'
       path: '/activity'
@@ -1363,6 +1489,13 @@ declare module '@tanstack/react-router' {
       path: '/notifications'
       fullPath: '/notifications'
       preLoaderRoute: typeof AuthenticatedNotificationsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/oauth-apps': {
+      id: '/_authenticated/oauth-apps'
+      path: '/oauth-apps'
+      fullPath: '/oauth-apps'
+      preLoaderRoute: typeof AuthenticatedOauthAppsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/organizations': {
@@ -1440,6 +1573,13 @@ declare module '@tanstack/react-router' {
       path: '/api/upload'
       fullPath: '/api/upload'
       preLoaderRoute: typeof ApiUploadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/oauth/authorize': {
+      id: '/oauth/authorize'
+      path: '/oauth/authorize'
+      fullPath: '/oauth/authorize'
+      preLoaderRoute: typeof OauthAuthorizeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/s/$token': {
@@ -1553,6 +1693,48 @@ declare module '@tanstack/react-router' {
       fullPath: '/ai/models/$slug'
       preLoaderRoute: typeof AuthenticatedAiModelsSlugRouteImport
       parentRoute: typeof AuthenticatedAiModelsRoute
+    }
+    '/api/public/oauth/introspect': {
+      id: '/api/public/oauth/introspect'
+      path: '/api/public/oauth/introspect'
+      fullPath: '/api/public/oauth/introspect'
+      preLoaderRoute: typeof ApiPublicOauthIntrospectRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/oauth/jwks': {
+      id: '/api/public/oauth/jwks'
+      path: '/api/public/oauth/jwks'
+      fullPath: '/api/public/oauth/jwks'
+      preLoaderRoute: typeof ApiPublicOauthJwksRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/oauth/openid-configuration': {
+      id: '/api/public/oauth/openid-configuration'
+      path: '/api/public/oauth/openid-configuration'
+      fullPath: '/api/public/oauth/openid-configuration'
+      preLoaderRoute: typeof ApiPublicOauthOpenidConfigurationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/oauth/revoke': {
+      id: '/api/public/oauth/revoke'
+      path: '/api/public/oauth/revoke'
+      fullPath: '/api/public/oauth/revoke'
+      preLoaderRoute: typeof ApiPublicOauthRevokeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/oauth/token': {
+      id: '/api/public/oauth/token'
+      path: '/api/public/oauth/token'
+      fullPath: '/api/public/oauth/token'
+      preLoaderRoute: typeof ApiPublicOauthTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/oauth/userinfo': {
+      id: '/api/public/oauth/userinfo'
+      path: '/api/public/oauth/userinfo'
+      fullPath: '/api/public/oauth/userinfo'
+      preLoaderRoute: typeof ApiPublicOauthUserinfoRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/api/public/v1/': {
       id: '/api/public/v1/'
@@ -1804,6 +1986,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedFavoritesRoute: typeof AuthenticatedFavoritesRoute
   AuthenticatedFilesRoute: typeof AuthenticatedFilesRoute
   AuthenticatedNotificationsRoute: typeof AuthenticatedNotificationsRoute
+  AuthenticatedOauthAppsRoute: typeof AuthenticatedOauthAppsRoute
   AuthenticatedOrganizationsRoute: typeof AuthenticatedOrganizationsRouteWithChildren
   AuthenticatedPlatformHealthRoute: typeof AuthenticatedPlatformHealthRoute
   AuthenticatedSecurityRoute: typeof AuthenticatedSecurityRoute
@@ -1827,6 +2010,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedFavoritesRoute: AuthenticatedFavoritesRoute,
   AuthenticatedFilesRoute: AuthenticatedFilesRoute,
   AuthenticatedNotificationsRoute: AuthenticatedNotificationsRoute,
+  AuthenticatedOauthAppsRoute: AuthenticatedOauthAppsRoute,
   AuthenticatedOrganizationsRoute: AuthenticatedOrganizationsRouteWithChildren,
   AuthenticatedPlatformHealthRoute: AuthenticatedPlatformHealthRoute,
   AuthenticatedSecurityRoute: AuthenticatedSecurityRoute,
@@ -1890,9 +2074,11 @@ const rootRouteChildren: RootRouteChildren = {
   DotwellKnownEgreedCloudDotjsonRoute: DotwellKnownEgreedCloudDotjsonRoute,
   Char91DotwellKnownChar93OauthProtectedResourceRoute:
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
+  DotwellKnownOpenidConfigurationRoute: DotwellKnownOpenidConfigurationRoute,
   ApiSplatRoute: ApiSplatRoute,
   ApiHealthRoute: ApiHealthRoute,
   ApiUploadRoute: ApiUploadRoute,
+  OauthAuthorizeRoute: OauthAuthorizeRoute,
   STokenRoute: STokenRoute,
   SdkEgreedCloudDotjsRoute: SdkEgreedCloudDotjsRoute,
   SdkEgreed_cloudDotpyRoute: SdkEgreed_cloudDotpyRoute,
@@ -1904,6 +2090,13 @@ const rootRouteChildren: RootRouteChildren = {
   ApiV1MeRoute: ApiV1MeRoute,
   ApiV1UploadRoute: ApiV1UploadRoute,
   ApiFilesIndexRoute: ApiFilesIndexRoute,
+  ApiPublicOauthIntrospectRoute: ApiPublicOauthIntrospectRoute,
+  ApiPublicOauthJwksRoute: ApiPublicOauthJwksRoute,
+  ApiPublicOauthOpenidConfigurationRoute:
+    ApiPublicOauthOpenidConfigurationRoute,
+  ApiPublicOauthRevokeRoute: ApiPublicOauthRevokeRoute,
+  ApiPublicOauthTokenRoute: ApiPublicOauthTokenRoute,
+  ApiPublicOauthUserinfoRoute: ApiPublicOauthUserinfoRoute,
   ApiPublicV1HealthRoute: ApiPublicV1HealthRoute,
   ApiPublicV1LiveRoute: ApiPublicV1LiveRoute,
   ApiPublicV1MeRoute: ApiPublicV1MeRoute,
