@@ -24,6 +24,17 @@ Interactive docs: ${base}/docs
 Usage guide (Markdown, AI-friendly): ${base}/api-guide.md
 Playground: ${base}/playground
 Postman: ${base}/postman.json  Insomnia: ${base}/insomnia.json  Bruno: ${base}/bruno.json
+MCP server (for AI assistants): ${base}/mcp
+
+## MCP server (AI assistants)
+AI assistants (Claude, ChatGPT, etc.) can connect directly to the MCP endpoint:
+
+    ${base}/mcp
+
+Authentication is OAuth 2.1: the assistant opens a sign-in + consent page, the
+user approves, and the assistant then acts as that user (their files only).
+No API key is needed for MCP. Available tools: list_files, list_folders,
+create_folder, get_download_link, trash_file.
 
 ## Authentication
 Send an API key on every request (create one in the dashboard under "API Keys"):
