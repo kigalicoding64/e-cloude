@@ -5,7 +5,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
-import { rotateOAuthClientSecret } from "@/lib/identity.functions";
+import { rotateOAuthClientSecret } from "@/lib/oauth-clients.functions";
 
 function Field({ label, hint, value }: { label: string; hint: string; value: string }) {
   return (

@@ -9,3 +9,4 @@
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
 - MCP server lives in src/lib/mcp (one tool per file, OAuth via backend issuer, RLS as caller) — external assistants act as the signed-in user, never with admin keys.
+- OAuth 2.1/OIDC provider (EGREED Connect) lives in src/lib/oauth*.ts with endpoints under /api/public/oauth/* and consent at /oauth/authorize; token/code/key tables are service-role only. Why: other EGREED apps sign users in through this one identity source.

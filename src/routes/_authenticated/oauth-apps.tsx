@@ -18,14 +18,14 @@ import {
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
-import { ConnectionDetails } from "@/components/developer/ConnectionDetails";
+import { ConnectionDetails } from "@/components/ConnectionDetails";
 import { OAUTH_SCOPES, OAUTH_SCOPE_DESCRIPTIONS } from "@/lib/egreed";
 import {
   createOAuthClient,
   deleteOAuthClient,
   listOAuthClients,
   setOAuthClientActive,
-} from "@/lib/identity.functions";
+} from "@/lib/oauth-clients.functions";
 
 export const Route = createFileRoute("/_authenticated/oauth-apps")({
   head: () => ({
