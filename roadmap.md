@@ -4,6 +4,7 @@
 - [x] Verify third-party CORS and API-key error handling
 - [x] Publish the current Lovable project build
 - [ ] Connect `cloud.egreedtech.org` to this Lovable project (currently points to an unmanaged Vercel deployment)
+- [ ] Point every public address at cloud.egreedtech.org only (done in app; Vercel domain must move to the proxy project)
 - [ ] Re-test the custom domain after it serves this project's published build
 - [x] Admin platform health page: live /health, /ready, /metrics probes on both live addresses
 - [x] Show missing managed configuration by name only (never values)
