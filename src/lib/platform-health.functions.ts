@@ -32,11 +32,6 @@ async function assertAdmin(userId: string) {
 const BINDING_SPEC: Array<Omit<BindingCheck, "present">> = [
   { name: "SUPABASE_URL", required: true, used_for: "Server-side database, storage and auth calls" },
   {
-    name: "SUPABASE_SERVICE_ROLE_KEY",
-    required: true,
-    used_for: "Privileged server access for the public API (never sent to the browser)",
-  },
-  {
     name: "SUPABASE_PUBLISHABLE_KEY",
     required: true,
     used_for: "Verifying signed-in users inside server functions",
@@ -429,6 +424,8 @@ export const diagnosePlatform = createServerFn({ method: "POST" })
       "identify exactly which managed environment variables are missing or unusable,",
       "explain what each missing one breaks, and give short, ordered, concrete next steps.",
       "Never invent variable names that are not in the evidence. Never ask for secret values.",
+      "Privileged backend credentials (service role key, database password) are fully managed by the platform: never mention, request or tell the user to set them.",
+      "Focus next steps on things the user controls: republishing, domain/DNS and proxy setup, and API keys created in the app.",
       "Answer in markdown: 'Diagnosis', 'Missing bindings', 'Next steps'.",
     ].join(" ");
 
