@@ -3,7 +3,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { useCallback, useEffect, useState } from "react";
 import { AlertTriangle, Check, Loader2, ShieldCheck } from "lucide-react";
 
-import { EgreedLogo } from "@/components/brand/EgreedLogo";
+import { Logo } from "@/components/Logo";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import {
@@ -155,8 +155,8 @@ function AuthorizePage() {
       <div className="bg-grid absolute inset-0 opacity-30" aria-hidden />
       <div className="relative w-full max-w-md">
         <div className="mb-8 text-center">
-          <Link to="/" className="inline-block" aria-label="EGREED Identity home">
-            <EgreedLogo />
+          <Link to="/" className="inline-block" aria-label="EGREED Cloud home">
+            <Logo />
           </Link>
         </div>
 
@@ -167,7 +167,7 @@ function AuthorizePage() {
               <h1 className="mt-4 font-display text-xl font-semibold">Request not allowed</h1>
               <p className="mt-2 text-sm text-muted-foreground">{error}</p>
               <Button asChild variant="outline" className="mt-6 w-full">
-                <Link to="/account">Back to your account</Link>
+                <Link to="/dashboard">Back to your account</Link>
               </Button>
             </div>
           ) : !request ? (
