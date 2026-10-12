@@ -82,7 +82,9 @@ export const approveAuthorizationRequest = createServerFn({ method: "POST" })
     const { findClient, filterScopes, redirectUriAllowed, createAuthorizationCode } = await import(
       "./oauth.server"
     );
-    const { writeAuditLog } = await import("./identity.server");
+    const { logIntegrationEvent } = await import("./oauth.server");
+    const writeAuditLog = (e: { userId: string; eventType: string; description: string; status?: "success" | "warning" | "error"; category?: string; metadata?: Record<string, unknown> }) =>
+      logIntegrationEvent({ userId: e.userId, eventType: e.eventType, description: e.description, status: e.status, metadata: e.metadata });
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
     const client = await findClient(data.client_id);
@@ -141,7 +143,9 @@ export const denyAuthorizationRequest = createServerFn({ method: "POST" })
   )
   .handler(async ({ data, context }): Promise<{ redirectTo: string }> => {
     const { findClient, redirectUriAllowed } = await import("./oauth.server");
-    const { writeAuditLog } = await import("./identity.server");
+    const { logIntegrationEvent } = await import("./oauth.server");
+    const writeAuditLog = (e: { userId: string; eventType: string; description: string; status?: "success" | "warning" | "error"; category?: string; metadata?: Record<string, unknown> }) =>
+      logIntegrationEvent({ userId: e.userId, eventType: e.eventType, description: e.description, status: e.status, metadata: e.metadata });
 
     const client = await findClient(data.client_id);
     if (!client || !redirectUriAllowed(client, data.redirect_uri)) {
