@@ -11,7 +11,9 @@ import { corsPreflight } from "@/lib/cors";
  */
 const forward = async ({ request, params }: { request: Request; params: { _splat?: string } }) => {
   const { safeHandler, forwardToCanonical } = await import("@/lib/api-files.server");
-  const splat = params._splat ?? "";
+  const raw = params._splat ?? "";
+  // Short upload alias: /v1/upload is documented as POST /api/v1/upload.
+  const splat = raw === "upload" || raw === "upload/" ? "files/upload" : raw;
   const canonical = `/api/public/v1/${splat}`.replace(/\/+$/, splat ? "" : "/");
   return safeHandler(({ request: req }) => forwardToCanonical(req, canonical))({ request });
 };
