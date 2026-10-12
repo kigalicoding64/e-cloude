@@ -24,12 +24,6 @@ export const LIVE_TARGETS: LiveTarget[] = [
     baseUrl: "https://cloud.egreedtech.org",
     official: true,
   },
-  {
-    id: "lovable",
-    label: "e-cloude.lovable.app",
-    baseUrl: "https://e-cloude.lovable.app",
-    official: false,
-  },
 ];
 
 export const PROBE_PATHS = [
