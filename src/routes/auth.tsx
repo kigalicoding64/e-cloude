@@ -12,6 +12,9 @@ import { Logo } from "@/components/Logo";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Link } from "@tanstack/react-router";
 import { oauthReturnPath } from "@/lib/oauth-return-path";
+import { useServerFn } from "@tanstack/react-start";
+import { Fingerprint } from "lucide-react";
+import { startPasskeySignIn, finishPasskeySignIn, backupCodeSignIn } from "@/lib/recovery.functions";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({ meta: [{ title: "Sign in — E-Cloud" }, { name: "description", content: "Sign in or create an E-Cloud account." }] }),
@@ -54,6 +57,51 @@ function AuthPage() {
     if (error) return toast.error(error.message);
     toast.success("Welcome back");
     go();
+  }
+
+  const [showBackup, setShowBackup] = useState(false);
+  const [backupCode, setBackupCode] = useState("");
+  const startPk = useServerFn(startPasskeySignIn);
+  const finishPk = useServerFn(finishPasskeySignIn);
+  const backupFn = useServerFn(backupCodeSignIn);
+
+  async function finishWithToken(token_hash: string) {
+    const { error } = await supabase.auth.verifyOtp({ token_hash, type: "email" });
+    if (error) throw error;
+    toast.success("Welcome back");
+    go();
+  }
+
+  async function handlePasskey() {
+    setLoading(true);
+    try {
+      const { startAuthentication } = await import("@simplewebauthn/browser");
+      const origin = window.location.origin;
+      const { options, challengeId } = await startPk({ data: { origin } });
+      const response = await startAuthentication({ optionsJSON: options as any });
+      const r = await finishPk({ data: { origin, challengeId, response } });
+      await finishWithToken(r.token_hash);
+    } catch (e) {
+      toast.error((e as Error).message || "Passkey sign-in failed");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleBackup(e: React.FormEvent) {
+    e.preventDefault();
+    const em = emailSchema.safeParse(email);
+    if (!em.success) return toast.error("Enter your email above first");
+    setLoading(true);
+    try {
+      const r = await backupFn({ data: { email: em.data, code: backupCode } });
+      toast.info(`${r.remaining} backup codes left. Set a new password in Security.`);
+      await finishWithToken(r.token_hash);
+    } catch (err) {
+      toast.error((err as Error).message);
+    } finally {
+      setLoading(false);
+    }
   }
 
   async function handleSignUp(e: React.FormEvent) {
@@ -127,6 +175,23 @@ function AuthPage() {
                     {loading ? "Signing in..." : "Sign in"}
                   </Button>
                 </form>
+                <div className="my-4 flex items-center gap-3 text-xs text-muted-foreground">
+                  <div className="h-px flex-1 bg-border" /> or <div className="h-px flex-1 bg-border" />
+                </div>
+                <Button type="button" variant="outline" className="w-full" disabled={loading} onClick={handlePasskey}>
+                  <Fingerprint className="mr-2 h-4 w-4" /> Sign in with passkey
+                </Button>
+                {!showBackup ? (
+                  <button type="button" className="mt-3 w-full text-center text-xs text-muted-foreground underline" onClick={() => setShowBackup(true)}>
+                    Lost access? Use a backup code
+                  </button>
+                ) : (
+                  <form className="mt-4 space-y-3" onSubmit={handleBackup}>
+                    <Label htmlFor="bc-code">Backup code (uses the email above)</Label>
+                    <Input id="bc-code" value={backupCode} onChange={(e) => setBackupCode(e.target.value)} autoComplete="one-time-code" required />
+                    <Button type="submit" variant="secondary" className="w-full" disabled={loading}>Sign in with backup code</Button>
+                  </form>
+                )}
               </Card>
             </TabsContent>
 
