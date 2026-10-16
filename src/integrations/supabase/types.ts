@@ -542,6 +542,24 @@ export type Database = {
         }
         Relationships: []
       }
+      app_settings: {
+        Row: {
+          key: string
+          updated_at: string
+          value: Json
+        }
+        Insert: {
+          key: string
+          updated_at?: string
+          value?: Json
+        }
+        Update: {
+          key?: string
+          updated_at?: string
+          value?: Json
+        }
+        Relationships: []
+      }
       backup_schedules: {
         Row: {
           created_at: string
@@ -611,6 +629,7 @@ export type Database = {
       files: {
         Row: {
           created_at: string
+          external_id: string | null
           folder_id: string | null
           id: string
           is_favorite: boolean
@@ -622,12 +641,14 @@ export type Database = {
           pin_hash: string | null
           size: number
           storage_path: string
+          storage_provider: string
           trashed_at: string | null
           updated_at: string
           user_id: string
         }
         Insert: {
           created_at?: string
+          external_id?: string | null
           folder_id?: string | null
           id?: string
           is_favorite?: boolean
@@ -639,12 +660,14 @@ export type Database = {
           pin_hash?: string | null
           size?: number
           storage_path: string
+          storage_provider?: string
           trashed_at?: string | null
           updated_at?: string
           user_id: string
         }
         Update: {
           created_at?: string
+          external_id?: string | null
           folder_id?: string | null
           id?: string
           is_favorite?: boolean
@@ -656,6 +679,7 @@ export type Database = {
           pin_hash?: string | null
           size?: number
           storage_path?: string
+          storage_provider?: string
           trashed_at?: string | null
           updated_at?: string
           user_id?: string
@@ -1253,6 +1277,9 @@ export type Database = {
           app_pin_hash: string | null
           backup_codes_hashed: string[]
           created_at: string
+          recovery_email: string | null
+          recovery_failed_attempts: number
+          recovery_locked_until: string | null
           require_2fa_for_sensitive: boolean
           totp_enabled: boolean
           totp_pending_secret: string | null
@@ -1265,6 +1292,9 @@ export type Database = {
           app_pin_hash?: string | null
           backup_codes_hashed?: string[]
           created_at?: string
+          recovery_email?: string | null
+          recovery_failed_attempts?: number
+          recovery_locked_until?: string | null
           require_2fa_for_sensitive?: boolean
           totp_enabled?: boolean
           totp_pending_secret?: string | null
@@ -1277,6 +1307,9 @@ export type Database = {
           app_pin_hash?: string | null
           backup_codes_hashed?: string[]
           created_at?: string
+          recovery_email?: string | null
+          recovery_failed_attempts?: number
+          recovery_locked_until?: string | null
           require_2fa_for_sensitive?: boolean
           totp_enabled?: boolean
           totp_pending_secret?: string | null
@@ -1318,6 +1351,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      find_user_id_by_email: { Args: { _email: string }; Returns: string }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]

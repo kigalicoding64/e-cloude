@@ -75,6 +75,7 @@ import { Route as ApiPublicOauthOpenidConfigurationRouteImport } from './routes/
 import { Route as ApiPublicOauthRevokeRouteImport } from './routes/api/public/oauth/revoke'
 import { Route as ApiPublicOauthTokenRouteImport } from './routes/api/public/oauth/token'
 import { Route as ApiPublicOauthUserinfoRouteImport } from './routes/api/public/oauth/userinfo'
+import { Route as ApiPublicStreamtapeUploadRouteImport } from './routes/api/public/streamtape/upload'
 import { Route as ApiPublicV1IndexRouteImport } from './routes/api/public/v1/index'
 import { Route as ApiPublicV1HealthRouteImport } from './routes/api/public/v1/health'
 import { Route as ApiPublicV1LiveRouteImport } from './routes/api/public/v1/live'
@@ -449,6 +450,12 @@ const ApiPublicOauthUserinfoRoute = ApiPublicOauthUserinfoRouteImport.update({
   path: '/api/public/oauth/userinfo',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicStreamtapeUploadRoute =
+  ApiPublicStreamtapeUploadRouteImport.update({
+    id: '/api/public/streamtape/upload',
+    path: '/api/public/streamtape/upload',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicV1IndexRoute = ApiPublicV1IndexRouteImport.update({
   id: '/api/public/v1/',
   path: '/api/public/v1/',
@@ -677,6 +684,7 @@ export interface FileRoutesByFullPath {
   '/api/public/oauth/revoke': typeof ApiPublicOauthRevokeRoute
   '/api/public/oauth/token': typeof ApiPublicOauthTokenRoute
   '/api/public/oauth/userinfo': typeof ApiPublicOauthUserinfoRoute
+  '/api/public/streamtape/upload': typeof ApiPublicStreamtapeUploadRoute
   '/api/public/v1/health': typeof ApiPublicV1HealthRoute
   '/api/public/v1/live': typeof ApiPublicV1LiveRoute
   '/api/public/v1/me': typeof ApiPublicV1MeRoute
@@ -774,6 +782,7 @@ export interface FileRoutesByTo {
   '/api/public/oauth/revoke': typeof ApiPublicOauthRevokeRoute
   '/api/public/oauth/token': typeof ApiPublicOauthTokenRoute
   '/api/public/oauth/userinfo': typeof ApiPublicOauthUserinfoRoute
+  '/api/public/streamtape/upload': typeof ApiPublicStreamtapeUploadRoute
   '/api/public/v1/health': typeof ApiPublicV1HealthRoute
   '/api/public/v1/live': typeof ApiPublicV1LiveRoute
   '/api/public/v1/me': typeof ApiPublicV1MeRoute
@@ -873,6 +882,7 @@ export interface FileRoutesById {
   '/api/public/oauth/revoke': typeof ApiPublicOauthRevokeRoute
   '/api/public/oauth/token': typeof ApiPublicOauthTokenRoute
   '/api/public/oauth/userinfo': typeof ApiPublicOauthUserinfoRoute
+  '/api/public/streamtape/upload': typeof ApiPublicStreamtapeUploadRoute
   '/api/public/v1/health': typeof ApiPublicV1HealthRoute
   '/api/public/v1/live': typeof ApiPublicV1LiveRoute
   '/api/public/v1/me': typeof ApiPublicV1MeRoute
@@ -972,6 +982,7 @@ export interface FileRouteTypes {
     | '/api/public/oauth/revoke'
     | '/api/public/oauth/token'
     | '/api/public/oauth/userinfo'
+    | '/api/public/streamtape/upload'
     | '/api/public/v1/health'
     | '/api/public/v1/live'
     | '/api/public/v1/me'
@@ -1069,6 +1080,7 @@ export interface FileRouteTypes {
     | '/api/public/oauth/revoke'
     | '/api/public/oauth/token'
     | '/api/public/oauth/userinfo'
+    | '/api/public/streamtape/upload'
     | '/api/public/v1/health'
     | '/api/public/v1/live'
     | '/api/public/v1/me'
@@ -1167,6 +1179,7 @@ export interface FileRouteTypes {
     | '/api/public/oauth/revoke'
     | '/api/public/oauth/token'
     | '/api/public/oauth/userinfo'
+    | '/api/public/streamtape/upload'
     | '/api/public/v1/health'
     | '/api/public/v1/live'
     | '/api/public/v1/me'
@@ -1243,6 +1256,7 @@ export interface RootRouteChildren {
   ApiPublicOauthRevokeRoute: typeof ApiPublicOauthRevokeRoute
   ApiPublicOauthTokenRoute: typeof ApiPublicOauthTokenRoute
   ApiPublicOauthUserinfoRoute: typeof ApiPublicOauthUserinfoRoute
+  ApiPublicStreamtapeUploadRoute: typeof ApiPublicStreamtapeUploadRoute
   ApiPublicV1HealthRoute: typeof ApiPublicV1HealthRoute
   ApiPublicV1LiveRoute: typeof ApiPublicV1LiveRoute
   ApiPublicV1MeRoute: typeof ApiPublicV1MeRoute
@@ -1736,6 +1750,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicOauthUserinfoRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/streamtape/upload': {
+      id: '/api/public/streamtape/upload'
+      path: '/api/public/streamtape/upload'
+      fullPath: '/api/public/streamtape/upload'
+      preLoaderRoute: typeof ApiPublicStreamtapeUploadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/v1/': {
       id: '/api/public/v1/'
       path: '/api/public/v1'
@@ -2097,6 +2118,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicOauthRevokeRoute: ApiPublicOauthRevokeRoute,
   ApiPublicOauthTokenRoute: ApiPublicOauthTokenRoute,
   ApiPublicOauthUserinfoRoute: ApiPublicOauthUserinfoRoute,
+  ApiPublicStreamtapeUploadRoute: ApiPublicStreamtapeUploadRoute,
   ApiPublicV1HealthRoute: ApiPublicV1HealthRoute,
   ApiPublicV1LiveRoute: ApiPublicV1LiveRoute,
   ApiPublicV1MeRoute: ApiPublicV1MeRoute,

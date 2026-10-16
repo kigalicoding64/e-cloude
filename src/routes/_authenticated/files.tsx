@@ -1,4 +1,8 @@
 import { PUBLIC_BASE_URL } from "@/lib/site";
+import { getStorageMode, getStreamtapeLink } from "@/lib/streamtape.functions";
+
+const isVideoFile = (mime: string, name: string) =>
+  mime.startsWith("video/") || /\.(mp4|mkv|mov|avi|webm|m4v|flv|wmv)$/i.test(name);
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState, useRef, useEffect, type ChangeEvent } from "react";
@@ -137,10 +141,30 @@ function FilesPage() {
     onError: (e: Error) => toast.error(e.message),
   });
 
+  const getMode = useServerFn(getStorageMode);
+  const getStLink = useServerFn(getStreamtapeLink);
+  const storageMode = useQuery({ queryKey: ["storage-mode"], queryFn: () => getMode(), staleTime: 60_000 });
+
   const uploadFile = useMutation({
     mutationFn: async (file: File) => {
       const parsed = fileNameSchema.safeParse(file.name);
       if (!parsed.success) throw new Error("Invalid file name");
+      if (storageMode.data?.streamtape && isVideoFile(file.type, file.name)) {
+        const { data: s } = await supabase.auth.getSession();
+        const fd = new FormData();
+        fd.append("file", file, parsed.data);
+        if (folderId) fd.append("folder_id", folderId);
+        const res = await fetch("/api/public/streamtape/upload", {
+          method: "POST",
+          headers: { Authorization: `Bearer ${s.session?.access_token ?? ""}` },
+          body: fd,
+        });
+        if (!res.ok) {
+          const b = await res.json().catch(() => ({}));
+          throw new Error(b.error ?? `Video upload failed (${res.status})`);
+        }
+        return;
+      }
       const storagePath = `${user!.id}/${randomToken(16)}-${parsed.data}`;
       const { error: upErr } = await supabase.storage.from("user-files").upload(storagePath, file, { upsert: false });
       if (upErr) throw upErr;
@@ -224,8 +248,20 @@ function FilesPage() {
     onError: (e: Error) => toast.error(e.message),
   });
 
-  const downloadFile = async (f: { id: string; storage_path: string; name: string; password_hash: string | null; pin_hash: string | null }) => {
+  const downloadFile = async (f: { id: string; storage_path: string; name: string; password_hash: string | null; pin_hash: string | null; storage_provider?: string | null }) => {
     if (!(await requireUnlock(f))) return;
+    if (f.storage_provider === "streamtape") {
+      const t = toast.loading("Preparing video link…");
+      try {
+        const l = await getStLink({ data: { fileId: f.id, withDownload: true } });
+        toast.dismiss(t);
+        window.open(l.download_url ?? l.embed_url, "_blank", "noopener");
+      } catch (e) {
+        toast.dismiss(t);
+        toast.error((e as Error).message);
+      }
+      return;
+    }
     const { data, error } = await supabase.storage.from("user-files").createSignedUrl(f.storage_path, 60);
     if (error || !data) return toast.error("Download failed");
     const a = document.createElement("a");
