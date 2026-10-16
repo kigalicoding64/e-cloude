@@ -137,10 +137,30 @@ function FilesPage() {
     onError: (e: Error) => toast.error(e.message),
   });
 
+  const getMode = useServerFn(getStorageMode);
+  const getStLink = useServerFn(getStreamtapeLink);
+  const storageMode = useQuery({ queryKey: ["storage-mode"], queryFn: () => getMode(), staleTime: 60_000 });
+
   const uploadFile = useMutation({
     mutationFn: async (file: File) => {
       const parsed = fileNameSchema.safeParse(file.name);
       if (!parsed.success) throw new Error("Invalid file name");
+      if (storageMode.data?.streamtape && isVideoFile(file.type, file.name)) {
+        const { data: s } = await supabase.auth.getSession();
+        const fd = new FormData();
+        fd.append("file", file, parsed.data);
+        if (folderId) fd.append("folder_id", folderId);
+        const res = await fetch("/api/public/streamtape/upload", {
+          method: "POST",
+          headers: { Authorization: `Bearer ${s.session?.access_token ?? ""}` },
+          body: fd,
+        });
+        if (!res.ok) {
+          const b = await res.json().catch(() => ({}));
+          throw new Error(b.error ?? `Video upload failed (${res.status})`);
+        }
+        return;
+      }
       const storagePath = `${user!.id}/${randomToken(16)}-${parsed.data}`;
       const { error: upErr } = await supabase.storage.from("user-files").upload(storagePath, file, { upsert: false });
       if (upErr) throw upErr;
