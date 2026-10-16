@@ -8,6 +8,13 @@
       "when": 1791844891921,
       "tag": "0000_egreed_connect_oauth_provider",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1792166884954,
+      "tag": "0001_recovery_streamtape",
+      "breakpoints": true
     }
   ]
 }
